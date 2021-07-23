@@ -80,10 +80,10 @@ class God {
          }, 1000 );
 
         setTimeout(() => {
-            console.log("wait 5s");
+            console.log("wait 3s");
             this.needStop = 0;
             this.createFirstEnemy();
-        }, 5000);
+        }, 3000);
 
         //动态显示金币
        this.timemoney = setInterval(() => {
