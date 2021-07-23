@@ -9,11 +9,12 @@
 
 /* 游戏首页的css样式*/
     .home {
-    width: 1860px;
-    height: 900px;
-    z-index: 6;
-    margin:0 auto;
-    position: absolute;
+        /*background: url("../img/items/scene-2.png") no-repeat;*/
+        width: 1860px;
+        height: 900px;
+        z-index: 6;
+        margin:0 auto;
+        position: absolute;
 }
     .btn_startgame {
         position: absolute;
@@ -196,16 +197,27 @@ ul.list-login-bottom li a:hover {
 /* 游戏界面 */
 .block1{
     position: relative;
-    width: 1380px;
-    height: 900px;
+    width: 1020px;
+    height: 660px;
     margin-left: 30px;
     background: url(../img/map/map-sea.jpg) no-repeat;
 }
+/* 技能页面 */
+.block3{
+    position: absolute;
+    background:yellow;
+    width: 1020px;
+    height:220px;
+    float: left;
+    margin-left: 30px;
+    top:75%;
 
+}
 
 /* 信息展示界面 */
 .block2{
     position: relative;
+    float: right;
     width: 480px;
     height: 900px;
     background-image: url(../img/map/message_ui_bg.png);
