@@ -8,9 +8,8 @@ class Enemy {
         this.size = size || 60; // 敌人的大小，默认60
         this.enemy_img = enemy_img || "img/TowerDefense.png";
         this.money = money; // 死后掉落金币
-        this.enemy_level = enemy_level; // 怪物等级
-        this.boss = boss; // 是否是boss：0=小怪，1=boss
-        this.
+        this.enemy_level = enemy_level || 1; // 怪物等级
+        this.boss = boss || 0; // 是否是boss：0=小怪，1=boss
         this.enemy_img_series = enemy_type; // 怪物图片序列头
         this._init();
         this.moveArr = new search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线

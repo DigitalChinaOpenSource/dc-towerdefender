@@ -30,6 +30,8 @@ class God {
         this.useful_tower = (new TowerFactory()).TowerArr;//定义可以用的塔的类型数组变量，当调用这个对象的factory方法时，往数组里面赋值。
         this.player = new Player();
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
+        this.enemy_level = 1; // 怪物等级
+        this.boss = 0; // 是否是boss：0=小怪，1=boss
         this.useful_enemy = (new TowerFactory()).EnemyArr; 
         this.leftTime = 20;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime/60);//设置结束的时间也为0
@@ -109,10 +111,10 @@ class God {
         return Math.floor(Math.random()*maxNum);  
     } 
     // 生成敌人
-    createEnemy(level,boss) {
+    createEnemy() {
         enemy_type = randomnum(5)
-        this.level = level || 1 //需要传入怪物当前等级
-        this.boss = boss || 0 //需要传入是否为boss
+        this.level = level //需要传入怪物当前等级
+        this.boss = boss //需要传入是否为boss
         var enemy = new Enemy(this.enemy_type,
             EnemyType[this.enemy_type][0], // 血量
             EnemyType[this.enemy_type][1], // 速度
