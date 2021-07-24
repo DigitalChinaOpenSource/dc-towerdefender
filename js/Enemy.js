@@ -10,6 +10,7 @@ class Enemy {
         this.money = money; // 死后掉落金币
         this.enemy_level = enemy_level; // 怪物等级
         this.boss = boss; // 是否是boss：0=小怪，1=boss
+        this.
         this.enemy_img_series = enemy_type; // 怪物图片序列头
         this._init();
         this.moveArr = new search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线
@@ -248,9 +249,9 @@ class Enemy {
         else{this.hp -= damage;}
     }
 
-    // 识别怪物是否为boss，触发相应功能
+    // 技能：产生boss
     check_boss(){
-        if(this.boss == 1){
+        if(this.boss == 1){ //识别怪物是否为boss
             this.hp = hp*10
             this.size = 80
             this.money = money*3
@@ -262,10 +263,15 @@ class Enemy {
         }
     }
 
-    // 怪物升级
+    // 技能：怪物升级
     check_levelup(){
-        this.hp = hp*(1+0.1*this.levelup)
-        this.money = money*(1+0.1*this.levelup)
+        this.hp = hp*(1+0.1*this.enemy_level)
+        this.money = money*(1+0.1*this.enemy_level)
+    }
+
+    // 技能：怪物扣血
+    check_bloodloss(){
+        this.hp = hp*0.5
     }
 
     // 怪物死亡
