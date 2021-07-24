@@ -1,27 +1,23 @@
 class Enemy {
     // 通过hp，speed，size,enemy_img来确定enemy的种类
     // enemy_img传入敌人的图片url
-    constructor(hp, speed, size, enemy_img, money, enemy_type,range,attack,atk_speed) {
+    constructor(enemy_type, hp, speed, size, enemy_img, money, enemy_level, boss) {
         this.flag = 0; // 移动状态：1=移动中，0=停止
         this.hp = hp || ENEMY_BASE_HP; // 不同种类的enemy有不同的血量，默认是10
         this.speed = speed || ENEMY_BASE_SPEED; // 不同种类的enemy有不同的速度
         this.size = size || 60; // 敌人的大小，默认60
         this.enemy_img = enemy_img || "img/TowerDefense.png";
         this.money = money; // 死后掉落金币
-        //this.kill_blood = kill_blood; // 到达终点后玩家扣除血量
-        this.enemy_type = enemy_type; // 怪物类型
-        this.range = range;  //小怪的初始攻击范围 
-        this.attack = attack;  //小怪的初始攻击力
-        this.atk_speed = atk_speed; //小怪的初始攻击速度 
+        this.enemy_level = enemy_level; // 怪物等级
+        this.boss = boss; // 是否是boss：0=小怪，1=boss
         this.enemy_img_series = enemy_type; // 怪物图片序列头
-        this._init();// 
-        // 根据关卡数来设定敌人的路线
-        this.moveArr = new search().searchEnemyRoute(LEVEL);
-        this.index = 1;
+        this._init();
+        this.moveArr = new search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线
+        this.index = 1; // 确定怪物移动方向
         // 怪物初始参数
         this.originHp = hp; // 原始hp
         // this.origin_spd = this.speed; // 初始速度 用于速度改变使用
-        this.fight = 0;//战斗状态：0表示小怪和塔之间的距离大于小怪的攻击范围，未进入战斗状态
+
         
     //     状态参数 
     
@@ -45,22 +41,24 @@ class Enemy {
     }
 
     _init() {
-        this.create();
-        this.check_type();
+        this.createlocation();
+        this.check_boss();
+        this.levelup();
         this.speed_control(this.speed);
     }
+
      // 生成0~maxNum-1的随机整数
-     randomNum(maxNum){ 
+    randomNum(maxNum){ 
         return Math.floor(Math.random()*maxNum);  
     } 
-    // 根据随机数来确定小怪的随机刷新位置
-    create() {
-            // this.x = START_X + CELL_WIDTH;
-            // this.y = START_Y;
+
+    // 根据随机数来确定小怪的随机出生位置
+    createlocation() {
             var ran = this.randomNum(route.routeOne.length)
             this.x = route.routeOne[ran].x * CELL_WIDTH
             this.y = route.routeOne[ran].y * CELL_WIDTH
     }
+
     // 怪物dot 伤害叠加 再次dot刷新时间
     // dot_control(){
     //     var start_time = this.dot_start;
@@ -103,6 +101,7 @@ class Enemy {
     //         }
     //     }, 100);
     // }
+
     // 怪物速度控制
     speed_control(spd){
         clearInterval(this.life);
@@ -116,6 +115,7 @@ class Enemy {
             }, 10000 / spd); // 控制enemy移动速度，每 10000 / spd毫秒刷新一次
         }
     }
+
     // 怪物移动方法
     move(order) {
         var x_d;
@@ -123,9 +123,9 @@ class Enemy {
         //当游戏正常运行时，并且小怪和塔之间的距离大于小怪的攻击范围，小怪正常运行
         if (this.flag == 0 && this.fight == 0) {
             // 切换怪物图片 实现动态变化
-            if(order < 10){this.enemy_img = "img/"+this.enemy_img_series+"-1.png";}
-            else if(order < 20){this.enemy_img = "img/"+this.enemy_img_series+"-2.png";}
-            else if(order < 30){this.enemy_img = "img/"+this.enemy_img_series+"-3.png";}
+            if(order < 10){this.enemy_img = "img/monster"+this.enemy_img_series+"-1.png";}
+            else if(order < 20){this.enemy_img = "img/monster"+this.enemy_img_series+"-2.png";}
+            else if(order < 30){this.enemy_img = "img/monster"+this.enemy_img_series+"-3.png";}
             else {this.enemy_img = "img/"+this.enemy_img_series+"-4.png";}
             // 判断的时候乘CELL_WIDTH
             if (this.x != this.moveArr[this.index].x * CELL_WIDTH) {
@@ -144,15 +144,11 @@ class Enemy {
         }
     }
 
-    //小怪攻击方法
-
-
-
     // 对外接口
     // 接收击中怪物的子弹类型和伤害
     take_damage(bullet_type, damage){
         this.monster_effect(bullet_type, damage);
-        this.take_debuff();
+        // this.take_debuff();
     }  
     // 怪物debuff生效
     // take_debuff(){
@@ -251,46 +247,41 @@ class Enemy {
         if(this.hp < damage){this.hp = 0;}
         else{this.hp -= damage;}
     }
-    // 识别怪物种类，用于触发怪物技能
-     //check_type(){
-    //     // boss被动加速
-    //     if(this.enemy_type > 8){ // boss
-    //         var hpcheck = setInterval(() => {
-    //             if(this.hp <= (this.originHp / 2)){
-    //                 this.origin_spd *= this.enemy_type * 0.1 + 0.4;
-    //                 this.speed_control(this.origin_spd);
-    //                 clearInterval(hpcheck);
-    //             }
-    //         },50);
-    //     }
-        // 自动恢复血量
-    //     if(this.enemy_type == 5){
-    //         this.autoheal = setInterval(() => {
-    //             if(this.hp + 100 < this.originHp) {this.hp += 100;}
-    //             else{this.hp = this.originHp;}
-    //         }, 3000);
-    //     }
-    // }
+
+    // 识别怪物是否为boss，触发相应功能
+    check_boss(){
+        if(this.boss == 1){
+            this.hp = hp*10
+            this.size = 80
+            this.money = money*3
+            // 每秒回血
+            this.autoheal = setInterval(() => {
+                if(this.hp + 20 < this.originHp) {this.hp += 20;}
+                else{this.hp = this.originHp;}
+            }, 1000);
+        }
+    }
+
+    // 怪物升级
+    check_levelup(){
+        this.hp = hp*(1+0.1*this.levelup)
+        this.money = money*(1+0.1*this.levelup)
+    }
+
     // 怪物死亡
-    dead() {
-        // clearInterval(this.autoheal);
+    dead(){
+        clearInterval(this.autoheal);
         // clearInterval(this.check_debuff);
         clearInterval(this.life);//清除定时器
     }
-    //怪物死亡后重新刷新两个小怪
-    reBirth(hp){
-        if(this.hp == 0){
-            create();
-            create();
-        }
-
-    }
+    
     // 游戏暂停
-    stop() {
+    stop(){
         this.flag = 1;
     }
+           
     // 游戏继续
-    continue () {
+    continue() {
         this.flag = 0;
     }
 }

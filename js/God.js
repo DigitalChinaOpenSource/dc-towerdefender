@@ -104,15 +104,27 @@ class God {
         console.log("create firstenemy");
     }
 
+    // 生成0~maxNum-1的随机整数
+    randomnum(maxNum){ 
+        return Math.floor(Math.random()*maxNum);  
+    } 
     // 生成敌人
     createEnemy() {
+        enemy_type = randomnum(5)
+        level = level //需要传入怪物当前等级
+        boss = boss //需要传入是否为boss
+        var enemy = new Enemy(this.enemy_type,
+            EnemyType[this.enemy_type][0], // 血量
+            EnemyType[this.enemy_type][1], // 速度
+            EnemyType[this.enemy_type][2], // 大小
+            EnemyType[this.enemy_type][3], // 图片
+            EnemyType[this.enemy_type][4], // 死亡掉落金币
+            this.level, // 等级
+            this.boss, // 是否为boss
+            );
+        this.enemies.push(enemy);
+        // console.log(this.enemies);
         this.enemyNumber++;
-        if (this.enemyNumber <= length) {
-            var enemy = new Enemy();
-            this.enemies.push(enemy);
-            // console.log(this.enemies);
-            this.enemyNumber++;
-        }
     }
            
     judge_game(){
