@@ -12,7 +12,8 @@ class God {
             $("#logout_btn").hide();
             $("#block_left").show();
             $("#block_right").show();
-            link()
+            //绑定连接事件
+            this.link();
             this.startGame();
         });
 
@@ -29,49 +30,62 @@ class God {
 		var name
 		//ip地址
         var IP='ws://localhost:8888'
-		function link(){
-			//建立连接
-			ws = new WebSocket(IP)
-			//连接成立触发
-			ws.onopen = function(){
-				console.log('success connected')
-				// 发送自己的积分
-				var score = document.getElementById("score")
-				ws.send({type:0,score:score.value})
-			}
-			//收到消息触发
-			ws.onmessage = function(evt){
-				// 消息转为json类型
-				var recv = JSON.parse(evt.data)
-				//设定房间号
-				if(recv.type==0){
-					var roomCount = document.getElementById("roomCount")
-					roomCount.value= recv.roomCount
-					roomCount = recv.roomCount
-				}
-				// 判断信息是否是发给自己的房间的
-				if(recv.roomCount == roomCount){
-					// 判断是否为自己发的信息
-					if(recv.name != name){
-						if(recv.type == 1){
-							//生成两个小兵
-						}else if(recv.type == 2){
-							//小兵增强
-						}else if(recv.type == 3){
-							//显示聊天msg
-						}else if(recv.type == 4){
-							//输了
-							//调用断开连接方法
-						}else if(recv.type == 5){
-							//时间到，对比小兵enemy数量，判断输赢
-							////调用断开连接方法
-						}
-					}
-				}
-				
-			}
-		}
-		//小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
+		
+		
+        this._init();//入口
+        this.stopGame();
+                         
+    }
+
+    // websocket建立连接
+    link(){
+        //建立连接
+        this.ws = new WebSocket(this.IP)
+        //连接成立触发
+        this.ws.onopen = function(){
+            console.log('success connected')
+            // 发送自己的积分
+            // 积分暂时无法获取！！！！！！！！！！！！！！
+            var score = document.getElementById("score")
+            ws.send({type:0,score:score.value})
+        }
+        //收到消息触发
+        ws.onmessage = function(evt){
+            // 消息转为json类型
+            var recv = JSON.parse(evt.data)
+            //设定房间号
+            if(recv.type==0){
+                var roomCount = document.getElementById("roomCount")
+                roomCount.value= recv.roomCount
+                this.roomCount = recv.roomCount
+            }
+            // 判断信息是否是发给自己的房间的
+            if(recv.roomCount == roomCount){
+                // 判断是否为自己发的信息
+                if(recv.name != name){
+                    if(recv.type == 1){
+                        //生成两个小兵
+                        this.createEnemy()
+                        this.createEnemy()
+                    }else if(recv.type == 2){
+                        //小兵增强
+                    }else if(recv.type == 3){
+                        //显示聊天msg
+                    }else if(recv.type == 4){
+                        //赢了
+                        //调用断开连接方法
+                        this.close()
+                    }else if(recv.type == 5){
+                        //时间到，对比小兵enemy数量，判断输赢
+                        ////调用断开连接方法
+                    }
+                }
+            }
+            
+        }
+    }
+
+    //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
 		// 通过roomCount判断发给哪个房间组
 		// 通过name确定是否为对方发送的信息
 		// 通过type确定为哪种信息
@@ -87,20 +101,14 @@ class God {
 		// {type:4,roomCount: ,name:''}
 		//type:5,msg:
 		//{type:5,roomConut: ,name:'',enemy: }
-		function send(msg){
-			// 发送信息转为string发送
-			ws.send(JSON.stringify(msg))
-		}
-		// 关闭连接，再玩需要重新建立连接
-		function close(){
-			ws.onclose()
-           link()
-		}
-
-
-        this._init();//入口
-        this.stopGame();
-                         
+    send(msg){
+        // 发送信息转为string发送
+        this.ws.send(JSON.stringify(msg))
+    }
+    //websocket 关闭连接，再玩需要重新建立连接
+    close(){
+        this.ws.onclose()
+        this.link()
     }
 
     _init() {
@@ -176,6 +184,20 @@ class God {
             $("#timeshow").html(this.leftTimeMin + ":" + this.leftTimeSecond);
         },300);
 
+
+        //websocket 判断小兵是否减少，如果减少，向对方发送信息
+        // 初始小兵数量
+        var enemies = 2
+        setInterval(()=>{
+            if(enemies > this.enemyExisted){
+                var num = enemies-this.enemyExisted
+                for(var i = 0;i<num;i++){
+                    this.send({type:1,roomCount:this.roomCount,name:this.name})
+                }
+            }
+        },300)
+
+
     }
     
     createFirstEnemy(){
@@ -200,6 +222,9 @@ class God {
         if(this.enemyExisted >= 100){
             this.stopGame();
             alert("lose");
+            //websocket发送失败信息
+            this.send({type:4,roomCount:this.roomCount,name:this.name})
+
         }
         //监听时间小于100秒，并且怪的数量小于100只
         if(this.enemyExisted <100 && this.leftTime <=0){
