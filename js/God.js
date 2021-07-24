@@ -340,17 +340,16 @@ class God {
         this.judge_game();
     }
 
-    judge_game(){
-        //监听怪的数量到了100只
-        if(this.enemyExisted >= 100){
-            this.stopGame();
-            console.log("lose");
-        }
-        //监听时间小于100秒，并且怪的数量小于100只
-        if(this.enemyExisted <100 && this.leftTime <=0){
-            this.stopGame();
-            console.log("win");
-        }
-        
-    }
+    // judge_game(){
+    //     //监听怪的数量到了100只
+    //     if(this.enemyExisted >= 100){
+    //         this.stopGame();
+    //         console.log("lose");
+    //     }
+    //     //监听时间小于100秒，并且怪的数量小于100只
+    //     if(this.enemyExisted <100 && this.leftTime <=0){
+    //         this.stopGame();
+    //         console.log("win");
+    //     }
+    // }
 }
