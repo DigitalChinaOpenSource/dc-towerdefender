@@ -8,39 +8,52 @@
 }
 
 /* 游戏首页的css样式*/
-    .home {
-        /*background: url("../img/items/scene-2.png") no-repeat;*/
-        width: 1860px;
-        height: 900px;
-        z-index: 6;
-        margin:0 auto;
-        position: absolute;
+.home {
+    /* background: url("../img/items/scene-2.png") no-repeat; */
+    width: 1860px;
+    height: 900px;
+    z-index: 6;
+    margin:0 auto;
+    position: absolute;
 }
-    .btn_startgame {
-        position: absolute;
-        width: 100px;
-        height:39px;
-        left: 50%;
-        top: 40%;
-        margin-left: -50px;
-        margin-top: 20px;
-        background: url("../img/button/start.png") no-repeat;
-        background-size: 100%;
-        border-style: none;
+
+.btn_startgame {
+    position: absolute;
+    width: 38%;
+    height:38%;
+    left: 50%;
+    top: 50%;
+    margin-left: -350px;
+    margin-top: 20px;
+    cursor: pointer;
+    background: url("../img/items/button-start.png") no-repeat;
+    background-size:100%;
+    border-style: none;
+}
+
+.btn_startgame:active{
+    box-shadow: 0 0px red;
+    transform: translateY(4px);
+}
+.btn_logout {
+    cursor: pointer;
+    background: url("../img/items/button-logout.png") no-repeat;
+    border-style: none;
+    position: absolute;
+    background-size: 100%;
+    width: 38%;
+    height: 38%;
+    left: 50%;
+    top: 65%;
+    margin-top: 20px;
+    margin-left: -350px;
+
     }
-    .btn_logout {
-        background: url("../img/button/exit.png") no-repeat;
-        border-style: none;
-        position: absolute;
-        background-size: 100%;
-        width: 80px;
-        height: 80px;
-        left: 50%;
-        top: 50%;
-        margin-top: 20px;
-        margin-left: -40px;
-    }
-/*页面数，log1登录页面，2为修改密码页面，3为游戏首页，4为游戏主页，除了1其他默认不显示*/
+.btn_logout:active {
+    box-shadow: 0 0px red;
+    transform: translateY(4px);
+}
+
 #log2 {
     display: none;
 }
