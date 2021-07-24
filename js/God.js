@@ -30,6 +30,8 @@ class God {
         this.useful_tower = (new TowerFactory()).TowerArr;//定义可以用的塔的类型数组变量，当调用这个对象的factory方法时，往数组里面赋值。
         this.player = new Player();
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
+        this.enemy_level = 1; // 怪物等级
+        this.boss = 0; // 是否是boss：0=小怪，1=boss
         this.useful_enemy = (new TowerFactory()).EnemyArr; 
         this.leftTime = 20;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime/60);//设置结束的时间也为0
@@ -76,7 +78,7 @@ class God {
     startGame() {
         this.startCountTime();
         setInterval(() => {
-            console.log("enemyNuber: "+this.enemyNumber);
+            console.log("enemyNumber: "+this.enemyNumber);
          }, 1000 );
 
         setTimeout(() => {
@@ -104,15 +106,28 @@ class God {
         console.log("create firstenemy");
     }
 
+    // 生成0~max-1的随机整数
+    randomnum(max){ 
+        return Math.floor(Math.random()*max);  
+    } 
+
     // 生成敌人
     createEnemy() {
+        var enemy_type = this.randomnum(4)
+        var level = level //需要传入怪物当前等级
+        var boss = boss //需要传入是否为boss
+        var enemy = new Enemy(enemy_type,
+            EnemyType[enemy_type][0], // 血量
+            EnemyType[enemy_type][1], // 速度
+            EnemyType[enemy_type][2], // 大小
+            EnemyType[enemy_type][3], // 图片
+            EnemyType[enemy_type][4], // 死亡掉落金币
+            this.level, // 等级
+            this.boss, // 是否为boss
+            );
+        this.enemies.push(enemy);
+        // console.log(this.enemies);
         this.enemyNumber++;
-        if (this.enemyNumber <= length) {
-            var enemy = new Enemy();
-            this.enemies.push(enemy);
-            // console.log(this.enemies);
-            this.enemyNumber++;
-        }
     }
            
     judge_game(){
