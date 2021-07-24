@@ -69,6 +69,7 @@ class God {
                 MAP_ARR[i][j] = 0;
             }
         }
+        this.startGame();
     }
     
 
