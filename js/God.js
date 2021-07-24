@@ -110,10 +110,10 @@ class God {
         return Math.floor(Math.random()*maxNum);  
     } 
     // 生成敌人
-    createEnemy() {
+    createEnemy(level,boss) {
         enemy_type = randomnum(5)
-        level = level //需要传入怪物当前等级
-        boss = boss //需要传入是否为boss
+        this.level = level || 1 //需要传入怪物当前等级
+        this.boss = boss || 0 //需要传入是否为boss
         var enemy = new Enemy(this.enemy_type,
             EnemyType[this.enemy_type][0], // 血量
             EnemyType[this.enemy_type][1], // 速度
