@@ -11,8 +11,8 @@ class Enemy {
         this.enemy_level = enemy_level || 1; // 怪物等级
         this.boss = boss || 0; // 是否是boss：0=小怪，1=boss
         this.enemy_img_series = enemy_type; // 怪物图片序列头
-        this._init();
-        this.moveArr = new search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线
+        this._init();//
+        this.moveArr = new Search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线
         this.index = 1; // 确定怪物移动方向
         // 怪物初始参数
         this.originHp = hp; // 原始hp
@@ -42,8 +42,8 @@ class Enemy {
 
     _init() {
         this.createlocation();
+        this.check_levelup();
         this.check_boss();
-        this.levelup();
         this.speed_control(this.speed);
     }
 
@@ -109,33 +109,30 @@ class Enemy {
         if(spd == 0){}
         else{
             this.life = setInterval(() => {
-                order = order % 40; // 控制order的数值大小 四张图片顺次切换 每10次切换一次
+                order = order % 30; // 控制order的数值大小 四张图片顺次切换 每10次切换一次
                 this.move(order); // 移动
                 order++;
-            }, 10000 / spd); // 控制enemy移动速度，每 10000 / spd毫秒刷新一次
+            }, 10000 / spd); // 控制enemy移动速度，每10000毫秒刷新一次
         }
     }
 
     // 怪物移动方法
     move(order) {
-        var x_d;
-        var y_d;
-        //当游戏正常运行时，并且小怪和塔之间的距离大于小怪的攻击范围，小怪正常运行
-        if (this.flag == 0 && this.fight == 0) {
+        //当游戏正常运行时，小怪正常运行
+        if (this.flag == 0) {
             // 切换怪物图片 实现动态变化
             if(order < 10){this.enemy_img = "img/monster"+this.enemy_img_series+"-1.png";}
             else if(order < 20){this.enemy_img = "img/monster"+this.enemy_img_series+"-2.png";}
-            else if(order < 30){this.enemy_img = "img/monster"+this.enemy_img_series+"-3.png";}
-            else {this.enemy_img = "img/"+this.enemy_img_series+"-4.png";}
+            else {this.enemy_img = "img/monster"+this.enemy_img_series+"-3.png";}
             // 判断的时候乘CELL_WIDTH
             if (this.x != this.moveArr[this.index].x * CELL_WIDTH) {
                 // 方向向量 正数向右 负数向左
-                x_d = this.moveArr[this.index % moveArr.length].x - this.moveArr[(this.index - 1) % moveArr.length].x;
+                var x_d = this.moveArr[this.index % this.moveArr.length].x - this.moveArr[(this.index - 1) % this.moveArr.length].x;
                 // x轴每一步的距离
                 this.x = this.x + 1 * (x_d / Math.abs(x_d));
             } else if (this.y != this.moveArr[this.index].y * CELL_WIDTH) {
                 // 方向向量 正数向上 负数向下
-                y_d = this.moveArr[this.index % moveArr.length].y - this.moveArr[(this.index - 1) % moveArr.length].y;
+                var y_d = this.moveArr[this.index % this.moveArr.length].y - this.moveArr[(this.index - 1) % this.moveArr.length].y;
                 // y轴每一步的距离
                 this.y = this.y + 1 * (y_d / Math.abs(y_d));
             } else {
@@ -264,8 +261,8 @@ class Enemy {
 
     // 技能：怪物升级
     check_levelup(){
-        this.hp = hp*(1+0.1*this.enemy_level)
-        this.money = money*(1+0.1*this.enemy_level)
+        this.hp = this.hp*(1+0.1*this.enemy_level)
+        this.money = this.money*(1+0.1*this.enemy_level)
     }
 
     // 技能：怪物扣血

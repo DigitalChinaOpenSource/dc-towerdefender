@@ -78,7 +78,7 @@ class God {
     startGame() {
         this.startCountTime();
         setInterval(() => {
-            console.log("enemyNuber: "+this.enemyNumber);
+            console.log("enemyNumber: "+this.enemyNumber);
          }, 1000 );
 
         setTimeout(() => {
@@ -106,21 +106,22 @@ class God {
         console.log("create firstenemy");
     }
 
-    // 生成0~maxNum-1的随机整数
-    randomnum(maxNum){ 
-        return Math.floor(Math.random()*maxNum);  
+    // 生成0~max-1的随机整数
+    randomnum(max){ 
+        return Math.floor(Math.random()*max);  
     } 
+
     // 生成敌人
     createEnemy() {
-        enemy_type = randomnum(5)
-        this.level = level //需要传入怪物当前等级
-        this.boss = boss //需要传入是否为boss
-        var enemy = new Enemy(this.enemy_type,
-            EnemyType[this.enemy_type][0], // 血量
-            EnemyType[this.enemy_type][1], // 速度
-            EnemyType[this.enemy_type][2], // 大小
-            EnemyType[this.enemy_type][3], // 图片
-            EnemyType[this.enemy_type][4], // 死亡掉落金币
+        var enemy_type = this.randomnum(4)
+        var level = level //需要传入怪物当前等级
+        var boss = boss //需要传入是否为boss
+        var enemy = new Enemy(enemy_type,
+            EnemyType[enemy_type][0], // 血量
+            EnemyType[enemy_type][1], // 速度
+            EnemyType[enemy_type][2], // 大小
+            EnemyType[enemy_type][3], // 图片
+            EnemyType[enemy_type][4], // 死亡掉落金币
             this.level, // 等级
             this.boss, // 是否为boss
             );
