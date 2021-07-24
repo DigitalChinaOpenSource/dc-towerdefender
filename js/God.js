@@ -20,8 +20,6 @@ class God {
         });
 
         this._init();//入口
-        this.stopGame();
-                         
     }
 
     _init() {
@@ -31,7 +29,7 @@ class God {
         this.player = new Player();
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.useful_enemy = (new TowerFactory()).EnemyArr; 
-        this.leftTime = 20;//剩余时间,单位秒
+        this.leftTime = 5;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime/60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime%60;
         this.map_a = new map();
@@ -75,7 +73,7 @@ class God {
     // 开始游戏
     startGame() {
         this.startCountTime();
-        setInterval(() => {
+        this.logEnemyNumber = setInterval(() => {
             console.log("enemyNuber: "+this.enemyNumber);
          }, 1000 );
 
@@ -86,17 +84,31 @@ class God {
         }, 3000);
 
         //动态显示金币
-       this.timemoney = setInterval(() => {
+       this.timeMoney = setInterval(() => {
             $("#moneyshow").html(this.player.money);
         }, 300);
         //动态显示敌人数量
-        this.timeenemies = setInterval(() => {
+        this.timeEnemies = setInterval(() => {
             $("#lifeshow").html(this.enemyExisted);
         },300);
-        this.timeenemies = setInterval(() => {
+        // 动态显示游戏时间
+        this.timeTime = setInterval(() => {
             $("#timeshow").html(this.leftTimeMin + ":" + this.leftTimeSecond);
         },300);
+        // 时刻获取游戏状态
+        this.getGameState = setInterval(() => {
+            this.gameState();
+        },300);
 
+    }
+
+    clearAllInterval(){
+        console.log("clearallinterval");
+        clearInterval(this.timeMoney);
+        clearInterval(this.timeEnemies);
+        clearInterval(this.timeTime);
+        clearInterval(this.getGameState);
+        clearInterval(this.logEnemyNumber);
     }
     
     createFirstEnemy(){
@@ -110,28 +122,12 @@ class God {
         if (this.enemyNumber <= length) {
             var enemy = new Enemy();
             this.enemies.push(enemy);
-            // console.log(this.enemies);
             this.enemyNumber++;
         }
     }
-           
-    judge_game(){
-        console.log("into judge_game");
-        //监听怪的数量到了100只
-        if(this.enemyExisted >= 100){
-            this.stopGame();
-            alert("lose");
-        }
-        //监听时间小于100秒，并且怪的数量小于100只
-        if(this.enemyExisted <100 && this.leftTime <=0){
-            this.stopGame();
-            alert("win");
-        }
-        
-    }
 
     stopCountTime() {
-        this.countDown = clearInterval();
+        clearInterval(this.countDown);
     }
     //点击开始按钮，计时器开始计时，定时器每隔一秒将开始时间加1，将开始时间的值赋值给结束时间
     startCountTime(){
@@ -163,6 +159,7 @@ class God {
         this.stopProduce();
         this.stopEnemies();
         this.stopBullets();
+        this.clearAllInterval();
     }
     //停止产生子弹和敌人
     stopProduce() {
@@ -182,10 +179,25 @@ class God {
             this.enemies[ene].stop();
         }
     }
+    
+    
 
     // 游戏状态获取
     gameState() {
-        console.log("in gamestate before judge_game")
         this.judge_game();
+    }
+
+    judge_game(){
+        //监听怪的数量到了100只
+        if(this.enemyExisted >= 100){
+            this.stopGame();
+            console.log("lose");
+        }
+        //监听时间小于100秒，并且怪的数量小于100只
+        if(this.enemyExisted <100 && this.leftTime <=0){
+            this.stopGame();
+            console.log("win");
+        }
+        
     }
 }
