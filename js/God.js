@@ -381,7 +381,7 @@ class God {
                     
                 }       
 
-                //如果当前怪的血量小于等于1，那它一定会死，进行死亡相关结算
+                //如果当前怪的血量小于等于1，那它不管被什么子弹打中都一定会死，进行死亡相关结算
                 if (this.enemies[ene].hp <= 1) {
                     this.player.money += this.enemies[ene].money;
                     this.enemies[ene].dead();
@@ -395,6 +395,35 @@ class God {
                         
 
     }       
+
+    //绘制子弹
+    drawBullet() {
+        //获取子弹画布
+        var cv = document.querySelector('#canvasMap_bullet');
+        var ctx = cv.getContext('2d');
+        //清空原子弹画布
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        for (var bullet in this.bullets) {
+            //获取子弹图片
+            var img = new Image;
+            img.src = this.bullets[bullet].color;
+            //获取子弹的坐标
+            var x=this.bullets[bullet].x;
+            var y=this.bullets[bullet].y;
+            //将画布原点（0,0）移动到绘制出子弹的坐标点
+            ctx.translate(x, y);
+            //旋转画布，效果是子弹对着敌人的方向直线移动
+            ctx.rotate(this.bullets[bullet].direction[2]);//direction[2]是子弹类中的旋转角度
+            ctx.drawImage(img, -10,-10,20,20);//待修改，根据不同种类的塔发出的子弹类型规定放置子弹图像的位置及子弹图片大小
+
+        }
+    }
+
+
+
+
+
+
     //绘制敌人
     drawEnemies() { 
         //获取敌人对象
