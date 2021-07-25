@@ -188,4 +188,38 @@ class God {
         console.log("in gamestate before judge_game")
         this.judge_game();
     }
+
+    //绘制敌人
+    drawEnemies() { 
+        //获取敌人对象
+        var cv = document.querySelector('#canvasMap_enemy');
+        //获取2d平面
+        var ctx = cv.getContext('2d');
+        // 清空敌人图片
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        var img = new Image;
+        // 遍历数据，绘制敌人
+        for (var ene in this.enemies) {
+            img.src = this.enemies[ene].enemy_img;
+            ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
+            Ca.drawBlood(ctx, this.enemies[ene]);
+        }
+    }
+
+
+    //绘制塔
+    drawTowers() {
+        var cv = document.querySelector('#canvasMap_tower');
+        var ctx = cv.getContext('2d');
+        var img = new Image;
+        for (var tower in this.towers) {
+            var img = new Image;
+            for (var a = 0; a < this.towerAndBullets.length; a++) {
+                if (this.towers[tower].type.type == this.towerAndBullets[a].type) {
+                    img.src = this.towerAndBullets[a].tower_img;
+                    ctx.drawImage(img, this.towers[tower].x, this.towers[tower].y, CELL_WIDTH, CELL_WIDTH);
+                }
+            }
+        }
+    }
 }
