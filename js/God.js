@@ -3,13 +3,14 @@ class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
-
         $("#startgame_btn").show();
         $("#logout_btn").show();
-
+        $("#home_visi").show();
         $("#startgame_btn").on("click",() => {
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
+            $("#home_visi").hide();
+            $("#block_skill").show();
             $("#block_left").show();
             $("#block_right").show();
             this.startGame();
@@ -188,4 +189,80 @@ class God {
         console.log("in gamestate before judge_game")
         this.judge_game();
     }
+
+
+
+
+
+
+    // canvas部分*******************************************************
+    //生成布板
+    drawMap() {
+        var cv_backgroud = document.querySelector('#canvasMap_backgroud');
+        cv_backgroud.setAttribute("height", MAP_HEIGHT);
+        cv_backgroud.setAttribute("width", MAP_WIDTH);
+        cv_backgroud.setAttribute("z-index", 1);
+
+        var cv_backgroud2 = document.querySelector('#canvasMap_backgroud2');
+        cv_backgroud2.setAttribute("height", MAP_HEIGHT);
+        cv_backgroud2.setAttribute("width", MAP_WIDTH);
+        cv_backgroud2.setAttribute("z-index", 2);
+
+        var cv_enemy = document.querySelector('#canvasMap_enemy');
+        cv_enemy.setAttribute("height", MAP_HEIGHT);
+        cv_enemy.setAttribute("width", MAP_WIDTH);
+        cv_enemy.setAttribute("z-index", 3);
+
+        this.drawTowerMap();
+
+        var cv_tower = document.querySelector('#canvasMap_bullet');
+        cv_tower.setAttribute("height", MAP_HEIGHT);
+        cv_tower.setAttribute("width", MAP_WIDTH);
+        cv_tower.setAttribute("z-index", 5);
+
+        this.drawss();
+    }
+
+    //绘制选项幕布
+    drawss() {
+        var cv_option = document.querySelector('#canvasMap_option');
+        cv_option.setAttribute("height", MAP_HEIGHT);
+        cv_option.setAttribute("width", MAP_WIDTH);
+        cv_option.setAttribute("z-index", 6);
+    }
+
+    drawTowerMap() {
+        var cv_bullet = document.querySelector('#canvasMap_tower');
+        cv_bullet.setAttribute("height", MAP_HEIGHT);
+        cv_bullet.setAttribute("width", MAP_WIDTH);
+        cv_bullet.setAttribute("z-index", 4);
+    }
+    // 绘制背景
+    drawBackgound(){
+        var cv = document.querySelector('#canvasMap_backgroud2');
+        var ctx = cv.getContext('2d');
+        new search().DrawBackground(LEVEL);
+
+        //根据关卡数来画小兵行进路线
+        new search().DrawEnemyRoad(LEVEL);
+        //根据关卡数来线画塔位
+        new search().DrawTowerPlace(LEVEL);
+        //水平方向
+        ctx.beginPath();
+        ctx.fillstyle = "red";
+        for (var i = 0; i <= MAP_HEIGHT / CELL_WIDTH; i++) {
+            ctx.moveTo(0, i * CELL_WIDTH);
+            ctx.lineTo(MAP_WIDTH, i * CELL_WIDTH);
+        }
+        // 竖直方向
+        ctx.beginPath();
+        ctx.fillstyle = "red";
+        for (var j = 0; j <= MAP_WIDTH / CELL_WIDTH; j++) {
+            ctx.moveTo(CELL_WIDTH * j, 0);
+            ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
+        }
+    }
+
 }
+
+

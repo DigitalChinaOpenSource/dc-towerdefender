@@ -9,24 +9,29 @@
 
 /* 游戏首页的css样式*/
 .home {
-    /* background: url("../img/items/scene-2.png") no-repeat; */
+
     width: 1860px;
     height: 900px;
     z-index: 6;
     margin:0 auto;
     position: absolute;
 }
+.home_back {
+    margin:0 auto;
+    width: 1860px;
+    height: 900px;
+    background: url("../img/items/scene-wolfman.png") no-repeat; 
+    position: absolute;
+}
 
 .btn_startgame {
     position: absolute;
-    width: 38%;
-    height:38%;
-    left: 50%;
-    top: 50%;
-    margin-left: -350px;
-    margin-top: 20px;
+    width: 22%;
+    height:22%;
+    left: 25%;
+    top: 73%;
     cursor: pointer;
-    background: url("../img/items/button-start.png") no-repeat;
+    background: url("../img/button/button-start\(2\).png") no-repeat;
     background-size:100%;
     border-style: none;
 }
@@ -37,16 +42,14 @@
 }
 .btn_logout {
     cursor: pointer;
-    background: url("../img/items/button-logout.png") no-repeat;
+    background: url("../img/button/button-logout\(2\).png") no-repeat;
     border-style: none;
     position: absolute;
     background-size: 100%;
-    width: 38%;
-    height: 38%;
-    left: 50%;
-    top: 65%;
-    margin-top: 20px;
-    margin-left: -350px;
+    width: 22%;
+    height: 22%;
+    left: 58%;
+    top: 73%;
 
     }
 .btn_logout:active {
@@ -203,8 +206,9 @@ ul.list-login-bottom li a:hover {
     position: absolute;
     width: 1860px;
     height: 900px;
-    display: flex;
     margin:0 auto;
+    background:greenyellow;
+
 }
 
 /* 游戏界面 */
@@ -212,28 +216,30 @@ ul.list-login-bottom li a:hover {
     position: relative;
     width: 1020px;
     height: 660px;
-    margin-left: 30px;
+    margin-left: 80px;
+    background-size:auto;
+    margin-top: 50px;
     background: url(../img/map/map-sea.jpg) no-repeat;
 }
 /* 技能页面 */
 .block3{
     position: absolute;
     background:yellow;
-    width: 1020px;
-    height:220px;
-    float: left;
-    margin-left: 30px;
-    top:75%;
+    width: 900px;
+    height:120px;
+    margin-left: 140px;
+    top:82%;
 
 }
 
 /* 信息展示界面 */
 .block2{
-    position: relative;
-    float: right;
-    width: 480px;
-    height: 900px;
-    background-image: url(../img/map/message_ui_bg.png);
+    position: absolute;
+    width: 600px;
+    left:1170px;
+    top: 110px;
+    height: 660px;
+    background: pink;
     /* background-color: chocolate; */
 }
 
@@ -246,22 +252,12 @@ ul.list-login-bottom li a:hover {
 }
 
 .content_player{
-    /* background-color: bisque; */
-    color: #fff;
+    background-color: bisque; 
     margin-left: 30px;
-    width: 480px;
+    width: 540px;
     height: 300px;
     display: flex;
     
-}
-.content_player1{
-    width: 240px;
-    height: 300px;
-}
-
-.content_player2{
-    width: 240px;
-    height: 300px;
 }
 
 .content_skill{
@@ -272,9 +268,12 @@ ul.list-login-bottom li a:hover {
 }
 
 .content_chat{
-    /* background-color: darkblue; */
-    width: 480px;
-    height: 300px;
+    position: absolute;
+    background-color: darkblue;
+    bottom: 10px;
+    margin-left: 10px;
+    width: 580px;
+    height: 200px;
     
 }
 .player{
@@ -286,30 +285,25 @@ ul.list-login-bottom li a:hover {
 .title{
     list-style: none;
     float:left;
-    margin-left: 6px;
-    margin-right: 6px;
     width: 219px;
     height:60px;
     text-align:center;
-    border: 1px solid #f4f4f4;
-    margin:0 0 -1px -1px;
+    border: 1px solid black;
+    margin: 0  0 -1px -1px;
     padding-top: 18px;
     font-size: 120%;
 }
 .mess{
     text-align:center;
-    height: 50px;
+    height: 45px;
     list-style: none;
     float:left;
     margin-left: 6px;
     margin-right: 6px;
     width: 110px;
     flex-direction: row;
-    border: 1px solid #f4f4f4;
+    border: 1px solid black;
     margin:0 0 -1px -1px;
     padding-top: 10px;
-}
-.float{
-    float: left;
 }
 
