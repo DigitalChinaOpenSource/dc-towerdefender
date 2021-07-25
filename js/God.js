@@ -236,16 +236,16 @@ class God {
     // 生成敌人
     createEnemy() {
         var enemy_type = this.randomnum(4)
-        var level = level || 0 //需要传入怪物当前等级
-        var boss = boss || 0 //需要传入是否为boss
+        var enemy_level = this.enemy_level //需要传入怪物当前等级
+        var boss = this.boss //需要传入是否为boss
         var enemy = new Enemy(enemy_type,
             EnemyType[enemy_type][0], // 血量
             EnemyType[enemy_type][1], // 速度
             EnemyType[enemy_type][2], // 大小
             EnemyType[enemy_type][3], // 图片
             EnemyType[enemy_type][4], // 死亡掉落金币
-            this.level, // 等级
-            this.boss, // 是否为boss
+            enemy_level, // 等级
+            boss, // 是否为boss
             );
         this.enemies.push(enemy);
         // console.log(this.enemies);
