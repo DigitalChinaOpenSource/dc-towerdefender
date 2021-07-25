@@ -1,12 +1,12 @@
 class map{
     constructor(player_name, player_score, player_money, monsters_killed, monsters_alive,tower_num) {
-        this.player_name = player_name;
-        this.player_score = player_score;
-        this.player_money = player_money;
-        this.monsters_killed = monsters_killed;
-        this.monsters_alive = monsters_alive;
-        this.tower_num=tower_num;
-        var myDate = new Date();
+        this.player_name = player_name;//昵称
+        this.player_score = player_score;//分数
+        this.player_money = player_money;//金币
+        this.monsters_killed = monsters_killed;//杀死的怪物数量
+        this.monsters_alive = monsters_alive;//存活的怪物数量
+        this.tower_num=tower_num;//塔数量
+        var myDate = new Date();//过了的时间
 
         // 0:地图，1:小兵路线，2:防御塔放置范围
         var map=[
@@ -23,6 +23,7 @@ class map{
             [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0]
         ]
     }
+    //set方法
     setPlayer_name(player_name) {
         this.player_name=player_name;
     }
@@ -45,7 +46,7 @@ class map{
          this.myDate=myDate;
     }
 
-    
+    //get方法   
     getPlayer_name() {
         return this.player_name;
     }
