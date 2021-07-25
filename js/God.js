@@ -341,7 +341,6 @@ class God {
         this.judge_game();
     }
 
-<<<<<<< HEAD
 
 
 
@@ -415,7 +414,6 @@ class God {
         }
     }
 
-=======
     // judge_game(){
     //     //监听怪的数量到了100只
     //     if(this.enemyExisted >= 100){
@@ -428,7 +426,6 @@ class God {
     //         console.log("win");
     //     }
     // }
->>>>>>> origin/develop
 }
 
 
