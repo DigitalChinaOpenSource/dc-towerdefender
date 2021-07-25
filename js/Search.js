@@ -23,13 +23,13 @@ class Search {
     searchEnemyRoute(map_index) {
         switch (map_index) {
             case 0:
-                return moveRoute.routeOne;
+                return moveRoute.MOVEARROne;
                 break;
             case 1:
-                return moveRoute.routeTwo;
+                return moveRoute.MOVEARRTwo;
                 break;
             case 2:
-                return moveRoute.routeThree;
+                return moveRoute.MOVEARRThree;
                 break;
             default:
                 return moveRoute.MOVEARROne;
