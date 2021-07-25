@@ -458,3 +458,15 @@ class God {
         }
     }
 }
+
+var Canvas = {
+    //清除画布
+    //清除画布原点到(x,y)范围的画布
+    clear: function (cxt, x, y) {
+        cxt.clearRect(0, 0, x, y);
+    },
+    //清除从(x,y)点到width,height范围内的画布（width与height是长度而不是坐标）
+    clearRect: function (cxt, x, y, width, height) {
+        cxt.clearRect(x, y, width, height);
+    },
+}
