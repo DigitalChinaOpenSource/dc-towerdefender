@@ -195,6 +195,7 @@ class God {
         this.getGameState = setInterval(() => {
             this.gameState();
         },300);
+        this.chat();//聊天功能
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
         // // 初始小兵数量
@@ -352,4 +353,37 @@ class God {
     //         console.log("win");
     //     }
     // }
+    
+    //聊天
+    chat(){
+            // console.log(this.player)
+            var player1 = this.player;
+            var Words = document.getElementById("words");
+            var Who = document.getElementById("who");
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
+            TalkSub.onclick = function(){
+                //定义空字符串
+                var str = "";
+                if(TalkWords.value == ""){
+                    // 消息为空时弹窗
+                    alert("消息不能为空");
+                    return;
+                }
+                //作弊
+                if(TalkWords.value=="show me the money"){
+                    player1.money = 10000;
+                    // console.log(player1)
+                    return;
+                }
+                //判断是谁发出的
+                if(Who.value == 0){
+                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                }
+                else{
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                }
+                Words.innerHTML = Words.innerHTML + str;
+            }
+        }
 }
