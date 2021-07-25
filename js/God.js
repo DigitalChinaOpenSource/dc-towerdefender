@@ -352,4 +352,47 @@ class God {
     //         console.log("win");
     //     }
     // }
+
+    //检查塔的状态并生成子弹
+    checkAndCreateBullets() {
+        if (this.towersNumber <= 0) { //如果场上没有塔，则不生成子弹
+            return false;
+        }
+        for (var tower in this.towers) {
+            for (var ene in this.enemies) {
+                var distanceX = this.towers[tower].x - this.enemies[ene].x; //计算塔到敌人的X坐标距离
+                var distanceY = this.towers[tower].y - this.enemies[ene].y; //计算塔到敌人的Y坐标距离
+                if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) { //判断怪物是否在塔的范围内
+                        this.bullets.push(new Bullet(
+                        this.towers[tower].x,
+                        this.towers[tower].y,
+                        this.enemies[ene].x,
+                        this.enemies[ene].y,
+                        this.towers[tower].type.bullet_type.speed,    //创建塔的时候也确定了塔的子弹的属性
+                        this.towers[tower].type.bullet_type.color,
+                        this.towers[tower].type.bullet_type.size,
+                        this.towers[tower].type.bullet_type.attack,
+                        this.towers[tower].type.bullet_type.type,
+                        this.towers[tower].type.bullet_type.run,
+                        this.towers[tower].type.bullet_type.reduce,
+                        this.towers[tower].type.bullet_type.blood,
+                        this.towers[tower].type.bullet_type.second,
+                    )); 
+                    
+                }       
+
+                //如果当前怪的血量小于等于1，那它一定会死，进行死亡相关结算
+                if (this.enemies[ene].hp <= 1) {
+                    this.player.money += this.enemies[ene].money;
+                    this.enemies[ene].dead();
+                    this.enemyNumber--;  
+                    this.enemies[ene] = null;
+                    this.enemies.splice(ene, 1); //从数组中删除已死的怪物
+                    this.enemyExisted--;
+                } 
+            }   
+        }
+                        
+
+    }       
 }
