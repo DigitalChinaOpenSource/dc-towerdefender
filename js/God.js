@@ -114,8 +114,8 @@ class God {
     // 生成敌人
     createEnemy() {
         var enemy_type = this.randomnum(4)
-        var level = level //需要传入怪物当前等级
-        var boss = boss //需要传入是否为boss
+        var level = level || 1 //需要传入怪物当前等级
+        var boss = boss || 0 //需要传入是否为boss
         var enemy = new Enemy(enemy_type,
             EnemyType[enemy_type][0], // 血量
             EnemyType[enemy_type][1], // 速度
