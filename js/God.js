@@ -211,7 +211,7 @@ class God {
     drawTowers() {
         var cv = document.querySelector('#canvasMap_tower');
         var ctx = cv.getContext('2d');
-        var img = new Image;
+
         for (var tower in this.towers) {
             var img = new Image;
             for (var a = 0; a < this.towerAndBullets.length; a++) {
