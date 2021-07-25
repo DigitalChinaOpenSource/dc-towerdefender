@@ -7,11 +7,23 @@ class God {
         $("#startgame_btn").show();
         $("#logout_btn").show();
 
+        // 隐藏匹配页面
+        // $(".match").hide();
+
         $("#startgame_btn").on("click",() => {
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
-            $("#block_left").show();
+             $("#block_left").show();
             $("#block_right").show();
+
+            //隐藏游戏页面，显示匹配页面，修改start******************
+            // this.showTime();
+            // $(".block3").hide();
+            // $("#block_left").hide();
+            // $("#block_right").hide();
+            // $(".match").show();
+            // 修改end******************
+
             // //绑定连接事件
             // this.link();
             this.startGame();
@@ -34,6 +46,31 @@ class God {
 		
         this._init();//入口
     }
+    
+    // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
+    // showTime() {
+    //     var count=6;        
+    //     var time=setInterval(function () {
+    //         count -= 1;
+    //         if(count==3){
+    //             $("#match_before").hide();
+    //             $("#match_after").show();
+    //         }
+    //         if (count == 0) {
+    //             clearInterval(time);
+    //             $("#startgame_btn").hide();
+    //             $("#logout_btn").hide();
+    //             $("#block_left").show();
+    //             $("#block_right").show();
+    //             $(".match").hide();
+    //         }else{    
+    //             // console.log("*****"+count);
+    //             document.getElementById('match_time').innerHTML = count;
+    //         } 
+            
+    //     }, 1000);
+    // }
+    // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面end
 
     // // websocket建立连接
     // link(){
