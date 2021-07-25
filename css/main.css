@@ -184,8 +184,53 @@ ul.list-login-bottom li a:hover {
 #start2{
     display: none;
 }
+/* 登录注册页面end */
 
-/* end */
+/* 匹配页面样式start */
+/* .match{
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: center;
+    
+}
+#match_header{
+    padding: 90px;
+}
+.our_part{
+    
+    height: 660px;
+    background: url(../img/match/my.jpg) no-repeat;
+    background-size: 100%;
+    float: left;
+    width: 40%;
+    padding-top: 75px;
+}
+.enemy_part{
+    height: 660px;
+    background: url(../img/match/my.jpg) no-repeat;
+    background-size: 100%;
+    float: left;
+    width: 40%;
+    padding-top: 75px;
+}
+.our_part img,.enemy_part img{
+    width: 39%;
+    border-radius: 50%;
+    padding-top: 15px;
+}
+.vs{
+    float: left;
+    width: 20%;
+    padding-top: 45px;
+}
+.match h2{
+    padding-top: 20px;
+}
+#match_time{
+    padding-top: 30px;
+} */
+
+/* 匹配页面end */
 
 /*游戏主页----------------------------------------------------------------------------*/
 /* 总界面 */
