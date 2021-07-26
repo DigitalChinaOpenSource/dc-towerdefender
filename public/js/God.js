@@ -514,7 +514,7 @@ class God {
                     if (this.enemies[ene].hp <= 1) {
                             this.player.money += this.enemies[ene].money;
                             this.enemies[ene].dead();
-                            this.nowenemys--;  
+                            this.enemyExisted--;  
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
