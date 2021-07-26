@@ -247,8 +247,8 @@ class God {
         //         enemies = this.enemyExisted
         //     }
         // },300)
-
     }
+
 
     clearAllInterval(){
         console.log("clearallinterval");
@@ -349,6 +349,7 @@ class God {
         this.stopEnemies();
         this.stopBullets();
         this.clearAllInterval();
+        this.kill_all_bullets();
     }
     //停止产生子弹和敌人
     stopProduce() {
@@ -367,6 +368,13 @@ class God {
         for (var ene in this.enemies) {
             this.enemies[ene].stop();
         }
+    }
+
+    kill_all_bullets(){
+        console.log("kill all bullets");
+        this.bullets.forEach((bullet) => {
+            bullet.dead();
+        })
     }
     
     
