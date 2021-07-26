@@ -26,8 +26,7 @@ function websocketLink(){
             if(recv.name != linkName){
                 if(recv.type == 1){
                     //生成两个小兵
-                    this.createEnemy()
-                    this.createEnemy()
+                    
                 }else if(recv.type == 2){
                     //小兵增强
                 }else if(recv.type == 3){
