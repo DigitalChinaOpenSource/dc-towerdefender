@@ -637,7 +637,7 @@ class God {
         { type :1,range: 3, tower_img: "img/tower/tower1-1.png", bullet_type: BulletType.one, cost: 100, sale: 80 },
         { type :4,range:3, tower_img: "img/tower/tower2-1.png", bullet_type: BulletType.four, cost: 180, sale: 100 },
         { type :7,range:4, tower_img: "img/tower/tower3-1.png", bullet_type: BulletType.seven, cost: 220, sale: 150 },
-        { ten:{type :10,range: 4, tower_img: "img/tower/tower4-1.png", bullet_type: BulletType.ten, cost: 200, sale: 120 },
+        { type :10,range: 4, tower_img: "img/tower/tower4-1.png", bullet_type: BulletType.ten, cost: 200, sale: 120 }
     ]
 
     
