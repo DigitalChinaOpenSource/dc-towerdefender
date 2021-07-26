@@ -3,11 +3,6 @@ var LEVEL = 0; // 游戏难度
 const MAP_HEIGHT = 660; // 地图高度
 const MAP_WIDTH = 1200; // 游戏宽度
 const CELL_WIDTH = 60; // 每格的长度
-const TOTAL_LEVEL = 5; // 游戏总共轮数
-// var START_X ; // 小怪出生位置 X
-// var START_Y ; // 小怪出生位置 Y
-// var END_X ; // 保护位置 X
-// var END_Y ; //保护位置 Y
 const MAP_X = MAP_WIDTH / CELL_WIDTH; // 地图X格子数
 const MAP_Y = MAP_HEIGHT / CELL_WIDTH; // 地图Y格子数
 
@@ -49,3 +44,8 @@ const END_HP = 100; //基地血量
 //控制小兵出生间隔速度
 var TIMEOUT = 10;
 var all_ghost_num;
+
+//技能所需金币设置
+const increase_enemy_level_money=100;
+const reduce_enemy_blood_money=100;
+const add_boss_money=50;
