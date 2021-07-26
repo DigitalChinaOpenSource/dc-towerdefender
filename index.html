@@ -9,7 +9,8 @@
 </head>
 <body>
     <!--游戏首页-->
-    <div class="home">
+    <div class="home" >
+        <div class="home_back" id="home_visi"></div>
         <button class="btn_startgame hide_it" id="startgame_btn"></button>
         <button class="btn_logout hide_it" id="logout_btn"></button>
     </div>
@@ -46,7 +47,7 @@
             <canvas id="canvasMap_bullet"></canvas>
             <canvas id="canvasMap_option"></canvas>
         </div>
-        <div class="block3">
+        <div class="block3 hide_it" id="block_skill">
             技能栏
         </div>
         <div class="block2 hide_it" id="block_right">
@@ -72,7 +73,7 @@
                 </table>
             </div>
             <div class="content_player">
-                <ul style="list-style: none;font-size:100%;margin-left: -7px" id="player1">
+                <ul style="list-style: none;font-size:100%;margin-top:10px;margin-left: 45px" id="player1">
                     <li class="title">我方信息:</li>
                     <li class="mess">昵称:</li>
                     <li class="mess" id="p1nameshow">name</li>
@@ -85,7 +86,7 @@
                     <li class="mess">场上还剩怪物:</li>
                     <li class="mess" id="p1leaveenemyshow">leave</li>
                 </ul>
-                <ul style="list-style: none;font-size: 100%;float: left; margin-left: -30px;" id="player1">
+                <ul style="list-style: none;font-size: 100%;float: left;margin-top:10px; margin-left: -30px;" id="player1">
                     <li class="title">敌方信息:</li>
                     <li class="mess">昵称:</li>
                     <li class="mess" id="p2nameshow">name</li>
