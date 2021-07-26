@@ -592,6 +592,9 @@ class God {
                         // 子弹类型：this.bullets[bullet].type
                         // 子弹伤害：this.bullets[bullet].atk
                         this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                        this.bullets[bullet].dead();
+                        this.bullets[bullet] = null;
+                        this.bullets.splice(bullet, 1);
                         // 生命为0的时候 敌人死去
                         if (this.enemies[ene].hp <= 0) {
                             this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
