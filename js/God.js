@@ -1,11 +1,29 @@
-
 class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
+
+        this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
-        $("#home_visi").show();
+        $("#skill-btns-container").hide();
+        // let e1 = new Enemy();
+        // e1.level = 1;
+        // e1.hp = 5;
+        // e1.boss = 0;
+        // this.enemies.push(e1);
+        // let e2 = new Enemy();
+        // e2.level = 1;
+        // e2.hp = 5;
+        // e2.boss = 0;
+        // this.enemies.push(e2);
+        // let self = this;
+
+        // console.log(new Player().money);
+        // var a = setInterval(() => {
+        //     $("#moneyshow").html(300);
+        // }, 300);
+        // console.log(a);
         $("#startgame_btn").on("click",() => {
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
@@ -13,36 +31,28 @@ class God {
             $("#block_skill").show();
             $("#block_left").show();
             $("#block_right").show();
-
-            //隐藏游戏页面，显示匹配页面，修改start******************
-            // this.showTime();
-            // $(".block3").hide();
-            // $("#block_left").hide();
-            // $("#block_right").hide();
-            // $(".match").show();
-            // 修改end******************
+            $("#skill-btns-container").show();
 
             // //绑定连接事件
             // this.link();
             this.startGame();
         });
 
-        $("#logout_btn").on("click",() => {
-            window.location.href='./log.html';
+        $("#logout_btn").on("click", () => {
+            window.location.href = './log.html';
         });
 
 
         // // websocket连接
-		// var ws
-		// // 房间号
-		// var roomCount
-		// // 用户名
-		// var name
-		// //ip地址
+        // var ws
+        // // 房间号
+        // var roomCount
+        // // 用户名
+        // var name
+        // //ip地址
         // var IP='ws://localhost:8888'
-		
-		
-        this._init();//入口
+
+
     }
     
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
@@ -121,26 +131,26 @@ class God {
     //                 }
     //             }
     //         }
-            
+
     //     }
     // }
 
     //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
-		// 通过roomCount判断发给哪个房间组
-		// 通过name确定是否为对方发送的信息
-		// 通过type确定为哪种信息
-		//type:0,msg:
-		//{type:0,score:}
-		// type:1,msg：
-		// {type:1,roomCount: ,name:''}
-		// type:2,msg：
-		// {type:2,roomCount: ,name:''}
-		// type:3,msg：
-		// {type:3,roomCount: ,name:','msg:''}
-		// type:4,msg：
-		// {type:4,roomCount: ,name:''}
-		//type:5,msg:
-		//{type:5,roomConut: ,name:'',enemy: }
+    // 通过roomCount判断发给哪个房间组
+    // 通过name确定是否为对方发送的信息
+    // 通过type确定为哪种信息
+    //type:0,msg:
+    //{type:0,score:}
+    // type:1,msg：
+    // {type:1,roomCount: ,name:''}
+    // type:2,msg：
+    // {type:2,roomCount: ,name:''}
+    // type:3,msg：
+    // {type:3,roomCount: ,name:','msg:''}
+    // type:4,msg：
+    // {type:4,roomCount: ,name:''}
+    //type:5,msg:
+    //{type:5,roomConut: ,name:'',enemy: }
     // send(msg){
     //     // 发送信息转为string发送
     //     this.ws.send(JSON.stringify(msg))
@@ -151,6 +161,8 @@ class God {
     //     this.link()
     // }
 
+
+
     _init() {
         //初始化（1先定义一个可以安置的塔的种类的数组.2创建一个玩家对象。3画出四层画布。4创建一个json形式的敌人数组，根据LEVEL数组被赋值,赋值为另一个数组（敌人的 类型，数量enemyType: EnemyType.DesertMob, num: 10）
         // 5 定义两个变量：地图上敌人数量，需要消灭的敌人数量）
@@ -160,10 +172,10 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.useful_enemy = (new TowerFactory()).EnemyArr; 
+        this.useful_enemy = (new TowerFactory()).EnemyArr;
         this.leftTime = 5;//剩余时间,单位秒
-        this.leftTimeMin = parseInt(this.leftTime/60);//设置结束的时间也为0
-        this.leftTimeSecond = this.leftTime%60;
+        this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
+        this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
         this.enemyNumber = 0; // 算上正在reborn的敌人的总数量
         this.enemyExisted = 0; // 地图上存在的的敌人数量
@@ -182,7 +194,7 @@ class God {
             var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
             var option_y = parseInt(e.offsetY / CELL_WIDTH);
             this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
-            this.chooseTower(option_x, option_y, e, this.towerAndBullets);//选择一个塔，然后
+            this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
         });
 
         $("tower1").mousedown((e) => {
@@ -200,14 +212,14 @@ class God {
             }
         }
     }
-    
 
     // 开始游戏
     startGame() {
+        // $('block3').css("display","block")
         this.startCountTime();
         this.logEnemyNumber = setInterval(() => {
-            console.log("enemyNuber: "+this.enemyNumber);
-         }, 1000 );
+            console.log("enemyNuber: " + this.enemyNumber);
+        }, 1000);
 
         setTimeout(() => {
             console.log("wait 3s");
@@ -215,23 +227,145 @@ class God {
             this.createFirstEnemy();
         }, 3000);
 
+
+         //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
+        $("#reduce_enemy_blood").on("click", () => {
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + reduce_enemy_blood_money);
+            if (this.enemies.length > 0) {
+                if (reduce_enemy_blood_money <= this.player.money) {
+                    this.enemies.forEach((e) => {
+                        e.check_bloodloss();
+                    })
+                    //金币数量减少
+                    this.player.money = this.player.money - reduce_enemy_blood_money;
+                    console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
+                }
+                else {
+                    // console.log(this.player.money);
+                    alert("给自己小怪减血技能金币数量不够");
+                }
+            } else {
+                alert("地图上没有小怪，无法减血");
+            }
+        });
+
+        //增强对方的小怪等级，点击按钮时调用
+        $("#increase_enemy_level").on("click", () => {
+            // console.log(this.enemies);
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + increase_enemy_level_money);
+            console.log("小怪的数量为" + this.enemies.length);
+            if (this.enemies.length > 0) {
+                if (this.enemies.length > 0) {
+                    if (increase_enemy_level_money <= this.player.money) {
+                        this.enemies.forEach((e) => {
+                            e.check_levelup();
+                        })
+                        this.enemy_level++;
+                        this.player.money = this.player.money - increase_enemy_level_money;
+                        console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+                    } else {
+                        alert("给对方小怪升级金币数量不够");
+                    }
+                }
+            } else {
+                alert("地图上没有小怪，无法升级");
+            }
+        });
+
+        //给对方增加一个boss，点击按钮时调用
+        $("#add_boss").on("click", () => {
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + add_boss_money);
+            if (add_boss_money <= this.player.money) {
+                var pro_boss = new Enemy();
+                pro_boss.boss = 1;
+                pro_boss.check_boss();
+                this.player.money = this.player.money - add_boss_money;
+                console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
+            } else {
+                alert("给对方增加一个boss金币数量不够");
+            }
+        });
         //动态显示金币
-       this.timeMoney = setInterval(() => {
+        this.timeMoney = setInterval(() => {
             $("#moneyshow").html(this.player.money);
         }, 300);
         //动态显示敌人数量
         this.timeEnemies = setInterval(() => {
             $("#lifeshow").html(this.enemyExisted);
-        },300);
+        }, 300);
         // 动态显示游戏时间
         this.timeTime = setInterval(() => {
             $("#timeshow").html(this.leftTimeMin + ":" + this.leftTimeSecond);
-        },300);
+        }, 300);
         // 时刻获取游戏状态
         this.getGameState = setInterval(() => {
             this.gameState();
-        },300);
-        this.chat();//聊天功能
+        }, 300);
+
+        // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
+        // $("#reduce_enemy_blood").on("click", () => {
+        //     // console.log(this.timeMoney);
+        //     if (this.enemies.length > 0) {
+        //         if (reduce_enemy_blood_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     console.log("小怪为"+this.enemies[e]);
+        //             //     // this.enemies[e].check_bloodloss();
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 console.log("进入到循环");
+        //                 e.check_bloodloss();
+        //             })
+        //         } else {
+        //             // console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法减血");
+        //     }
+        // });
+
+        // //增强对方的小怪等级，点击按钮时调用
+        // $("#increase_enemy_level").on("click", () => {
+        //     // console.log(this.enemies);
+        //     if (this.enemies.length > 0) {
+        //         if (increase_enemy_level_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     this.enemies[e].check_levelup();
+        //             //     this.enemy_level++;
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 e.check_levelup();
+        //             })
+        //             this.enemy_level++;
+        //         } else {
+        //             console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法升级");
+        //     }
+        // });
+
+        // //给对方增加一个boss，点击按钮时调用
+        // $("#add_boss").on("click", () => {
+        //     if (add_boss_money < this.player.money) {
+        //         var pro_boss = new Enemy();
+        //         pro_boss.boss = 1;
+        //         pro_boss.check_boss();
+        //     } else {
+        //         console.log(this.timeMoney);
+        //         alert("金币数量不够");
+        //     }
+
+        // });
+
+
+
+
+
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
         // // 初始小兵数量
@@ -248,10 +382,9 @@ class God {
         //         enemies = this.enemyExisted
         //     }
         // },300)
-
     }
 
-    clearAllInterval(){
+    clearAllInterval() {
         console.log("clearallinterval");
         clearInterval(this.timeMoney);
         clearInterval(this.timeEnemies);
@@ -259,16 +392,16 @@ class God {
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
     }
-    
-    createFirstEnemy(){
+
+    createFirstEnemy() {
         this.createEnemy();
         console.log("create firstenemy");
     }
 
     // 生成0~max-1的随机整数
-    randomnum(max){ 
-        return Math.floor(Math.random()*max);  
-    } 
+    randomnum(max) {
+        return Math.floor(Math.random() * max);
+    }
 
     // 生成敌人
     createEnemy() {
@@ -293,11 +426,11 @@ class God {
             this.enemyNumber++;
         }
     }
-           
-    judge_game(){
+
+    judge_game() {
         console.log("into judge_game");
         //监听怪的数量到了100只
-        if(this.enemyExisted >= 100){
+        if (this.enemyExisted >= 100) {
             this.stopGame();
             alert("lose");
             // //websocket发送失败信息
@@ -307,40 +440,92 @@ class God {
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
-        if(this.enemyExisted <100 && this.leftTime <=0){
+        if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
             // // 发送自己的小兵剩余信息给对方
             // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
             alert("win");
         }
-        
     }
 
     stopCountTime() {
         clearInterval(this.countDown);
     }
     //点击开始按钮，计时器开始计时，定时器每隔一秒将开始时间加1，将开始时间的值赋值给结束时间
-    startCountTime(){
+    startCountTime() {
         this.countDown = setInterval(() => {
-            if(this.leftTime>0){
-                this.leftTime --;
-                if(this.leftTimeSecond>0){
-                    this.leftTimeSecond --;
+            if (this.leftTime > 0) {
+                this.leftTime--;
+                if (this.leftTimeSecond > 0) {
+                    this.leftTimeSecond--;
                 }
-                else{
-                    if(this.leftTimeMin>0){
+                else {
+                    if (this.leftTimeMin > 0) {
                         this.leftTimeSecond = 59;
-                        this.leftTimeMin --;
+                        this.leftTimeMin--;
                     }
-                    else{
+                    else {
                         this.stopCountTime();
                     }
                 }
             }
-            else{
+            else {
                 this.stopCountTime();
             }
-        },1000)
+        }, 1000)
+    }
+
+    // 检查并生成子弹
+    checkAndCreateBullets() {
+        if (this.towersNumber <= 0) {
+            return false;
+        }
+        for (var tower in this.towers) {
+            for (var ene in this.enemies) {
+                var distanceX = this.towers[tower].x - this.enemies[ene].x;
+                var distanceY = this.towers[tower].y - this.enemies[ene].y;
+                if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) {
+                    // if(this.towers[tower].seed!=1)               
+                    //     {
+                    //         this.towers[tower].seed++;
+                    //         this.bullets.push(new Bullet(
+                    //         this.towers[tower].x,
+                    //         this.towers[tower].y,
+                    //         this.enemies[ene].x,
+                    //         this.enemies[ene].y,
+                    //         this.towers[tower].type.bullet_type.speed,    //创建塔的时候也确定了塔的子弹的属性
+                    //         this.towers[tower].type.bullet_type.color,
+                    //         this.towers[tower].type.bullet_type.size,
+                    //         this.towers[tower].type.bullet_type.attack,
+                    //         this.towers[tower].type.bullet_type.type,
+                    //         this.towers[tower].type.bullet_type.run,
+                    //         this.towers[tower].type.bullet_type.reduce,
+                    //         this.towers[tower].type.bullet_type.blood,
+                    //         this.towers[tower].type.bullet_type.second,
+                    //     )); }
+
+                    this.enemies[ene].take_damage(this.towers[tower].type.bullet_type.type,this.towers[tower].type.bullet_type.attack);
+                           
+                        }
+
+                }       
+
+               
+                    if (this.enemies[ene].hp <= 1) {
+                            this.player.money += this.enemies[ene].money;
+                            this.enemies[ene].dead();
+                            this.nowenemys--;  
+                            this.enemies[ene] = null;
+                            this.enemies.splice(ene, 1);
+                            this.enemyExisted--;
+                            this.enemies[ene++].take_damage(this.towers[tower].type.bullet_type.type,this.towers[tower].type.bullet_type.attack);
+                            // console.log(ene);
+                            //ene++;
+                        } 
+                        }
+                        
+                        
+
     }
 
     // 暂停游戏
@@ -350,6 +535,11 @@ class God {
         this.stopEnemies();
         this.stopBullets();
         this.clearAllInterval();
+        this.kill_all_bullets();
+        // $("#skill-btns-container").hide();
+        document.getElementById("increase_enemy_level").disabled=true;
+        document.getElementById("reduce_enemy_blood").disabled=true;
+        document.getElementById("add_boss").disabled=true;
     }
     //停止产生子弹和敌人
     stopProduce() {
@@ -369,14 +559,56 @@ class God {
             this.enemies[ene].stop();
         }
     }
+
+    kill_all_bullets(){
+        console.log("kill all bullets");
+        this.bullets.forEach((bullet) => {
+            bullet.dead();
+        })
+    }
     
     
 
     // 游戏状态获取
-    gameState() {
+    gameState() {
         this.judge_game();
+        this.bullet_touch_enemy();
     }
 
+    bullet_touch_enemy(){
+        for(let bullet in bullets){
+            if (this.bullets[bullet].x < 0 || this.bullets[bullet].y < 0 ||
+                this.bullets[bullet].x > MAP_WIDTH || this.bullets[bullet].y > MAP_HEIGHT) {
+                this.bullets[bullet].dead();
+                this.bullets[bullet] = null;
+                this.bullets.splice(bullet, 1);
+            }else{
+                for (let ene in this.enemies) {
+                    // 触碰到敌人时 敌人血量减少
+                    let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
+                    let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
+                    if ((distanceX*distanceX+distanceY*distanceY)<=
+                        ((this.bullets[bullet].size+30)*(this.bullets[bullet].size+30))) {
+                        // 调用敌人扣血，传入子弹类型与子弹伤害：
+                        // 子弹类型：this.bullets[bullet].type
+                        // 子弹伤害：this.bullets[bullet].atk
+                        this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                        // 生命为0的时候 敌人死去
+                        if (this.enemies[ene].hp <= 0) {
+                            this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
+                            this.enemies[ene].dead();
+                            // console.log("kill");
+                            this.nowenemys--;
+                            this.enemies[ene] = null;
+                            this.enemies.splice(ene, 1);
+                            this.enemyExisted--;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
 
 
@@ -449,20 +681,7 @@ class God {
             ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
         }
     }
-
-    // judge_game(){
-    //     //监听怪的数量到了100只
-    //     if(this.enemyExisted >= 100){
-    //         this.stopGame();
-    //         console.log("lose");
-    //     }
-    //     //监听时间小于100秒，并且怪的数量小于100只
-    //     if(this.enemyExisted <100 && this.leftTime <=0){
-    //         this.stopGame();
-    //         console.log("win");
-    //     }
-    // }
-    
+  
     //聊天
     chat(){
             // console.log(this.player)
@@ -495,6 +714,262 @@ class God {
                 Words.innerHTML = Words.innerHTML + str;
             }
         }
+
+    //选塔------------------------------------------------------------------------------------------------
+    chooseTower(option_x, option_y, e, type) {
+        var s = 0; //选塔标签，1表示选中了塔
+        if (this.options.length > 0 || MAP_ARR[option_x][option_y] == 1) {
+            var origin = parseInt(this.useful_tower.length / 5); //第一个选项塔的位置
+            var b = 0;
+             console.log(this.options);
+             console.log(origin);
+            for (var option in this.options) {
+                for (var a = 0; a < this.useful_tower.length; a++) {
+                    if (a % 3 >= 0 && a % 3 < 1) {
+                        b++;
+                        if (this.options[option].x - (origin - b) * CELL_WIDTH <= e.offsetX && e.offsetX < this.options[option].x - (origin - b - 1) * CELL_WIDTH && this.options[option].y - CELL_WIDTH <= e.offsetY && e.offsetY < this.options[option].y) {
+                            //选择左上角的塔建塔
+                            this.createTower(this.options[option].x / CELL_WIDTH, this.options[option].y / CELL_WIDTH, type[a]);
+                            s = 1;
+                            this.drawss();
+                        }
+                    }
+                }
+                if (s == 0) {
+                    this.options.splice(option, 1);
+                    this.drawss();
+                    this.createOption(option_x, option_y);
+                    if (this.options.length > 1) {
+                        this.options.splice(option, 1);
+                    }
+                }
+
+            }
+
+        } else {
+            this.drawss();
+            for (var cx in this.xx) {
+                this.xx.splice(cx, 1);
+            }
+            this.createOption(option_x, option_y);//检查选的是不是在坑位上。
+        }
+    }
+
+    //升级塔
+    Tower_up(tower, x, y) {
+        var type = tower.type;
+        var new_type = type + 1;
+        this.x = x + 1;
+        this.y = y + 1;
+        //根据塔的type，首先删除塔，在新建一个高级塔
+        switch (type) {
+            case 1:
+                //删除当前塔
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower1-2.png";
+                        this.towers[tower].type = TowerType.two;
+                        MAP_ARR[x - 1][y + 1] = 0;
+                        this.drawTowerMap();
+                        MAP_ARR[x - 1][y + 1] = 1;
+                    }
+                }
+                break;
+            case 2:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower1-3.png";
+                        this.towers[tower].type = TowerType.three;
+                    }
+                }
+                break;
+            case 3:
+                break;
+            case 4:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower2-2.png";
+                        this.towers[tower].type = TowerType.five;
+                    }
+                }
+                break;
+            case 5:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower2-3.png";
+                        this.towers[tower].type = TowerType.six;
+                    }
+                }
+                break;
+            case 6:
+                break;
+            case 7:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower3-2.png";
+                        this.towers[tower].type = TowerType.eight;
+                    }
+                }
+                break;
+            case 8:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower3-3.png";
+                        this.towers[tower].type = TowerType.nine;
+                    }
+                }
+                break;
+            case 9:
+                break;
+            case 10:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower4-2.png";
+                        this.towers[tower].type = TowerType.eleven;
+                    }
+                }
+                break;
+            case 11:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
+                        this.towers[tower].tower_img = "img/tower/tower4-3.png";
+                        this.towers[tower].type = TowerType.twelve;
+                    }
+                }
+                break;
+            case 12:
+                break;           
+            default: break;
+        }
+    }
+
+    //需要引擎新建一个放置初始塔的数组towersPosition,记录塔的x,y,width,height等
+    //towersposion数组，用来存放地图下方4种一级塔的属性。
+    towersPosition = [
+        { type :1,range: 3, tower_img: "img/tower/tower1-1.png", bullet_type: BulletType.one, cost: 100, sale: 80 },
+        { type :4,range:3, tower_img: "img/tower/tower2-1.png", bullet_type: BulletType.four, cost: 180, sale: 100 },
+        { type :7,range:4, tower_img: "img/tower/tower3-1.png", bullet_type: BulletType.seven, cost: 220, sale: 150 },
+        { type :10,range: 4, tower_img: "img/tower/tower4-1.png", bullet_type: BulletType.ten, cost: 200, sale: 120 }
+    ]
+
+    
+    //判断鼠标的点是否在塔位（一个正方形）中 
+    //tower是默认塔组中的一个对象
+    pointInRect(point_x, point_y, tower) {
+        if (point_x >= tower.x && point_x <= (tower.x + tower.width) && point_y >= tower.y
+            && point_y <= (tower.y + tower.height))
+            return true
+        else return false;
+    }
+
+    //拆塔以及升级塔
+    up_downTower(option_x, option_y) {
+        if (this.xx.length > 0 ) {
+            for (var tower in this.towers) {
+                for (var cx in this.xx) {
+                    //点击删除
+                    if (this.towers[tower].x == (option_x - 1) * CELL_WIDTH && this.towers[tower].y == (option_y + 1) * CELL_WIDTH) {
+                        this.player.money += this.towers[tower].type.sale;
+                        this.towers.splice(tower, 1);
+                        this.xx.splice(cx, 1);
+                        MAP_ARR[option_x - 1][option_y + 1] = 0;
+                        this.drawTowerMap();
+                        this.drawss();
+                        break;
+                    }
+                    //点击升级
+                    // console.log(this.towers[tower]);
+                    if (this.towers[tower].x == (option_x + 1) * CELL_WIDTH && this.towers[tower].y == (option_y + 1) * CELL_WIDTH) {
+                        this.up.splice(cx, 1);
+                        console.log("塔对应类型"+this.towers[tower].type.type % 3);
+                        if (this.towers[tower].type.type % 3 > 0 && this.towers[tower].type.type % 3 < 3) {
+                            if (this.towers[tower].type.cost <= this.player.money) {
+                                this.Tower_up(this.towers[tower].type, option_x, option_y);
+                                this.player.money -= this.towers[tower].type.cost;
+                                break;
+                            } else {
+                                $("#moneyshow").css("border", "2px solid red");
+                                setTimeout(() => {
+                                    $("#moneyshow").css("border", " white");
+                                }, 500);
+                                //金额不足提示框显示2s后消失
+                                $("#lack_money").show();
+                                setTimeout(() => {
+                                    $("#lack_money").hide();
+                                }, 2000);
+
+                            }
+                        }
+                    }
+                }
+            }
+           
+        }
+        if (MAP_ARR[option_x][option_y] == 1) {
+            this.drawss();
+            this.xx.push(new Xx(option_x, option_y));
+            if (this.xx.length > 1) {
+                this.xx.splice(cx, 1);
+                if (this.xx.length > 1) {
+                    this.xx.splice(cx, 1);
+                }
+            }
+            console.log(this.xx)
+            this.drawxx();
+        }
+    }
+
+    // 生成选项------------------------------------------------------------------------------------------------
+    createOption(X, Y) {
+        //根据关卡数来设选项的坑位
+        this.towerHome = new search().searchTower(LEVEL);
+
+        for (var arr in this.towerHome) {
+            // this.towerHome[arr].x - 1 为了修正数组坐标
+            //判断条件为 1.鼠标的x,y 等于 规定塔位的x,y   2.一个坑位只能放一个塔  3.放置的塔不能超过最大数量
+
+            if (X == this.towerHome[arr].x - 1 && Y == this.towerHome[arr].y - 1 && MAP_ARR[X][Y] != 1 && this.towersNumber < TOWER_BASE_NUMBER + TOWER_UP_NUMBER * LEVEL) {
+                this.optionsNumber++;
+                this.options.push(new TowerOption(X * CELL_WIDTH, Y * CELL_WIDTH));
+
+                this.drawOptions();
+            }
+        }
+    }
+
+    // 生成塔
+    createTower(X, Y, type) {
+
+        //根据关卡数来设定塔的坑位
+        this.towerHome = new search().searchTower(LEVEL);
+
+        for (var arr in this.towerHome) {
+            // this.towerHome[arr].x - 1 为了修正数组坐标
+            //判断条件为 1.鼠标的x,y 等于 规定塔位的x,y   2.一个坑位只能放一个塔  3.放置的塔不能超过最大数量
+            if (X == this.towerHome[arr].x - 1 && Y == this.towerHome[arr].y - 1 && MAP_ARR[X][Y] != 1 && this.towersNumber < TOWER_BASE_NUMBER + TOWER_UP_NUMBER * LEVEL) {
+                this.towersNumber++;
+
+                // this.towers.push(new Tower(X * CELL_WIDTH, Y * CELL_WIDTH));
+                //---------------------------------------------------------------------------------戴
+                if (type.cost - this.player.money <= 0) {
+                    this.towers.push(new Tower(X * CELL_WIDTH, Y * CELL_WIDTH, type));//创建塔，就往塔里面传值。
+                    this.player.money -= type.cost;
+                    MAP_ARR[X][Y] = 1;
+                } else {
+                    $("#moneyshow").css("border", "2px solid red");
+                    setTimeout(() => {
+                        $("#moneyshow").css("border", " white");
+                    }, 500);
+                    //金额不足提示框显示2s后消失
+                    $("#lack_money").show();
+                    setTimeout(() => {
+                        $("#lack_money").hide();
+                    }, 2000);
+
+                }
+            }
+        }
+    } 
 }
 
 

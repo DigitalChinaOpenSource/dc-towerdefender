@@ -13,20 +13,20 @@
 
      factory() {
           this.BulletArr.push(BulletType.one);
-          this.BulletArr.push(TowerType.two);
-          this.BulletArr.push(TowerType.three);
-          this.BulletArr.push(TowerType.four);
-          this.BulletArr.push(TowerType.five);
-          this.BulletArr.push(TowerType.six);
-          this.BulletArr.push(TowerType.seven);
-          this.BulletArr.push(TowerType.eight);
-          this.BulletArr.push(TowerType.nine);
-          this.BulletArr.push(TowerType.thirteen);
-          this.BulletArr.push(TowerType.fourteen);
-          this.BulletArr.push(TowerType.fifteen);
-          this.BulletArr.push(TowerType.sixteen);
-          this.BulletArr.push(TowerType.seventeen);
-          this.BulletArr.push(TowerType.eighteen);
+          this.BulletArr.push(BulletType.two);
+          this.BulletArr.push(BulletType.three);
+          this.BulletArr.push(BulletType.four);
+          this.BulletArr.push(BulletType.five);
+          this.BulletArr.push(BulletType.six);
+          this.BulletArr.push(BulletType.seven);
+          this.BulletArr.push(BulletType.eight);
+          this.BulletArr.push(BulletType.nine);
+          this.BulletArr.push(BulletType.thirteen);
+          this.BulletArr.push(BulletType.fourteen);
+          this.BulletArr.push(BulletType.fifteen);
+          this.BulletArr.push(BulletType.sixteen);
+          this.BulletArr.push(BulletType.seventeen);
+          this.BulletArr.push(BulletType.eighteen);
        
     }
 }
