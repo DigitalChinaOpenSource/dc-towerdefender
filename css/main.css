@@ -266,13 +266,103 @@ ul.list-login-bottom li a:hover {
 /* 技能页面 */
 .block3{
     position: absolute;
-    background:yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:#a3b955;
     width: 1020px;
     height:220px;
     float: left;
     margin-left: 30px;
     top:75%;
+}
 
+.block .block3 .btn-item {
+    width: 200px;
+    height: 120px;
+    /* background: tomato; */
+}
+.block .block3 .btn-item > div {
+    width: 200px;
+    height: 90px;
+}
+.block .block3 .btn-item > p {
+    width: 200px;
+    height: 30px;
+    font-size: 10px;
+    text-align: center;
+}
+
+/* 技能按钮 */
+#increase_enemy_level {
+    width: 200px;
+    height: 80px;
+    border: none;
+    position: relative;
+    background: url(../img/button/increase_level.png) no-repeat center center;
+}
+#increase_enemy_level:hover::after {
+    content: '对战玩家所有的小怪升级';
+    position: absolute;
+    bottom: -50px;
+    left: 60px;
+    font-size: 10px;
+    width: 80px;
+    height: 40px;
+    line-height: 20px;
+    background: cornflowerblue;
+    border-radius: 10px;
+    border: rgba(0, 0, 0, 0.01);
+}
+#increase_enemy_level:active {
+    transform: scale(1.5);
+}
+
+#reduce_enemy_blood {
+    width: 200px;
+    height: 80px;
+    border: none;
+    position: relative;
+    background: url(../img/button/less_blood.gif) no-repeat center center;
+}
+#reduce_enemy_blood:hover::after {
+    content: '减少小怪血量';
+    position: absolute;
+    bottom: -50px;
+    left: 60px;
+    font-size: 10px;
+    width: 80px;
+    height: 40px;
+    line-height: 20px;
+    background: cornflowerblue;
+    border-radius: 10px;
+    border: rgba(0, 0, 0, 0.01);
+}
+#reduce_enemy_blood:active {
+    transform: scale(1.5);
+}
+#add_boss {
+    width: 200px;
+    height: 80px;
+    border: none;
+    position: relative;
+    background: url(../img/button/add_boss.png) no-repeat center center;
+}
+#add_boss:hover::after {
+    content: '对战玩家新增大boss';
+    position: absolute;
+    bottom: -50px;
+    left: 60px;
+    font-size: 10px;
+    width: 80px;
+    height: 40px;
+    line-height: 20px;
+    background: cornflowerblue;
+    border-radius: 10px;
+    border: rgba(0, 0, 0, 0.01);
+}
+#add_boss:active {
+    transform: scale(1.5);
 }
 
 /* 信息展示界面 */

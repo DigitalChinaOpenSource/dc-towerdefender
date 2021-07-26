@@ -6,6 +6,7 @@ class God {
 
         $("#startgame_btn").show();
         $("#logout_btn").show();
+        // $("#skill-btns-container").hide();
 
         // 隐藏匹配页面
         // $(".match").hide();
@@ -216,6 +217,48 @@ class God {
             this.createFirstEnemy();
         }, 3000);
 
+
+         //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
+         $("#reduce_enemy_blood").on("click", () => {
+            console.log(this.timeMoney);
+            if (reduce_enemy_blood_money <= this.player.money) {
+                for (var e = 0; e < this.enemies.length; e++) {
+                    this.enemies[e].check_bloodloss();
+                }
+            } else {
+                console.log(this.timeMoney);
+                alert("金币数量不够");
+            }
+        });
+
+        //增强对方的小怪等级，点击按钮时调用
+        $("#increase_enemy_level").on("click", () => {
+            // console.log(this.enemies);
+            if (increase_enemy_level_money < this.player.money) {
+                for (var e = 0; e <= this.enemies.length; e++) {
+                    this.enemies[e].check_levelup();
+                    this.enemy_level++;
+                }
+            } else {
+                console.log(this.timeMoney);
+                alert("金币数量不够");
+            }
+        });
+
+        //给对方增加一个boss，点击按钮时调用
+        $("#add_boss").on("click", () => {
+            if (add_boss_money <= this.player.money) {
+                var pro_boss = new Enemy();
+                pro_boss.boss = 1;
+                pro_boss.check_boss();
+            } else {
+                console.log(this.timeMoney);
+                alert("金币数量不够");
+            }
+
+        });
+
+
         //动态显示金币
        this.timeMoney = setInterval(() => {
             $("#moneyshow").html(this.player.money);
@@ -233,6 +276,9 @@ class God {
             this.gameState();
         },300);
         this.chat();//聊天功能
+
+
+
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
         // // 初始小兵数量
