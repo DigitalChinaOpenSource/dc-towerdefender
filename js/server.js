@@ -3,30 +3,35 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 
+//项目根目录
+var path=require('path');
+var rootPath=path.join(__dirname,'../');
+
 //数据库初始化配置
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'majortom',
-    password: '1234',
-    database: 'tower_defence'
+    host: '10.3.70.132',
+    port:'30772',
+    user: 'root',
+    password: 'ToNpxg699e',
+    database: 'tower_defense_v4.0.1'
 });
 
 var urlEncodedParser = bodyParser.urlencoded({ extended: false })
 
 //首页重定向
 app.get('/index', function (req, res) {
-    res.sendFile(__dirname+'/'+'index.html');
+    res.sendFile(rootPath+'index.html');
 })
 
 //登录重定向
 app.get('/login', function (req, res) {
-    res.sendFile(__dirname+'/'+'log.html');
+    res.sendFile(rootPath+'log.html');
 })
 
 //注册重定向
 app.get('/regist', function (req, res) {
-    res.sendFile(__dirname+'/'+'log.html');
+    res.sendFile(rootPath+'log.html');
 })
 
 //注册
@@ -60,12 +65,12 @@ app.post('/login',urlEncodedParser,function(req,res){
         //登录失败
         if(result.length==0){
             console.log("用户名或者密码错误！");
-            res.sendFile(__dirname+'/'+'login_fail.html');
+            res.sendFile(rootPath+'login_fail.html');
             return;
         }
         //登录成功
         //登录信息存入Session内，定位至首页（后续加）
-        res.sendFile(__dirname+'/'+'login_success.html');
+        res.sendFile(rootPath+'login_success.html');
     })
 })
 
