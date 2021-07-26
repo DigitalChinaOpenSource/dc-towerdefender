@@ -181,7 +181,7 @@ class God {
             var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
             var option_y = parseInt(e.offsetY / CELL_WIDTH);
             this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
-            this.chooseTower(option_x, option_y, e, this.towerAndBullets);//选择一个塔，然后
+            this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
         });
 
         $("tower1").mousedown((e) => {
