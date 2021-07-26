@@ -8,39 +8,55 @@
 }
 
 /* 游戏首页的css样式*/
-    .home {
-        /*background: url("../img/items/scene-2.png") no-repeat;*/
-        width: 1860px;
-        height: 900px;
-        z-index: 6;
-        margin:0 auto;
-        position: absolute;
+.home {
+
+    width: 1860px;
+    height: 900px;
+    z-index: 6;
+    margin:0 auto;
+    position: absolute;
 }
-    .btn_startgame {
-        position: absolute;
-        width: 100px;
-        height:39px;
-        left: 50%;
-        top: 40%;
-        margin-left: -50px;
-        margin-top: 20px;
-        background: url("../img/button/start.png") no-repeat;
-        background-size: 100%;
-        border-style: none;
+.home_back {
+    margin:0 auto;
+    width: 1860px;
+    height: 900px;
+    background: url("../img/items/scene-wolfman.png") no-repeat; 
+    position: absolute;
+}
+
+.btn_startgame {
+    position: absolute;
+    width: 22%;
+    height:22%;
+    left: 25%;
+    top: 73%;
+    cursor: pointer;
+    background: url("../img/button/button-start\(2\).png") no-repeat;
+    background-size:100%;
+    border-style: none;
+}
+
+.btn_startgame:active{
+    box-shadow: 0 0px red;
+    transform: translateY(4px);
+}
+.btn_logout {
+    cursor: pointer;
+    background: url("../img/button/button-logout\(2\).png") no-repeat;
+    border-style: none;
+    position: absolute;
+    background-size: 100%;
+    width: 22%;
+    height: 22%;
+    left: 58%;
+    top: 73%;
+
     }
-    .btn_logout {
-        background: url("../img/button/exit.png") no-repeat;
-        border-style: none;
-        position: absolute;
-        background-size: 100%;
-        width: 80px;
-        height: 80px;
-        left: 50%;
-        top: 50%;
-        margin-top: 20px;
-        margin-left: -40px;
-    }
-/*页面数，log1登录页面，2为修改密码页面，3为游戏首页，4为游戏主页，除了1其他默认不显示*/
+.btn_logout:active {
+    box-shadow: 0 0px red;
+    transform: translateY(4px);
+}
+
 #log2 {
     display: none;
 }
@@ -62,6 +78,8 @@ a {
     justify-content: center;
     display: grid;
     align-items: center;
+    grid-template-rows: 50px 450px;
+    padding-top: 150px;
 }
 .main:before {
     position: absolute;
@@ -160,6 +178,7 @@ ul.list-login-bottom li{
     
     padding-left: 35%;
     padding-top: 20px;
+    list-style-type: none;
 }
 ul.list-login-bottom li a{
     font-size: 15px;
@@ -181,8 +200,53 @@ ul.list-login-bottom li a:hover {
 #start2{
     display: none;
 }
+/* 登录注册页面end */
 
-/* end */
+/* 匹配页面样式start */
+/* .match{
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: center;
+    
+}
+#match_header{
+    padding: 90px;
+}
+.our_part{
+    
+    height: 660px;
+    background: url(../img/match/my.jpg) no-repeat;
+    background-size: 100%;
+    float: left;
+    width: 40%;
+    padding-top: 75px;
+}
+.enemy_part{
+    height: 660px;
+    background: url(../img/match/my.jpg) no-repeat;
+    background-size: 100%;
+    float: left;
+    width: 40%;
+    padding-top: 75px;
+}
+.our_part img,.enemy_part img{
+    width: 39%;
+    border-radius: 50%;
+    padding-top: 15px;
+}
+.vs{
+    float: left;
+    width: 20%;
+    padding-top: 45px;
+}
+.match h2{
+    padding-top: 20px;
+}
+#match_time{
+    padding-top: 30px;
+} */
+
+/* 匹配页面end */
 
 /*游戏主页----------------------------------------------------------------------------*/
 /* 总界面 */
@@ -190,8 +254,9 @@ ul.list-login-bottom li a:hover {
     position: absolute;
     width: 1860px;
     height: 900px;
-    display: flex;
     margin:0 auto;
+    background:greenyellow;
+
 }
 
 /* 游戏界面 */
@@ -199,28 +264,30 @@ ul.list-login-bottom li a:hover {
     position: relative;
     width: 1020px;
     height: 660px;
-    margin-left: 30px;
+    margin-left: 80px;
+    background-size:auto;
+    margin-top: 50px;
     background: url(../img/map/map-sea.jpg) no-repeat;
 }
 /* 技能页面 */
 .block3{
     position: absolute;
     background:yellow;
-    width: 1020px;
-    height:220px;
-    float: left;
-    margin-left: 30px;
-    top:75%;
+    width: 900px;
+    height:120px;
+    margin-left: 140px;
+    top:82%;
 
 }
 
 /* 信息展示界面 */
 .block2{
-    position: relative;
-    float: right;
-    width: 480px;
-    height: 900px;
-    background-image: url(../img/map/message_ui_bg.png);
+    position: absolute;
+    width: 600px;
+    left:1170px;
+    top: 110px;
+    height: 660px;
+    background: pink;
     /* background-color: chocolate; */
 }
 
@@ -233,22 +300,12 @@ ul.list-login-bottom li a:hover {
 }
 
 .content_player{
-    /* background-color: bisque; */
-    color: #fff;
+    background-color: bisque; 
     margin-left: 30px;
-    width: 480px;
+    width: 540px;
     height: 300px;
     display: flex;
     
-}
-.content_player1{
-    width: 240px;
-    height: 300px;
-}
-
-.content_player2{
-    width: 240px;
-    height: 300px;
 }
 
 .content_skill{
@@ -259,9 +316,12 @@ ul.list-login-bottom li a:hover {
 }
 
 .content_chat{
-    /* background-color: darkblue; */
-    width: 480px;
-    height: 300px;
+    position: absolute;
+    background-color: darkblue;
+    bottom: 10px;
+    margin-left: 10px;
+    width: 580px;
+    height: 200px;
     
 }
 .player{
@@ -273,30 +333,81 @@ ul.list-login-bottom li a:hover {
 .title{
     list-style: none;
     float:left;
-    margin-left: 6px;
-    margin-right: 6px;
     width: 219px;
     height:60px;
     text-align:center;
-    border: 1px solid #f4f4f4;
-    margin:0 0 -1px -1px;
+    border: 1px solid black;
+    margin: 0  0 -1px -1px;
     padding-top: 18px;
     font-size: 120%;
 }
 .mess{
     text-align:center;
-    height: 50px;
+    height: 45px;
     list-style: none;
     float:left;
     margin-left: 6px;
     margin-right: 6px;
     width: 110px;
     flex-direction: row;
-    border: 1px solid #f4f4f4;
+    border: 1px solid black;
     margin:0 0 -1px -1px;
     padding-top: 10px;
 }
-.float{
-    float: left;
+
+.talk_con{
+    width:480px;
+    height:50px;
+    /*border:1px solid #666;*/
+    margin:50px auto 0;
+    background:#f9f9f9;
+        }
+.talk_show{
+    width:480px;
+    height:200px;
+    border:1px solid #666;
+    background:#fff;
+    margin:10px auto 0;
+    overflow:auto;
+}
+.talk_input{
+    width:580px;
+    margin:10px auto 0;
+}
+.talk_word{
+    width:420px;
+    height:26px;
+    padding:0px;
+    float:left;
+    margin-left:10px;
+    outline:none;
+    text-indent:10px;
+}
+.talk_sub{
+    width:56px;
+    height:30px;
+    float:left;
+    margin-left:10px;
+}
+.atalk{
+    margin:10px;
+}
+.atalk span{
+    display:inline-block;
+    background:#0181cc;
+    border-radius:10px;
+    color:#fff;
+    padding:5px 10px;
+}
+.btalk{
+    margin:10px;
+    text-align:right;
+}
+.btalk span{
+    display:inline-block;
+    background:#ef8201;
+    border-radius:10px;
+    color:#fff;
+    padding:5px 10px;
 }
 

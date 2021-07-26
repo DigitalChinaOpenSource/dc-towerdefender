@@ -3,15 +3,27 @@ class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
-
         $("#startgame_btn").show();
         $("#logout_btn").show();
-
+        $("#home_visi").show();
         $("#startgame_btn").on("click",() => {
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
+            $("#home_visi").hide();
+            $("#block_skill").show();
             $("#block_left").show();
             $("#block_right").show();
+
+            //隐藏游戏页面，显示匹配页面，修改start******************
+            // this.showTime();
+            // $(".block3").hide();
+            // $("#block_left").hide();
+            // $("#block_right").hide();
+            // $(".match").show();
+            // 修改end******************
+
+            // //绑定连接事件
+            // this.link();
             this.startGame();
         });
 
@@ -19,10 +31,125 @@ class God {
             window.location.href='./log.html';
         });
 
+
+        // // websocket连接
+		// var ws
+		// // 房间号
+		// var roomCount
+		// // 用户名
+		// var name
+		// //ip地址
+        // var IP='ws://localhost:8888'
+		
+		
         this._init();//入口
-        this.stopGame();
-                         
     }
+    
+    // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
+    // showTime() {
+    //     var count=6;        
+    //     var time=setInterval(function () {
+    //         count -= 1;
+    //         if(count==3){
+    //             $("#match_before").hide();
+    //             $("#match_after").show();
+    //         }
+    //         if (count == 0) {
+    //             clearInterval(time);
+    //             $("#startgame_btn").hide();
+    //             $("#logout_btn").hide();
+    //             $("#block_left").show();
+    //             $("#block_right").show();
+    //             $(".match").hide();
+    //         }else{    
+    //             // console.log("*****"+count);
+    //             document.getElementById('match_time').innerHTML = count;
+    //         } 
+            
+    //     }, 1000);
+    // }
+    // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面end
+
+    // // websocket建立连接
+    // link(){
+    //     //建立连接
+    //     this.ws = new WebSocket(this.IP)
+    //     //连接成立触发
+    //     this.ws.onopen = function(){
+    //         console.log('success connected')
+    //         // 发送自己的积分
+    //         // 积分暂时无法获取！！！！！！！！！！！！！！
+    //         var score = document.getElementById("score")
+    //         ws.send({type:0,score:score.value})
+    //     }
+    //     //收到消息触发
+    //     ws.onmessage = function(evt){
+    //         // 消息转为json类型
+    //         var recv = JSON.parse(evt.data)
+    //         //设定房间号
+    //         if(recv.type==0){
+    //             var roomCount = document.getElementById("roomCount")
+    //             roomCount.value= recv.roomCount
+    //             this.roomCount = recv.roomCount
+    //         }
+    //         // 判断信息是否是发给自己的房间的
+    //         if(recv.roomCount == roomCount){
+    //             // 判断是否为自己发的信息
+    //             if(recv.name != name){
+    //                 if(recv.type == 1){
+    //                     //生成两个小兵
+    //                     this.createEnemy()
+    //                     this.createEnemy()
+    //                 }else if(recv.type == 2){
+    //                     //小兵增强
+    //                 }else if(recv.type == 3){
+    //                     //显示聊天msg
+    //                 }else if(recv.type == 4){
+    //                     //调用获胜方法赢了
+    //                     alert('you win')
+    //                     //调用断开连接方法
+    //                     this.close()
+    //                 }else if(recv.type == 5){
+    //                     //时间到，对比小兵enemy数量，判断输赢
+    //                     ////调用断开连接方法
+    //                     if(recv.enemy<this.enemyExisted){
+    //                         alert("you losed")
+    //                     }else{
+    //                         alert('you win')
+    //                     }
+    //                     this.close()
+    //                 }
+    //             }
+    //         }
+            
+    //     }
+    // }
+
+    //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
+		// 通过roomCount判断发给哪个房间组
+		// 通过name确定是否为对方发送的信息
+		// 通过type确定为哪种信息
+		//type:0,msg:
+		//{type:0,score:}
+		// type:1,msg：
+		// {type:1,roomCount: ,name:''}
+		// type:2,msg：
+		// {type:2,roomCount: ,name:''}
+		// type:3,msg：
+		// {type:3,roomCount: ,name:','msg:''}
+		// type:4,msg：
+		// {type:4,roomCount: ,name:''}
+		//type:5,msg:
+		//{type:5,roomConut: ,name:'',enemy: }
+    // send(msg){
+    //     // 发送信息转为string发送
+    //     this.ws.send(JSON.stringify(msg))
+    // }
+    // //websocket 关闭连接，再玩需要重新建立连接
+    // close(){
+    //     this.ws.onclose()
+    //     this.link()
+    // }
 
     _init() {
         //初始化（1先定义一个可以安置的塔的种类的数组.2创建一个玩家对象。3画出四层画布。4创建一个json形式的敌人数组，根据LEVEL数组被赋值,赋值为另一个数组（敌人的 类型，数量enemyType: EnemyType.DesertMob, num: 10）
@@ -31,8 +158,10 @@ class God {
         this.player = new Player();
         
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
+        this.enemy_level = 1; // 怪物等级
+        this.boss = 0; // 是否是boss：0=小怪，1=boss
         this.useful_enemy = (new TowerFactory()).EnemyArr; 
-        this.leftTime = 20;//剩余时间,单位秒
+        this.leftTime = 5;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime/60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime%60;
         this.map_a = new map();
@@ -76,7 +205,7 @@ class God {
     // 开始游戏
     startGame() {
         this.startCountTime();
-        setInterval(() => {
+        this.logEnemyNumber = setInterval(() => {
             console.log("enemyNuber: "+this.enemyNumber);
          }, 1000 );
 
@@ -87,17 +216,48 @@ class God {
         }, 3000);
 
         //动态显示金币
-       this.timemoney = setInterval(() => {
+       this.timeMoney = setInterval(() => {
             $("#moneyshow").html(this.player.money);
         }, 300);
         //动态显示敌人数量
-        this.timeenemies = setInterval(() => {
+        this.timeEnemies = setInterval(() => {
             $("#lifeshow").html(this.enemyExisted);
         },300);
-        this.timeenemies = setInterval(() => {
+        // 动态显示游戏时间
+        this.timeTime = setInterval(() => {
             $("#timeshow").html(this.leftTimeMin + ":" + this.leftTimeSecond);
         },300);
+        // 时刻获取游戏状态
+        this.getGameState = setInterval(() => {
+            this.gameState();
+        },300);
+        this.chat();//聊天功能
 
+        // //websocket 判断小兵是否减少，如果减少，向对方发送信息
+        // // 初始小兵数量
+        // //记录初始小兵数量
+        // var enemies = 2
+        // setInterval(()=>{
+        //     // 300毫秒，检测小兵数量，少了就发送小兵死亡信息，少几个发几次，多了就把当前小兵数赋值给enemies，方便之后的比对
+        //     if(enemies > this.enemyExisted){
+        //         var num = enemies-this.enemyExisted
+        //         for(var i = 0;i<num;i++){
+        //             this.send({type:1,roomCount:this.roomCount,name:this.name})
+        //         }
+        //     }else{
+        //         enemies = this.enemyExisted
+        //     }
+        // },300)
+
+    }
+
+    clearAllInterval(){
+        console.log("clearallinterval");
+        clearInterval(this.timeMoney);
+        clearInterval(this.timeEnemies);
+        clearInterval(this.timeTime);
+        clearInterval(this.getGameState);
+        clearInterval(this.logEnemyNumber);
     }
     
     createFirstEnemy(){
@@ -105,13 +265,31 @@ class God {
         console.log("create firstenemy");
     }
 
+    // 生成0~max-1的随机整数
+    randomnum(max){ 
+        return Math.floor(Math.random()*max);  
+    } 
+
     // 生成敌人
     createEnemy() {
+        var enemy_type = this.randomnum(4)
+        var enemy_level = this.enemy_level //需要传入怪物当前等级
+        var boss = this.boss //需要传入是否为boss
+        var enemy = new Enemy(enemy_type,
+            EnemyType[enemy_type][0], // 血量
+            EnemyType[enemy_type][1], // 速度
+            EnemyType[enemy_type][2], // 大小
+            EnemyType[enemy_type][3], // 图片
+            EnemyType[enemy_type][4], // 死亡掉落金币
+            enemy_level, // 等级
+            boss, // 是否为boss
+            );
+        this.enemies.push(enemy);
+        // console.log(this.enemies);
         this.enemyNumber++;
         if (this.enemyNumber <= length) {
             var enemy = new Enemy();
             this.enemies.push(enemy);
-            // console.log(this.enemies);
             this.enemyNumber++;
         }
     }
@@ -122,17 +300,24 @@ class God {
         if(this.enemyExisted >= 100){
             this.stopGame();
             alert("lose");
+            // //websocket发送失败信息
+            // this.send({type:4,roomCount:this.roomCount,name:this.name})
+            // // 关闭websocket连接
+            // this.close()
+
         }
         //监听时间小于100秒，并且怪的数量小于100只
         if(this.enemyExisted <100 && this.leftTime <=0){
             this.stopGame();
+            // // 发送自己的小兵剩余信息给对方
+            // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
             alert("win");
         }
         
     }
 
     stopCountTime() {
-        this.countDown = clearInterval();
+        clearInterval(this.countDown);
     }
     //点击开始按钮，计时器开始计时，定时器每隔一秒将开始时间加1，将开始时间的值赋值给结束时间
     startCountTime(){
@@ -164,6 +349,7 @@ class God {
         this.stopProduce();
         this.stopEnemies();
         this.stopBullets();
+        this.clearAllInterval();
     }
     //停止产生子弹和敌人
     stopProduce() {
@@ -183,10 +369,132 @@ class God {
             this.enemies[ene].stop();
         }
     }
+    
+    
 
     // 游戏状态获取
     gameState() {
-        console.log("in gamestate before judge_game")
         this.judge_game();
     }
+
+
+
+
+
+
+    // canvas部分*******************************************************
+    //生成布板
+    drawMap() {
+        var cv_backgroud = document.querySelector('#canvasMap_backgroud');
+        cv_backgroud.setAttribute("height", MAP_HEIGHT);
+        cv_backgroud.setAttribute("width", MAP_WIDTH);
+        cv_backgroud.setAttribute("z-index", 1);
+
+        var cv_backgroud2 = document.querySelector('#canvasMap_backgroud2');
+        cv_backgroud2.setAttribute("height", MAP_HEIGHT);
+        cv_backgroud2.setAttribute("width", MAP_WIDTH);
+        cv_backgroud2.setAttribute("z-index", 2);
+
+        var cv_enemy = document.querySelector('#canvasMap_enemy');
+        cv_enemy.setAttribute("height", MAP_HEIGHT);
+        cv_enemy.setAttribute("width", MAP_WIDTH);
+        cv_enemy.setAttribute("z-index", 3);
+
+        this.drawTowerMap();
+
+        var cv_tower = document.querySelector('#canvasMap_bullet');
+        cv_tower.setAttribute("height", MAP_HEIGHT);
+        cv_tower.setAttribute("width", MAP_WIDTH);
+        cv_tower.setAttribute("z-index", 5);
+
+        this.drawss();
+    }
+
+    //绘制选项幕布
+    drawss() {
+        var cv_option = document.querySelector('#canvasMap_option');
+        cv_option.setAttribute("height", MAP_HEIGHT);
+        cv_option.setAttribute("width", MAP_WIDTH);
+        cv_option.setAttribute("z-index", 6);
+    }
+
+    drawTowerMap() {
+        var cv_bullet = document.querySelector('#canvasMap_tower');
+        cv_bullet.setAttribute("height", MAP_HEIGHT);
+        cv_bullet.setAttribute("width", MAP_WIDTH);
+        cv_bullet.setAttribute("z-index", 4);
+    }
+    // 绘制背景
+    drawBackgound(){
+        var cv = document.querySelector('#canvasMap_backgroud2');
+        var ctx = cv.getContext('2d');
+        new search().DrawBackground(LEVEL);
+
+        //根据关卡数来画小兵行进路线
+        new search().DrawEnemyRoad(LEVEL);
+        //根据关卡数来线画塔位
+        new search().DrawTowerPlace(LEVEL);
+        //水平方向
+        ctx.beginPath();
+        ctx.fillstyle = "red";
+        for (var i = 0; i <= MAP_HEIGHT / CELL_WIDTH; i++) {
+            ctx.moveTo(0, i * CELL_WIDTH);
+            ctx.lineTo(MAP_WIDTH, i * CELL_WIDTH);
+        }
+        // 竖直方向
+        ctx.beginPath();
+        ctx.fillstyle = "red";
+        for (var j = 0; j <= MAP_WIDTH / CELL_WIDTH; j++) {
+            ctx.moveTo(CELL_WIDTH * j, 0);
+            ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
+        }
+    }
+
+    // judge_game(){
+    //     //监听怪的数量到了100只
+    //     if(this.enemyExisted >= 100){
+    //         this.stopGame();
+    //         console.log("lose");
+    //     }
+    //     //监听时间小于100秒，并且怪的数量小于100只
+    //     if(this.enemyExisted <100 && this.leftTime <=0){
+    //         this.stopGame();
+    //         console.log("win");
+    //     }
+    // }
+    
+    //聊天
+    chat(){
+            // console.log(this.player)
+            var player1 = this.player;
+            var Words = document.getElementById("words");
+            var Who = document.getElementById("who");
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
+            TalkSub.onclick = function(){
+                //定义空字符串
+                var str = "";
+                if(TalkWords.value == ""){
+                    // 消息为空时弹窗
+                    alert("消息不能为空");
+                    return;
+                }
+                //作弊
+                if(TalkWords.value=="show me the money"){
+                    player1.money = 10000;
+                    // console.log(player1)
+                    return;
+                }
+                //判断是谁发出的
+                if(Who.value == 0){
+                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                }
+                else{
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                }
+                Words.innerHTML = Words.innerHTML + str;
+            }
+        }
 }
+
+
