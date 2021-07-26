@@ -341,6 +341,59 @@ class God {
         },1000)
     }
 
+    // 检查并生成子弹
+    checkAndCreateBullets() {
+        if (this.towersNumber <= 0) {
+            return false;
+        }
+        for (var tower in this.towers) {
+            for (var ene in this.enemies) {
+                var distanceX = this.towers[tower].x - this.enemies[ene].x;
+                var distanceY = this.towers[tower].y - this.enemies[ene].y;
+                if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) {
+                    // if(this.towers[tower].seed!=1)               
+                    //     {
+                    //         this.towers[tower].seed++;
+                    //         this.bullets.push(new Bullet(
+                    //         this.towers[tower].x,
+                    //         this.towers[tower].y,
+                    //         this.enemies[ene].x,
+                    //         this.enemies[ene].y,
+                    //         this.towers[tower].type.bullet_type.speed,    //创建塔的时候也确定了塔的子弹的属性
+                    //         this.towers[tower].type.bullet_type.color,
+                    //         this.towers[tower].type.bullet_type.size,
+                    //         this.towers[tower].type.bullet_type.attack,
+                    //         this.towers[tower].type.bullet_type.type,
+                    //         this.towers[tower].type.bullet_type.run,
+                    //         this.towers[tower].type.bullet_type.reduce,
+                    //         this.towers[tower].type.bullet_type.blood,
+                    //         this.towers[tower].type.bullet_type.second,
+                    //     )); }
+
+                    this.enemies[ene].take_damage(this.towers[tower].type.bullet_type.type,this.towers[tower].type.bullet_type.attack);
+                           
+                        }
+
+                }       
+
+               
+                    if (this.enemies[ene].hp <= 1) {
+                            this.player.money += this.enemies[ene].money;
+                            this.enemies[ene].dead();
+                            this.nowenemys--;  
+                            this.enemies[ene] = null;
+                            this.enemies.splice(ene, 1);
+                            this.enemyExisted--;
+                            this.enemies[ene++].take_damage(this.towers[tower].type.bullet_type.type,this.towers[tower].type.bullet_type.attack);
+                            // console.log(ene);
+                            //ene++;
+                        } 
+                        }
+                        
+                        
+
+    }
+
     // 暂停游戏
     stopGame() {
         this.stopCountTime();
