@@ -249,7 +249,6 @@ class God {
         // },300)
     }
 
-
     clearAllInterval(){
         console.log("clearallinterval");
         clearInterval(this.timeMoney);
@@ -382,8 +381,43 @@ class God {
     // 游戏状态获取
     gameState() {
         this.judge_game();
+        this.bullet_touch_enemy();
     }
 
+    bullet_touch_enemy(){
+        for(let bullet in bullets){
+            if (this.bullets[bullet].x < 0 || this.bullets[bullet].y < 0 ||
+                this.bullets[bullet].x > MAP_WIDTH || this.bullets[bullet].y > MAP_HEIGHT) {
+                this.bullets[bullet].dead();
+                this.bullets[bullet] = null;
+                this.bullets.splice(bullet, 1);
+            }else{
+                for (let ene in this.enemies) {
+                    // 触碰到敌人时 敌人血量减少
+                    let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
+                    let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
+                    if ((distanceX*distanceX+distanceY*distanceY)<=
+                        ((this.bullets[bullet].size+30)*(this.bullets[bullet].size+30))) {
+                        // 调用敌人扣血，传入子弹类型与子弹伤害：
+                        // 子弹类型：this.bullets[bullet].type
+                        // 子弹伤害：this.bullets[bullet].atk
+                        this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                        // 生命为0的时候 敌人死去
+                        if (this.enemies[ene].hp <= 0) {
+                            this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
+                            this.enemies[ene].dead();
+                            // console.log("kill");
+                            this.nowenemys--;
+                            this.enemies[ene] = null;
+                            this.enemies.splice(ene, 1);
+                            this.enemyExisted--;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
 
 
@@ -456,20 +490,7 @@ class God {
             ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
         }
     }
-
-    // judge_game(){
-    //     //监听怪的数量到了100只
-    //     if(this.enemyExisted >= 100){
-    //         this.stopGame();
-    //         console.log("lose");
-    //     }
-    //     //监听时间小于100秒，并且怪的数量小于100只
-    //     if(this.enemyExisted <100 && this.leftTime <=0){
-    //         this.stopGame();
-    //         console.log("win");
-    //     }
-    // }
-    
+  
     //聊天
     chat(){
             // console.log(this.player)
