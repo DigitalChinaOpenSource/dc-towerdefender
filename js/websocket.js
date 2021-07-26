@@ -1,15 +1,15 @@
-var ws
-var roomCount
-var linkName
-var score
-var ip='ws://localhost:8888'
+let ws
+let roomCount
+let linkName
+let score
+let ip='ws://localhost:8888'
 function websocketLink(){
     ws = new WebSocket(ip)
     ws.onopen = function(){
         console.log('success liked the server')
-        var i = parseInt(Math.random()*5)
-        console.log('score======>'+i)
-        websocketSend({type:0,score:i})
+        // let i = parseInt(Math.random()*5)
+        // console.log('score======>'+i)
+        // websocketSend({type:0,score:i})
     }
 
     ws.onmessage = function(evt){
@@ -19,6 +19,7 @@ function websocketLink(){
         if(recv.type==0){
             roomCount = recv.roomCount
             console.log('roomCount========>'+roomCount)
+
         }
         // 判断信息是否是发给自己的房间的
         if(recv.roomCount == roomCount){
@@ -31,11 +32,12 @@ function websocketLink(){
                     //小兵增强
                 }else if(recv.type == 3){
                     //显示聊天msg
+                    console.log(recv.msg)
                 }else if(recv.type == 4){
                     //调用获胜方法赢了
                     alert('you win')
                     //调用断开连接方法
-                    this.close()
+                    websocketClose()
                 }else if(recv.type == 5){
                     //时间到，对比小兵enemy数量，判断输赢
                     ////调用断开连接方法
@@ -44,7 +46,7 @@ function websocketLink(){
                     }else{
                         alert('you win')
                     }
-                    this.close()
+                    websocketClose()
                 }
             }
         }
@@ -72,6 +74,39 @@ function websocketSend(msg){
     ws.send(JSON.stringify(msg))
 }
 function websocketClose(){
-    ws.onclose()
+    ws.close()
+    console.log('success close websocket link')
     websocketLink()
 }
+
+
+            // //绑定连接事件
+            // websocketLink();
+
+
+            //websocket 判断小兵是否减少，如果减少，向对方发送信息
+        // 初始小兵数量
+        //记录初始小兵数量
+        // var enemies = 0
+        // setInterval(()=>{
+        //     // 300毫秒，检测小兵数量，少了就发送小兵死亡信息，少几个发几次，多了就把当前小兵数赋值给enemies，方便之后的比对
+        //     if(enemies > this.enemyExisted){
+        //         var num = enemies-this.enemyExisted
+        //         for(var i = 0;i<num;i++){
+        //             websocketSend({type:1,roomCount:this.roomCount,name:this.name})
+        //         }
+        //     }else{
+        //         enemies = this.enemyExisted
+        //     }
+        // },300)
+
+
+
+        //websocket发送失败信息
+        // websocketSend({type:4,roomCount:this.roomCount,name:this.name})
+        // 关闭websocket连接
+        // websocketClose()
+
+
+         // 发送自己的小兵剩余信息给对方
+        //  websocketSend({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
