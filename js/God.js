@@ -24,9 +24,11 @@ class God {
         //     $("#moneyshow").html(300);
         // }, 300);
         // console.log(a);
-        $("#startgame_btn").on("click", () => {
+        $("#startgame_btn").on("click",() => {
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
+            $("#home_visi").hide();
+            $("#block_skill").show();
             $("#block_left").show();
             $("#block_right").show();
             $("#skill-btns-container").show();
@@ -52,6 +54,31 @@ class God {
 
 
     }
+    
+    // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
+    // showTime() {
+    //     var count=6;        
+    //     var time=setInterval(function () {
+    //         count -= 1;
+    //         if(count==3){
+    //             $("#match_before").hide();
+    //             $("#match_after").show();
+    //         }
+    //         if (count == 0) {
+    //             clearInterval(time);
+    //             $("#startgame_btn").hide();
+    //             $("#logout_btn").hide();
+    //             $("#block_left").show();
+    //             $("#block_right").show();
+    //             $(".match").hide();
+    //         }else{    
+    //             // console.log("*****"+count);
+    //             document.getElementById('match_time').innerHTML = count;
+    //         } 
+            
+    //     }, 1000);
+    // }
+    // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面end
 
     // // websocket建立连接
     // link(){
@@ -299,17 +326,17 @@ class God {
     // 生成敌人
     createEnemy() {
         var enemy_type = this.randomnum(4)
-        var level = level //需要传入怪物当前等级
-        var boss = boss //需要传入是否为boss
+        var enemy_level = this.enemy_level //需要传入怪物当前等级
+        var boss = this.boss //需要传入是否为boss
         var enemy = new Enemy(enemy_type,
             EnemyType[enemy_type][0], // 血量
             EnemyType[enemy_type][1], // 速度
             EnemyType[enemy_type][2], // 大小
             EnemyType[enemy_type][3], // 图片
             EnemyType[enemy_type][4], // 死亡掉落金币
-            this.level, // 等级
-            this.boss, // 是否为boss
-        );
+            enemy_level, // 等级
+            boss, // 是否为boss
+            );
         this.enemies.push(enemy);
         // console.log(this.enemies);
         this.enemyNumber++;
@@ -403,6 +430,79 @@ class God {
         this.judge_game();
     }
 
+
+
+
+
+
+    // canvas部分*******************************************************
+    //生成布板
+    drawMap() {
+        var cv_backgroud = document.querySelector('#canvasMap_backgroud');
+        cv_backgroud.setAttribute("height", MAP_HEIGHT);
+        cv_backgroud.setAttribute("width", MAP_WIDTH);
+        cv_backgroud.setAttribute("z-index", 1);
+
+        var cv_backgroud2 = document.querySelector('#canvasMap_backgroud2');
+        cv_backgroud2.setAttribute("height", MAP_HEIGHT);
+        cv_backgroud2.setAttribute("width", MAP_WIDTH);
+        cv_backgroud2.setAttribute("z-index", 2);
+
+        var cv_enemy = document.querySelector('#canvasMap_enemy');
+        cv_enemy.setAttribute("height", MAP_HEIGHT);
+        cv_enemy.setAttribute("width", MAP_WIDTH);
+        cv_enemy.setAttribute("z-index", 3);
+
+        this.drawTowerMap();
+
+        var cv_tower = document.querySelector('#canvasMap_bullet');
+        cv_tower.setAttribute("height", MAP_HEIGHT);
+        cv_tower.setAttribute("width", MAP_WIDTH);
+        cv_tower.setAttribute("z-index", 5);
+
+        this.drawss();
+    }
+
+    //绘制选项幕布
+    drawss() {
+        var cv_option = document.querySelector('#canvasMap_option');
+        cv_option.setAttribute("height", MAP_HEIGHT);
+        cv_option.setAttribute("width", MAP_WIDTH);
+        cv_option.setAttribute("z-index", 6);
+    }
+
+    drawTowerMap() {
+        var cv_bullet = document.querySelector('#canvasMap_tower');
+        cv_bullet.setAttribute("height", MAP_HEIGHT);
+        cv_bullet.setAttribute("width", MAP_WIDTH);
+        cv_bullet.setAttribute("z-index", 4);
+    }
+    // 绘制背景
+    drawBackgound(){
+        var cv = document.querySelector('#canvasMap_backgroud2');
+        var ctx = cv.getContext('2d');
+        new search().DrawBackground(LEVEL);
+
+        //根据关卡数来画小兵行进路线
+        new search().DrawEnemyRoad(LEVEL);
+        //根据关卡数来线画塔位
+        new search().DrawTowerPlace(LEVEL);
+        //水平方向
+        ctx.beginPath();
+        ctx.fillstyle = "red";
+        for (var i = 0; i <= MAP_HEIGHT / CELL_WIDTH; i++) {
+            ctx.moveTo(0, i * CELL_WIDTH);
+            ctx.lineTo(MAP_WIDTH, i * CELL_WIDTH);
+        }
+        // 竖直方向
+        ctx.beginPath();
+        ctx.fillstyle = "red";
+        for (var j = 0; j <= MAP_WIDTH / CELL_WIDTH; j++) {
+            ctx.moveTo(CELL_WIDTH * j, 0);
+            ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
+        }
+    }
+
     // judge_game(){
     //     //监听怪的数量到了100只
     //     if(this.enemyExisted >= 100){
@@ -415,4 +515,39 @@ class God {
     //         console.log("win");
     //     }
     // }
+    
+    //聊天
+    chat(){
+            // console.log(this.player)
+            var player1 = this.player;
+            var Words = document.getElementById("words");
+            var Who = document.getElementById("who");
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
+            TalkSub.onclick = function(){
+                //定义空字符串
+                var str = "";
+                if(TalkWords.value == ""){
+                    // 消息为空时弹窗
+                    alert("消息不能为空");
+                    return;
+                }
+                //作弊
+                if(TalkWords.value=="show me the money"){
+                    player1.money = 10000;
+                    // console.log(player1)
+                    return;
+                }
+                //判断是谁发出的
+                if(Who.value == 0){
+                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                }
+                else{
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                }
+                Words.innerHTML = Words.innerHTML + str;
+            }
+        }
 }
+
+

@@ -250,7 +250,7 @@ class Enemy {
         if(this.boss == 1){ //识别怪物是否为boss
             this.hp = this.hp*10
             this.size = 80
-            this.money = money*3
+            this.money = this.money*3
             // 每秒回血
             this.autoheal = setInterval(() => {
                 if(this.hp + 20 < this.originHp) {this.hp += 20;}
