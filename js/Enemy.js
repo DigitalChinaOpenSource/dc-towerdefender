@@ -261,8 +261,8 @@ class Enemy {
 
     // 技能：怪物升级
     check_levelup(){
-        this.hp = this.hp*(1+0.1*this.enemy_level)
-        this.money = this.money*(1+0.1*this.enemy_level)
+        this.hp = this.hp*(1+0.1*this.enemy_level);
+        this.money = this.money*(1+0.1*this.enemy_level);
     }
 
     // 技能：怪物扣血
