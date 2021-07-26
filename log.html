@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="input-field">
-                            <button type="submit" class="btn" id="login" onclick="window.location.href= 'towerdefense4.0.1/index.html' ">Login</button>
+                            <button type="submit" class="btn" id="login" onclick="window.location.href= 'index.html' ">Login</button>
                         </div>
                         
                         <ul class="list-login-bottom">
@@ -82,9 +82,8 @@
             </div>
             <div class="content" id="upadte-password">
                 <div class="content-header">
-                    <a href="">
-                        <img src="img/life.png" class="life" id="life"> 
-                        <span id="">修改密码</span>
+                    <a href=""> 
+                        <span id="">返回登录</span>
                     </a>
                     
                 </div>
@@ -123,7 +122,26 @@
     </div> 
 
     <!-- end -->
-
+<script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script>
+    $("#regist-exp").on("click", () => {
+            $("#log2").show();   
+            $("#log1").hide();
+            
+            }),
+    $("#login-exp").on("click", () => {
+            $("#log1").show();   
+            $("#log2").hide();
+            
+            }),
+    $("#forget-password").on("click", () => {
+        $("#upadte-password").show();   
+        $("#login-regist").hide();
+                
+        });
+</script>
 
 </body>
 </html>
