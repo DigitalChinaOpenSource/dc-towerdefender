@@ -6,7 +6,7 @@ class God {
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
-        // $("#skill-btns-container").hide();
+        $("#skill-btns-container").hide();
         // let e1 = new Enemy();
         // e1.level = 1;
         // e1.hp = 5;
@@ -228,46 +228,65 @@ class God {
 
 
          //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
-         $("#reduce_enemy_blood").on("click", () => {
-            console.log(this.player.money);
-            if (reduce_enemy_blood_money <= this.player.money) {
-                for (var e = 0; e < this.enemies.length; e++) {
-                    this.enemies[e].check_bloodloss();
+        $("#reduce_enemy_blood").on("click", () => {
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + reduce_enemy_blood_money);
+            if (this.enemies.length > 0) {
+                if (reduce_enemy_blood_money <= this.player.money) {
+                    this.enemies.forEach((e) => {
+                        e.check_bloodloss();
+                    })
+                    //金币数量减少
+                    this.player.money = this.player.money - reduce_enemy_blood_money;
+                    console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
+                }
+                else {
+                    // console.log(this.player.money);
+                    alert("给自己小怪减血技能金币数量不够");
                 }
             } else {
-                console.log(this.player.money);
-                alert("金币数量不够");
+                alert("地图上没有小怪，无法减血");
             }
         });
 
         //增强对方的小怪等级，点击按钮时调用
         $("#increase_enemy_level").on("click", () => {
             // console.log(this.enemies);
-            if (increase_enemy_level_money < this.player.money) {
-                for (var e = 0; e <= this.enemies.length; e++) {
-                    this.enemies[e].check_levelup();
-                    this.enemy_level++;
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + increase_enemy_level_money);
+            console.log("小怪的数量为" + this.enemies.length);
+            if (this.enemies.length > 0) {
+                if (this.enemies.length > 0) {
+                    if (increase_enemy_level_money <= this.player.money) {
+                        this.enemies.forEach((e) => {
+                            e.check_levelup();
+                        })
+                        this.enemy_level++;
+                        this.player.money = this.player.money - increase_enemy_level_money;
+                        console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+                    } else {
+                        alert("给对方小怪升级金币数量不够");
+                    }
                 }
             } else {
-                console.log(this.timeMoney);
-                alert("金币数量不够");
+                alert("地图上没有小怪，无法升级");
             }
         });
 
         //给对方增加一个boss，点击按钮时调用
         $("#add_boss").on("click", () => {
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + add_boss_money);
             if (add_boss_money <= this.player.money) {
                 var pro_boss = new Enemy();
                 pro_boss.boss = 1;
                 pro_boss.check_boss();
+                this.player.money = this.player.money - add_boss_money;
+                console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
-                console.log(this.timeMoney);
-                alert("金币数量不够");
+                alert("给对方增加一个boss金币数量不够");
             }
-
         });
-
-
         //动态显示金币
         this.timeMoney = setInterval(() => {
             $("#moneyshow").html(this.player.money);
@@ -285,45 +304,62 @@ class God {
             this.gameState();
         }, 300);
 
-        //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
-        $("#reduce_enemy_blood").on("click", () => {
-            console.log(this.timeMoney);
-            if (reduce_enemy_blood_money < this.player.money) {
-                for (var e = 0; e < this.enemies.length; e++) {
-                    this.enemies[e].check_bloodloss();
-                }
-            } else {
-                console.log(this.timeMoney);
-                alert("金币数量不够");
-            }
-        });
+        // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
+        // $("#reduce_enemy_blood").on("click", () => {
+        //     // console.log(this.timeMoney);
+        //     if (this.enemies.length > 0) {
+        //         if (reduce_enemy_blood_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     console.log("小怪为"+this.enemies[e]);
+        //             //     // this.enemies[e].check_bloodloss();
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 console.log("进入到循环");
+        //                 e.check_bloodloss();
+        //             })
+        //         } else {
+        //             // console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法减血");
+        //     }
+        // });
 
-        //增强对方的小怪等级，点击按钮时调用
-        $("#increase_enemy_level").on("click", () => {
-            // console.log(this.enemies);
-            if (increase_enemy_level_money < this.player.money) {
-                for (var e = 0; e < this.enemies.length; e++) {
-                    this.enemies[e].check_levelup();
-                    this.enemy_level++;
-                }
-            } else {
-                console.log(this.timeMoney);
-                alert("金币数量不够");
-            }
-        });
+        // //增强对方的小怪等级，点击按钮时调用
+        // $("#increase_enemy_level").on("click", () => {
+        //     // console.log(this.enemies);
+        //     if (this.enemies.length > 0) {
+        //         if (increase_enemy_level_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     this.enemies[e].check_levelup();
+        //             //     this.enemy_level++;
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 e.check_levelup();
+        //             })
+        //             this.enemy_level++;
+        //         } else {
+        //             console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法升级");
+        //     }
+        // });
 
-        //给对方增加一个boss，点击按钮时调用
-        $("#add_boss").on("click", () => {
-            if (add_boss_money < this.player.money) {
-                var pro_boss = new Enemy();
-                pro_boss.boss = 1;
-                pro_boss.check_boss();
-            } else {
-                console.log(this.timeMoney);
-                alert("金币数量不够");
-            }
+        // //给对方增加一个boss，点击按钮时调用
+        // $("#add_boss").on("click", () => {
+        //     if (add_boss_money < this.player.money) {
+        //         var pro_boss = new Enemy();
+        //         pro_boss.boss = 1;
+        //         pro_boss.check_boss();
+        //     } else {
+        //         console.log(this.timeMoney);
+        //         alert("金币数量不够");
+        //     }
 
-        });
+        // });
 
 
 
@@ -410,7 +446,6 @@ class God {
             // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
             alert("win");
         }
-
     }
 
     stopCountTime() {
@@ -447,6 +482,10 @@ class God {
         this.stopEnemies();
         this.stopBullets();
         this.clearAllInterval();
+        // $("#skill-btns-container").hide();
+        document.getElementById("increase_enemy_level").disabled=true;
+        document.getElementById("reduce_enemy_blood").disabled=true;
+        document.getElementById("add_boss").disabled=true;
     }
     //停止产生子弹和敌人
     stopProduce() {

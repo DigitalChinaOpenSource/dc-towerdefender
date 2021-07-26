@@ -281,6 +281,7 @@ ul.list-login-bottom li a:hover {
     float: left;
     margin-left: 30px;
     top:75%;
+    z-index: 6;
 }
 
 .block .block3 .btn-item {
