@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/main.css" type="text/css">
 </head>
+
 <body>
     <!--游戏首页-->
     <div class="home" >
@@ -38,7 +40,7 @@
     <!-- 匹配页面end -->
     
     <!--游戏主页-->
-    <div class="block" id= "jump2">
+    <div class="block" id="jump2">
         <div class="block1 hide_it" id="block_left">
             <canvas id="canvasMap_backgroud">当前浏览器不支持canvas画布</canvas>
             <canvas id="canvasMap_backgroud2"></canvas>
@@ -47,8 +49,20 @@
             <canvas id="canvasMap_bullet"></canvas>
             <canvas id="canvasMap_option"></canvas>
         </div>
-        <div class="block3 hide_it" id="block_skill">
-            技能栏
+
+        <div class="block3" id="skill-btns-container">
+            <div class='btn-item'>
+                <p>增强敌方小怪等级</p>
+                <div id="increase_enemy_level"></div>
+            </div>
+            <div class='btn-item'>
+                <p>减少小怪血量</p>
+                <div id="reduce_enemy_blood"></div>
+            </div>
+            <div class='btn-item'>
+                <p>增加boss</p>
+                <div id="add_boss"></div>
+            </div>
         </div>
         <div class="block2 hide_it" id="block_right">
             <div class="content_banner">
@@ -100,9 +114,7 @@
                     <li class="mess" id="p2leaveenemyshow">leave</li>
                 </ul>
             </div>
-            <div class="content_skill">
-                
-            </div>
+            
             <div class="content_chat">
                 <div class="talk_con">
                     <div class="talk_show" id="words">
@@ -120,7 +132,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <script type="text/javascript" src="js/Bullet.js"></script>
     <script type="text/javascript" src="js/BulletData.js"></script>
@@ -146,4 +157,5 @@
     <script type="text/javascript" src="js/variable.js"></script>
     <script type="text/javascript" src="js/transverter.js"></script>
 </body>
+
 </html>
