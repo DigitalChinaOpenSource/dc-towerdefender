@@ -13,6 +13,7 @@ class God {
             $("#block_skill").show();
             $("#block_left").show();
             $("#block_right").show();
+            $("#block1_box").show();
 
             //隐藏游戏页面，显示匹配页面，修改start******************
             // this.showTime();

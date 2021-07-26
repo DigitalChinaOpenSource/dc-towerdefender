@@ -267,7 +267,7 @@ ul.list-login-bottom li a:hover {
     margin-left: 80px;
     background-size:auto;
     margin-top: 50px;
-    background: url(../img/map/map-sea.jpg) no-repeat;
+    background: url(../img/map/map1.png) no-repeat;
 }
 /* 技能页面 */
 .block3{
@@ -283,28 +283,34 @@ ul.list-login-bottom li a:hover {
 /* 信息展示界面 */
 .block2{
     position: absolute;
-    width: 600px;
-    left:1170px;
-    top: 110px;
-    height: 660px;
-    background: pink;
+    width: 100%;
+    left:1100px;
+    top: 20px;
+    height: 100%;
+    background: url(../img/map/info-2.png) no-repeat;
     /* background-color: chocolate; */
 }
 
 .content_banner{
-    margin-left: 30px;
+    margin-left:190px;
     /* background-color: aquamarine; */
-    margin-top: 50px;
+    margin-top:80px;
     width: 480px;
     height: 100px;
+    font-weight:bold;
+    font-size: 30px;
+    font-family:"FZShuTi","FZShuTi";
 }
 
 .content_player{
-    background-color: bisque; 
-    margin-left: 30px;
+    font-size: 20px;
+    margin-left: 105px;
     width: 540px;
     height: 300px;
+    font-weight:bold;
     display: flex;
+    font-family:"FZShuTi","FZShuTi";
+
     
 }
 
@@ -317,14 +323,16 @@ ul.list-login-bottom li a:hover {
 
 .content_chat{
     position: absolute;
-    background-color: darkblue;
-    bottom: 10px;
-    margin-left: 10px;
+    /* background-color: darkblue; */
+    z-index: 7;
+    bottom:80px;
+    margin-left:-35px;
     width: 580px;
-    height: 200px;
+    height: 220px;
     
 }
 .player{
+    font-weight: bolder;
     border-collapse:collapse;
     width: 230px;
     table-layout: fixed;
@@ -333,7 +341,7 @@ ul.list-login-bottom li a:hover {
 .title{
     list-style: none;
     float:left;
-    width: 219px;
+    width: 259px;
     height:60px;
     text-align:center;
     border: 1px solid black;
@@ -346,9 +354,7 @@ ul.list-login-bottom li a:hover {
     height: 45px;
     list-style: none;
     float:left;
-    margin-left: 6px;
-    margin-right: 6px;
-    width: 110px;
+    width: 130px;
     flex-direction: row;
     border: 1px solid black;
     margin:0 0 -1px -1px;
@@ -356,14 +362,16 @@ ul.list-login-bottom li a:hover {
 }
 
 .talk_con{
+    align-content: center;
     width:480px;
     height:50px;
     /*border:1px solid #666;*/
-    margin:50px auto 0;
+    margin-top: -100px;
+    margin-left: 135px;
     background:#f9f9f9;
-        }
+}
 .talk_show{
-    width:480px;
+    width:570px;
     height:200px;
     border:1px solid #666;
     background:#fff;
@@ -409,5 +417,15 @@ ul.list-login-bottom li a:hover {
     border-radius:10px;
     color:#fff;
     padding:5px 10px;
+}
+.box_block{
+    z-index: 7;
+    position: absolute;
+    background: url(../img/map/mapbar.png) no-repeat;
+    width: 100%;
+    height: 100%;
+    margin-left: 52px;
+    background-size:auto;
+    margin-top: 20px;
 }
 
