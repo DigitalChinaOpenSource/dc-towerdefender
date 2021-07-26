@@ -29,6 +29,7 @@ class God {
         // 5 定义两个变量：地图上敌人数量，需要消灭的敌人数量）
         this.useful_tower = (new TowerFactory()).TowerArr;//定义可以用的塔的类型数组变量，当调用这个对象的factory方法时，往数组里面赋值。
         this.player = new Player();
+        
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.useful_enemy = (new TowerFactory()).EnemyArr; 
         this.leftTime = 20;//剩余时间,单位秒
