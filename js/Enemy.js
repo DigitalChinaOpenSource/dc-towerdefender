@@ -248,7 +248,7 @@ class Enemy {
     // 技能：产生boss
     check_boss(){
         if(this.boss == 1){ //识别怪物是否为boss
-            this.hp = hp*10
+            this.hp = this.hp*10
             this.size = 80
             this.money = money*3
             // 每秒回血
@@ -261,13 +261,13 @@ class Enemy {
 
     // 技能：怪物升级
     check_levelup(){
-        this.hp = this.hp*(1+0.1*this.enemy_level)
-        this.money = this.money*(1+0.1*this.enemy_level)
+        this.hp = this.hp*(1+0.1*this.enemy_level);
+        this.money = this.money*(1+0.1*this.enemy_level);
     }
 
     // 技能：怪物扣血
     check_bloodloss(){
-        this.hp = hp*0.5
+        this.hp = this.hp*0.5
     }
 
     // 怪物死亡
