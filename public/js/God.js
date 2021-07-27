@@ -437,11 +437,11 @@ class God {
         this.enemies.push(enemy);
         // console.log(this.enemies);
         this.enemyNumber++;
-        if (this.enemyNumber <= length) {
-            var enemy = new Enemy();
-            this.enemies.push(enemy);
-            this.enemyNumber++;
-        }
+        // if (this.enemyNumber <= length) {
+        //     var enemy = new Enemy();
+        //     this.enemies.push(enemy);
+        //     this.enemyNumber++;
+        // }
     }
 
     // 传入参数，xy坐标（以格子为单位，横x竖y），防御塔类型（int）
