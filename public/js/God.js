@@ -813,46 +813,58 @@ class God {
     }
   
 
-    //绘制选项
-    drawOptions() {
+   //点塔选项，有塔可操作，无塔可建塔
+    drawOptions(option_x,option_y){
+        let cv = document.querySelector('#canvasMap_option');
+        let ctx = cv.getContext('2d');
+        let img_xx = new Image();
+        let img_up = new Image();
         let num = tower_message[option_x][option_y];
-        if (num==1){
-            let cv = document.querySelector('#canvasMap_option');
-            let ctx = cv.getContext('2d');
-            let b = 0;
-            let origin = parseInt(this.towerAndBullets.length / 5); //绘画的初始位置 //解析一个字符串，返回整数
-            for (let a = 0; a < this.towerAndBullets.length; a++) {
-                if (a % 3 >= 0 && a % 3 < 1) {
-                    b++;
-                    let img = new Image;
-                    img.src = this.towerAndBullets[a].tower_img;
-                    for (let option in this.options) {
-                        ctx.drawImage(img, this.options[option].x - (origin - b) * CELL_WIDTH, this.options[option].y - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+        if (num==1){   //没有塔，开始建塔
+            img_xx.src = "img/tower/tower1-1.png";
+            img_up.src = "img/tower/tower2-1.png";
+            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
 
-                    }
+            $("#canvasMap_option").on("click", (e) => {
+                var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                if (on_x==option_x+1 && on_y==option_y-1){  //右边
+                    this.createTower(option_x,option_y,2);
                 }
-            }
-        }
-    }
-    //绘制点塔选项标志
-    drawxx(option_x , option_y) {
-        let num = tower_message[option_x][option_y];
-        if (num!==0 && num!==1){
-            let cv = document.querySelector('#canvasMap_option');
-            let ctx = cv.getContext('2d');
-            let img_xx = new Image();
-            let img_up = new Image();
+                else if(on_x==option_x-1 && on_y==option_y-1){    //左边
+                    this.createTower(option_x,option_y,1);
+                    }
+                else{
+                    this.drawTowers();
+                }
+            })}
+
+
+        else if (num!==0 && num!==1){
             img_xx.src = "img/button/sholve.png";
             img_up.src = "img/button/upgrade.png";
-            for (let cx in this.towerhome) {
-                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                up_position[0]=(option_x + 1) * CELL_WIDTH;      //升级选项
-                up_position[1]=(option_y - 1) * CELL_WIDTH;
-                xx_position[0]= (option_x - 1) * CELL_WIDTH;      //删除选项
-                xx_position[1]=(option_y - 1) * CELL_WIDTH;
-                console.log(up_position[0],up_position[1]);
-            }
+            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            up_position[0]=(option_x + 1) * CELL_WIDTH;      //升级选项
+            up_position[1]=(option_y - 1) * CELL_WIDTH;
+            xx_position[0]= (option_x - 1) * CELL_WIDTH;      //删除选项
+            xx_position[1]=(option_y - 1) * CELL_WIDTH;
+            $("#canvasMap_option").on("click", (e) => {
+                var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                if (on_x==option_x+1 && on_y==option_y-1){  //右边 拆塔
+                    this.Tower_down(num-1,option_x,option_y);
+                }
+                else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
+                    this.Tower_up(num-1,option_x,option_y);
+                    }
+                else{
+                    this.drawTowers();
+                }
+            })}
+        else{
+            this.drawTowers();
         }
     }
 
