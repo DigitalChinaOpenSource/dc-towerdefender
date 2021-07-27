@@ -168,11 +168,9 @@ class God {
         // 5 定义两个变量：地图上敌人数量，需要消灭的敌人数量）
         this.useful_tower = (new TowerFactory()).TowerArr;//定义可以用的塔的类型数组变量，当调用这个对象的factory方法时，往数组里面赋值。
         this.player = new Player();
-        
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.useful_enemy = (new TowerFactory()).EnemyArr;
         this.leftTime = 5;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
@@ -187,6 +185,19 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
+        this.tower_message=[
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0],
+            [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
+            [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
+            [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+            [0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+            [0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+            [0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+            [0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        ]
 
         // 监控 
         $("#canvasMap_option").on("click", (e) => {//jquery语法，在这个图层里面，就是坑位被点击后做的动作。e就是鼠标监听的坐标
@@ -427,6 +438,12 @@ class God {
         }
     }
 
+    createTower(x,y,type){
+        let tower = new Tower(x,y,1,type,this.useful_tower[type-1].range,this.useful_tower[type-1].tower_img,this.useful_tower[type-1].cost,this.useful_tower[type-1].sale);
+        towers.push(tower);
+        this.tower_message[x,y] = (type+1);
+    }
+
     judge_game() {
         console.log("into judge_game");
         //监听怪的数量到了100只
@@ -475,58 +492,6 @@ class God {
         }, 1000)
     }
 
-    // 检查并生成子弹
-    checkAndCreateBullets() {
-        if (this.towersNumber <= 0) {
-            return false;
-        }
-        for (var tower in this.towers) {
-            for (var ene in this.enemies) {
-                var distanceX = this.towers[tower].x - this.enemies[ene].x;
-                var distanceY = this.towers[tower].y - this.enemies[ene].y;
-                if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) {
-                    // if(this.towers[tower].seed!=1)               
-                    //     {
-                    //         this.towers[tower].seed++;
-                    //         this.bullets.push(new Bullet(
-                    //         this.towers[tower].x,
-                    //         this.towers[tower].y,
-                    //         this.enemies[ene].x,
-                    //         this.enemies[ene].y,
-                    //         this.towers[tower].type.bullet_type.speed,    //创建塔的时候也确定了塔的子弹的属性
-                    //         this.towers[tower].type.bullet_type.color,
-                    //         this.towers[tower].type.bullet_type.size,
-                    //         this.towers[tower].type.bullet_type.attack,
-                    //         this.towers[tower].type.bullet_type.type,
-                    //         this.towers[tower].type.bullet_type.run,
-                    //         this.towers[tower].type.bullet_type.reduce,
-                    //         this.towers[tower].type.bullet_type.blood,
-                    //         this.towers[tower].type.bullet_type.second,
-                    //     )); }
-
-                    this.enemies[ene].take_damage(this.towers[tower].type.bullet_type.type,this.towers[tower].type.bullet_type.attack);
-                           
-                        }
-
-                }       
-
-               
-                    if (this.enemies[ene].hp <= 1) {
-                            this.player.money += this.enemies[ene].money;
-                            this.enemies[ene].dead();
-                            this.nowenemys--;  
-                            this.enemies[ene] = null;
-                            this.enemies.splice(ene, 1);
-                            this.enemyExisted--;
-                            this.enemies[ene++].take_damage(this.towers[tower].type.bullet_type.type,this.towers[tower].type.bullet_type.attack);
-                            // console.log(ene);
-                            //ene++;
-                        } 
-                        }
-                        
-                        
-
-    }
 
     // 暂停游戏
     stopGame() {
@@ -566,8 +531,6 @@ class God {
             bullet.dead();
         })
     }
-    
-    
 
     // 游戏状态获取
     gameState() {
@@ -593,6 +556,9 @@ class God {
                         // 子弹类型：this.bullets[bullet].type
                         // 子弹伤害：this.bullets[bullet].atk
                         this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                        this.bullets[bullet].dead();
+                        this.bullets[bullet] = null;
+                        this.bullets.splice(bullet, 1);
                         // 生命为0的时候 敌人死去
                         if (this.enemies[ene].hp <= 0) {
                             this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
@@ -715,261 +681,7 @@ class God {
             }
         }
 
-    //选塔------------------------------------------------------------------------------------------------
-    chooseTower(option_x, option_y, e, type) {
-        var s = 0; //选塔标签，1表示选中了塔
-        if (this.options.length > 0 || MAP_ARR[option_x][option_y] == 1) {
-            var origin = parseInt(this.useful_tower.length / 5); //第一个选项塔的位置
-            var b = 0;
-             console.log(this.options);
-             console.log(origin);
-            for (var option in this.options) {
-                for (var a = 0; a < this.useful_tower.length; a++) {
-                    if (a % 3 >= 0 && a % 3 < 1) {
-                        b++;
-                        if (this.options[option].x - (origin - b) * CELL_WIDTH <= e.offsetX && e.offsetX < this.options[option].x - (origin - b - 1) * CELL_WIDTH && this.options[option].y - CELL_WIDTH <= e.offsetY && e.offsetY < this.options[option].y) {
-                            //选择左上角的塔建塔
-                            this.createTower(this.options[option].x / CELL_WIDTH, this.options[option].y / CELL_WIDTH, type[a]);
-                            s = 1;
-                            this.drawss();
-                        }
-                    }
-                }
-                if (s == 0) {
-                    this.options.splice(option, 1);
-                    this.drawss();
-                    this.createOption(option_x, option_y);
-                    if (this.options.length > 1) {
-                        this.options.splice(option, 1);
-                    }
-                }
-
-            }
-
-        } else {
-            this.drawss();
-            for (var cx in this.xx) {
-                this.xx.splice(cx, 1);
-            }
-            this.createOption(option_x, option_y);//检查选的是不是在坑位上。
-        }
-    }
-
-    //升级塔
-    Tower_up(tower, x, y) {
-        var type = tower.type;
-        var new_type = type + 1;
-        this.x = x + 1;
-        this.y = y + 1;
-        //根据塔的type，首先删除塔，在新建一个高级塔
-        switch (type) {
-            case 1:
-                //删除当前塔
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower1-2.png";
-                        this.towers[tower].type = TowerType.two;
-                        MAP_ARR[x - 1][y + 1] = 0;
-                        this.drawTowerMap();
-                        MAP_ARR[x - 1][y + 1] = 1;
-                    }
-                }
-                break;
-            case 2:
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower1-3.png";
-                        this.towers[tower].type = TowerType.three;
-                    }
-                }
-                break;
-            case 3:
-                break;
-            case 4:
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower2-2.png";
-                        this.towers[tower].type = TowerType.five;
-                    }
-                }
-                break;
-            case 5:
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower2-3.png";
-                        this.towers[tower].type = TowerType.six;
-                    }
-                }
-                break;
-            case 6:
-                break;
-            case 7:
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower3-2.png";
-                        this.towers[tower].type = TowerType.eight;
-                    }
-                }
-                break;
-            case 8:
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower3-3.png";
-                        this.towers[tower].type = TowerType.nine;
-                    }
-                }
-                break;
-            case 9:
-                break;
-            case 10:
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower4-2.png";
-                        this.towers[tower].type = TowerType.eleven;
-                    }
-                }
-                break;
-            case 11:
-                for (var tower in this.towers) {
-                    if (this.towers[tower].x == this.x * CELL_WIDTH && this.towers[tower].y == this.y * CELL_WIDTH) {
-                        this.towers[tower].tower_img = "img/tower/tower4-3.png";
-                        this.towers[tower].type = TowerType.twelve;
-                    }
-                }
-                break;
-            case 12:
-                break;           
-            default: break;
-        }
-    }
-
-    //需要引擎新建一个放置初始塔的数组towersPosition,记录塔的x,y,width,height等
-    //towersposion数组，用来存放地图下方4种一级塔的属性。
-    towersPosition = [
-        { type :1,range: 3, tower_img: "img/tower/tower1-1.png", bullet_type: BulletType.one, cost: 100, sale: 80 },
-        { type :4,range:3, tower_img: "img/tower/tower2-1.png", bullet_type: BulletType.four, cost: 180, sale: 100 },
-        { type :7,range:4, tower_img: "img/tower/tower3-1.png", bullet_type: BulletType.seven, cost: 220, sale: 150 },
-        { type :10,range: 4, tower_img: "img/tower/tower4-1.png", bullet_type: BulletType.ten, cost: 200, sale: 120 }
-    ]
-
     
-    //判断鼠标的点是否在塔位（一个正方形）中 
-    //tower是默认塔组中的一个对象
-    pointInRect(point_x, point_y, tower) {
-        if (point_x >= tower.x && point_x <= (tower.x + tower.width) && point_y >= tower.y
-            && point_y <= (tower.y + tower.height))
-            return true
-        else return false;
-    }
-
-    //拆塔以及升级塔
-    up_downTower(option_x, option_y) {
-        if (this.xx.length > 0 ) {
-            for (var tower in this.towers) {
-                for (var cx in this.xx) {
-                    //点击删除
-                    if (this.towers[tower].x == (option_x - 1) * CELL_WIDTH && this.towers[tower].y == (option_y + 1) * CELL_WIDTH) {
-                        this.player.money += this.towers[tower].type.sale;
-                        this.towers.splice(tower, 1);
-                        this.xx.splice(cx, 1);
-                        MAP_ARR[option_x - 1][option_y + 1] = 0;
-                        this.drawTowerMap();
-                        this.drawss();
-                        break;
-                    }
-                    //点击升级
-                    // console.log(this.towers[tower]);
-                    if (this.towers[tower].x == (option_x + 1) * CELL_WIDTH && this.towers[tower].y == (option_y + 1) * CELL_WIDTH) {
-                        this.up.splice(cx, 1);
-                        console.log("塔对应类型"+this.towers[tower].type.type % 3);
-                        if (this.towers[tower].type.type % 3 > 0 && this.towers[tower].type.type % 3 < 3) {
-                            if (this.towers[tower].type.cost <= this.player.money) {
-                                this.Tower_up(this.towers[tower].type, option_x, option_y);
-                                this.player.money -= this.towers[tower].type.cost;
-                                break;
-                            } else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-
-                            }
-                        }
-                    }
-                }
-            }
-           
-        }
-        if (MAP_ARR[option_x][option_y] == 1) {
-            this.drawss();
-            this.xx.push(new Xx(option_x, option_y));
-            if (this.xx.length > 1) {
-                this.xx.splice(cx, 1);
-                if (this.xx.length > 1) {
-                    this.xx.splice(cx, 1);
-                }
-            }
-            console.log(this.xx)
-            this.drawxx();
-        }
-    }
-
-    // 生成选项------------------------------------------------------------------------------------------------
-    createOption(X, Y) {
-        //根据关卡数来设选项的坑位
-        this.towerHome = new search().searchTower(LEVEL);
-
-        for (var arr in this.towerHome) {
-            // this.towerHome[arr].x - 1 为了修正数组坐标
-            //判断条件为 1.鼠标的x,y 等于 规定塔位的x,y   2.一个坑位只能放一个塔  3.放置的塔不能超过最大数量
-
-            if (X == this.towerHome[arr].x - 1 && Y == this.towerHome[arr].y - 1 && MAP_ARR[X][Y] != 1 && this.towersNumber < TOWER_BASE_NUMBER + TOWER_UP_NUMBER * LEVEL) {
-                this.optionsNumber++;
-                this.options.push(new TowerOption(X * CELL_WIDTH, Y * CELL_WIDTH));
-
-                this.drawOptions();
-            }
-        }
-    }
-
-    // 生成塔
-    createTower(X, Y, type) {
-
-        //根据关卡数来设定塔的坑位
-        this.towerHome = new search().searchTower(LEVEL);
-
-        for (var arr in this.towerHome) {
-            // this.towerHome[arr].x - 1 为了修正数组坐标
-            //判断条件为 1.鼠标的x,y 等于 规定塔位的x,y   2.一个坑位只能放一个塔  3.放置的塔不能超过最大数量
-            if (X == this.towerHome[arr].x - 1 && Y == this.towerHome[arr].y - 1 && MAP_ARR[X][Y] != 1 && this.towersNumber < TOWER_BASE_NUMBER + TOWER_UP_NUMBER * LEVEL) {
-                this.towersNumber++;
-
-                // this.towers.push(new Tower(X * CELL_WIDTH, Y * CELL_WIDTH));
-                //---------------------------------------------------------------------------------戴
-                if (type.cost - this.player.money <= 0) {
-                    this.towers.push(new Tower(X * CELL_WIDTH, Y * CELL_WIDTH, type));//创建塔，就往塔里面传值。
-                    this.player.money -= type.cost;
-                    MAP_ARR[X][Y] = 1;
-                } else {
-                    $("#moneyshow").css("border", "2px solid red");
-                    setTimeout(() => {
-                        $("#moneyshow").css("border", " white");
-                    }, 500);
-                    //金额不足提示框显示2s后消失
-                    $("#lack_money").show();
-                    setTimeout(() => {
-                        $("#lack_money").hide();
-                    }, 2000);
-
-                }
-            }
-        }
-    } 
 }
 
 
