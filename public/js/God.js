@@ -417,10 +417,7 @@ class God {
             enemy_level, // 等级
             boss, // 是否为boss
             );
-        this.enemies.push(enemy);
-        // console.log(this.enemies);
-        this.enemyNumber++;
-        if (this.enemyNumber <= length) {
+        if (this.enemyNumber <= enemyNumberLimit) {
             var enemy = new Enemy();
             this.enemies.push(enemy);
             this.enemyNumber++;
