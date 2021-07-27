@@ -13,7 +13,7 @@ class Enemy {
         this.enemy_img_series = enemy_type+1; // 怪物图片序列头
         this._init();//
         this.moveArr = new Search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线
-        this.index = 1; // 确定怪物移动方向
+        // this.ran = 1; // 确定怪物移动方向
         // 怪物初始参数
         this.originHp = hp; // 原始hp
         // this.origin_spd = this.speed; // 初始速度 用于速度改变使用
@@ -54,9 +54,9 @@ class Enemy {
 
     // 根据随机数来确定小怪的随机出生位置
     createlocation() {
-            var ran = this.randomNum(route.routeOne.length)
-            this.x = moveRoute.MOVEARROne[ran].x * CELL_WIDTH
-            this.y = moveRoute.MOVEARROne[ran].y * CELL_WIDTH
+            this.ran = this.randomNum(moveRoute.MOVEARROne.length)
+            this.x = moveRoute.MOVEARROne[this.ran].x * CELL_WIDTH
+            this.y = moveRoute.MOVEARROne[this.ran].y * CELL_WIDTH
     }
 
     // 怪物dot 伤害叠加 再次dot刷新时间
@@ -112,7 +112,7 @@ class Enemy {
                 order = order % 30; // 控制order的数值大小 四张图片顺次切换 每10次切换一次
                 this.move(order); // 移动
                 order++;
-            }, 10000 / spd); // 控制enemy移动速度，每10000毫秒刷新一次
+            }, 10000 / spd); // 控制enemy移动速度
         }
     }
 
@@ -125,18 +125,25 @@ class Enemy {
             else if(order < 20){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-2.png";}
             else {this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-3.png";}
             // 判断的时候乘CELL_WIDTH
-            if (this.x != this.moveArr[ran].x * CELL_WIDTH) {
+            // console.log(this.ran)
+            // console.log(this.x)
+            // console.log(this.y)
+            // console.log(this.moveArr[this.ran + 1].x * CELL_WIDTH)
+            // console.log(this.moveArr[this.ran + 1].y * CELL_WIDTH)
+            if (this.x != this.moveArr[this.ran + 1].x * CELL_WIDTH) {
                 // 方向向量 正数向右 负数向左
-                var x_d = this.moveArr[(ran + 1) % this.moveArr.length].x - this.moveArr[ran % this.moveArr.length].x;
+                var x_d = this.moveArr[(this.ran + 1) % this.moveArr.length].x - this.moveArr[this.ran % this.moveArr.length].x;
+                // console.log(x_d)
                 // x轴每一步的距离
                 this.x = this.x + 1 * (x_d / Math.abs(x_d));
-            } else if (this.y != this.moveArr[ran].y * CELL_WIDTH) {
+            } else if (this.y != this.moveArr[this.ran + 1].y * CELL_WIDTH) {
                 // 方向向量 正数向上 负数向下
-                var y_d = this.moveArr[(ran + 1) % this.moveArr.length].y - this.moveArr[ran % this.moveArr.length].y;
+                var y_d = this.moveArr[(this.ran + 1) % this.moveArr.length].y - this.moveArr[this.ran % this.moveArr.length].y;
+                // console.log(y_d)
                 // y轴每一步的距离
                 this.y = this.y + 1 * (y_d / Math.abs(y_d));
             } else {
-                this.index++;
+                this.ran++;
             }
         }
     }

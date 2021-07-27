@@ -427,13 +427,13 @@ class God {
             boss, // 是否为boss
             );
         this.enemies.push(enemy);
-        // console.log(this.enemies);
+        console.log(this.enemies);
         this.enemyNumber++;
-        if (this.enemyNumber <= length) {
-            var enemy = new Enemy();
-            this.enemies.push(enemy);
-            this.enemyNumber++;
-        }
+        // if (this.enemyNumber <= length) {
+        //     var enemy = new Enemy();
+        //     this.enemies.push(enemy);
+        //     this.enemyNumber++;
+        // }
     }
 
     judge_game() {
@@ -704,8 +704,6 @@ class God {
         for (var ene in this.enemies) {
             console.log(this.enemies[ene])
             img.src = this.enemies[ene].enemy_img;
-            console.log(this.enemies[ene].x)
-            console.log(this.enemies[ene].y)
             ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
             Ca.drawBlood(ctx, this.enemies[ene]);
             console.log(this.enemies[ene].x)
