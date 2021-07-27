@@ -31,7 +31,15 @@ class God {
             $("#block_skill").show();
             $("#block_left").show();
             $("#block_right").show();
-            $("#skill-btns-container").show();
+            $("#block1_box").show();
+
+            //隐藏游戏页面，显示匹配页面，修改start******************
+            // this.showTime();
+            // $(".block3").hide();
+            // $("#block_left").hide();
+            // $("#block_right").hide();
+            // $(".match").show();
+            // 修改end******************
 
             // //绑定连接事件
             // this.link();
