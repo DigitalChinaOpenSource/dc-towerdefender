@@ -868,6 +868,27 @@ class God {
         }
     }
 
+     //绘制敌人
+     drawEnemies() { 
+        //获取敌人对象
+            var cv = document.querySelector('#canvasMap_enemy');
+            //获取2d平面
+            var ctx = cv.getContext('2d');
+            // 清空敌人图片
+            ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+            var img = new Image;
+            // 遍历数据，绘制敌人
+            for (var ene in this.enemies) {
+                console.log(this.enemies[ene])
+                img.src = this.enemies[ene].enemy_img;
+                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
+                Ca.drawBlood(ctx, this.enemies[ene]);
+                console.log(this.enemies[ene].x)
+                console.log(this.enemies[ene].y)
+            }
+    
+        }
+
 
 
 
