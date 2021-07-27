@@ -2,7 +2,6 @@ class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
-
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
@@ -34,24 +33,13 @@ class God {
             $("#skill-btns-container").show();
 
             // //绑定连接事件
-            // websocketLink();
-            this.startGame();
+            this.websocketLink();
+           // this.startGame();
         });
 
         $("#logout_btn").on("click", () => {
             window.location.href = './log.html';
         });
-
-
-        // // websocket连接
-        // var ws
-        // // 房间号
-        // var roomCount
-        // // 用户名
-        // var name
-        // //ip地址
-        // var IP='ws://localhost:8888'
-
 
     }
     
@@ -80,87 +68,83 @@ class God {
     // }
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面end
 
-    // // websocket建立连接
-    // link(){
-    //     //建立连接
-    //     this.ws = new WebSocket(this.IP)
-    //     //连接成立触发
-    //     this.ws.onopen = function(){
-    //         console.log('success connected')
-    //         // 发送自己的积分
-    //         // 积分暂时无法获取！！！！！！！！！！！！！！
-    //         var score = document.getElementById("score")
-    //         ws.send({type:0,score:score.value})
-    //     }
-    //     //收到消息触发
-    //     ws.onmessage = function(evt){
-    //         // 消息转为json类型
-    //         var recv = JSON.parse(evt.data)
-    //         //设定房间号
-    //         if(recv.type==0){
-    //             var roomCount = document.getElementById("roomCount")
-    //             roomCount.value= recv.roomCount
-    //             this.roomCount = recv.roomCount
-    //         }
-    //         // 判断信息是否是发给自己的房间的
-    //         if(recv.roomCount == roomCount){
-    //             // 判断是否为自己发的信息
-    //             if(recv.name != name){
-    //                 if(recv.type == 1){
-    //                     //生成两个小兵
-    //                     this.createEnemy()
-    //                     this.createEnemy()
-    //                 }else if(recv.type == 2){
-    //                     //小兵增强
-    //                 }else if(recv.type == 3){
-    //                     //显示聊天msg
-    //                 }else if(recv.type == 4){
-    //                     //调用获胜方法赢了
-    //                     alert('you win')
-    //                     //调用断开连接方法
-    //                     this.close()
-    //                 }else if(recv.type == 5){
-    //                     //时间到，对比小兵enemy数量，判断输赢
-    //                     ////调用断开连接方法
-    //                     if(recv.enemy<this.enemyExisted){
-    //                         alert("you losed")
-    //                     }else{
-    //                         alert('you win')
-    //                     }
-    //                     this.close()
-    //                 }
-    //             }
-    //         }
 
-    //     }
-    // }
 
-    //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
-    // 通过roomCount判断发给哪个房间组
-    // 通过name确定是否为对方发送的信息
-    // 通过type确定为哪种信息
-    //type:0,msg:
-    //{type:0,score:}
-    // type:1,msg：
-    // {type:1,roomCount: ,name:''}
-    // type:2,msg：
-    // {type:2,roomCount: ,name:''}
-    // type:3,msg：
-    // {type:3,roomCount: ,name:','msg:''}
-    // type:4,msg：
-    // {type:4,roomCount: ,name:''}
-    //type:5,msg:
-    //{type:5,roomConut: ,name:'',enemy: }
-    // send(msg){
-    //     // 发送信息转为string发送
-    //     this.ws.send(JSON.stringify(msg))
-    // }
-    // //websocket 关闭连接，再玩需要重新建立连接
-    // close(){
-    //     this.ws.onclose()
-    //     this.link()
-    // }
+    websocketLink(){
+        console.log(ip)
+        ws = new WebSocket(ip)
+        ws.onopen = function(){
+            console.log('success liked the server')
+            let i = parseInt(Math.random()*5)
+            console.log('score======>'+i)
+            score = i
+            ws.send(JSON.stringify({score:i}))
+        }
+    
+        ws.onmessage = function(evt){
+            // 消息转为json类型
+            var recv = JSON.parse(evt.data)
+            //设定房间号
+            if(recv.type==0){
+                roomCount = recv.roomCount
+                console.log('roomCount========>'+roomCount)
+                for(var i = 0;i<10;i++){
+                    ws.send(JSON.stringify({type:3,roomCount:roomCount,msg:'hello i am'}))
+                }
+                // 开始游戏
+                this.startGame()
+    
+            }
+            // 判断信息是否是发给自己的房间的
+            if(recv.roomCount == roomCount){
+                // 判断是否为自己发的信息
+                // if(recv.name != linkName){
+                    if(recv.type == 1){
+                        //生成两个小兵
+    
+                    }else if(recv.type == 2){
+                        //小兵增强
+                        if(recv.action == enemy_level_up){
+    
+                        }
+                        if(recv.action == add_boss){
+    
+                        }
+                    }else if(recv.type == 3){
+                        //显示聊天msg
+                        console.log(recv.msg)
+                    }else if(recv.type == 4){
+                        //调用获胜方法赢了
+                        alert('you win')
+                        //调用断开连接方法
+                        ws.close()
+                    }else if(recv.type == 5){
+                        //时间到，对比小兵enemy数量，判断输赢
+                        ////调用断开连接方法
+                        if(recv.enemy<enemyExisted){
+                            alert("you losed")
+                        }else{
+                            alert('you win')
+                        }
+                        ws.close()
+                    }
+                // }
+            }
+        }
+        
+    }
 
+    websocketSend(msg){
+        ws.send(JSON.stringify(msg))
+    }
+
+    websocketClose(){
+        ws.close()
+        console.log('success close websocket link')
+        this.websocketLink()
+    }
+
+    
 
 
     _init() {

@@ -3,63 +3,63 @@ let roomCount
 let linkName
 let score
 let ip='ws://localhost:8888'
-function websocketLink(){
-    ws = new WebSocket(ip)
-    ws.onopen = function(){
-        console.log('success liked the server')
-        // let i = parseInt(Math.random()*5)
-        // console.log('score======>'+i)
-        // websocketSend({type:0,score:i})
-    }
+// function websocketLink(){
+//     ws = new WebSocket(ip)
+//     ws.onopen = function(){
+//         console.log('success liked the server')
+//         // let i = parseInt(Math.random()*5)
+//         // console.log('score======>'+i)
+//         // websocketSend({type:0,score:i})
+//     }
 
-    ws.onmessage = function(evt){
-        // 消息转为json类型
-        var recv = JSON.parse(evt.data)
-        //设定房间号
-        if(recv.type==0){
-            roomCount = recv.roomCount
-            console.log('roomCount========>'+roomCount)
-            // 开始游戏
+//     ws.onmessage = function(evt){
+//         // 消息转为json类型
+//         var recv = JSON.parse(evt.data)
+//         //设定房间号
+//         if(recv.type==0){
+//             roomCount = recv.roomCount
+//             console.log('roomCount========>'+roomCount)
+//             // 开始游戏
 
-        }
-        // 判断信息是否是发给自己的房间的
-        if(recv.roomCount == roomCount){
-            // 判断是否为自己发的信息
-            if(recv.name != linkName){
-                if(recv.type == 1){
-                    //生成两个小兵
-                    
-                }else if(recv.type == 2){
-                    //小兵增强
-                    if(recv.action == enemy_level_up){
+//         }
+//         // 判断信息是否是发给自己的房间的
+//         if(recv.roomCount == roomCount){
+//             // 判断是否为自己发的信息
+//             if(recv.name != linkName){
+//                 if(recv.type == 1){
+//                     //生成两个小兵
 
-                    }
-                    if(recv.action == add_boss){
+//                 }else if(recv.type == 2){
+//                     //小兵增强
+//                     if(recv.action == enemy_level_up){
 
-                    }
-                }else if(recv.type == 3){
-                    //显示聊天msg
-                    console.log(recv.msg)
-                }else if(recv.type == 4){
-                    //调用获胜方法赢了
-                    alert('you win')
-                    //调用断开连接方法
-                    websocketClose()
-                }else if(recv.type == 5){
-                    //时间到，对比小兵enemy数量，判断输赢
-                    ////调用断开连接方法
-                    if(recv.enemy<enemyExisted){
-                        alert("you losed")
-                    }else{
-                        alert('you win')
-                    }
-                    websocketClose()
-                }
-            }
-        }
-    }
+//                     }
+//                     if(recv.action == add_boss){
+
+//                     }
+//                 }else if(recv.type == 3){
+//                     //显示聊天msg
+//                     console.log(recv.msg)
+//                 }else if(recv.type == 4){
+//                     //调用获胜方法赢了
+//                     alert('you win')
+//                     //调用断开连接方法
+//                     websocketClose()
+//                 }else if(recv.type == 5){
+//                     //时间到，对比小兵enemy数量，判断输赢
+//                     ////调用断开连接方法
+//                     if(recv.enemy<enemyExisted){
+//                         alert("you losed")
+//                     }else{
+//                         alert('you win')
+//                     }
+//                     websocketClose()
+//                 }
+//             }
+//         }
+//     }
     
-}
+// }
  //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
 		// 通过roomCount判断发给哪个房间组
 		// 通过name确定是否为对方发送的信息
@@ -77,14 +77,14 @@ function websocketLink(){
 		//type:5,msg:
 		//{type:5,roomConut: ,name:'',enemy: }
 
-function websocketSend(msg){
-    ws.send(JSON.stringify(msg))
-}
-function websocketClose(){
-    ws.close()
-    console.log('success close websocket link')
-    websocketLink()
-}
+// function websocketSend(msg){
+//     ws.send(JSON.stringify(msg))
+// }
+// function websocketClose(){
+//     ws.close()
+//     console.log('success close websocket link')
+//     websocketLink()
+// }
 
 
             // //绑定连接事件
