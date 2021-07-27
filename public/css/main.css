@@ -31,7 +31,7 @@
     left: 25%;
     top: 73%;
     cursor: pointer;
-    background: url("../img/button/button-start\(2\).png") no-repeat;
+    background: url("../img/button/button-start.png") no-repeat;
     background-size:100%;
     border-style: none;
 }
@@ -42,7 +42,7 @@
 }
 .btn_logout {
     cursor: pointer;
-    background: url("../img/button/button-logout\(2\).png") no-repeat;
+    background: url("../img/button/button-logout.png") no-repeat;
     border-style: none;
     position: absolute;
     background-size: 100%;
@@ -391,7 +391,15 @@ ul.list-login-bottom li a:hover {
     background: url(../img/map/info-2\(1\).png) no-repeat;
     /* background-color: chocolate; */
 }
-
+.lackmoney{
+    background:url(../img/items/lackofmoney.png) no-repeat;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left:60%;
+    top: 1%;
+    z-index: 6;
+}
 .content_banner{
     margin-left:190px;
     /* background-color: aquamarine; */

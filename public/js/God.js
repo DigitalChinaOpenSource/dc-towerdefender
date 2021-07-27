@@ -172,7 +172,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 5;//剩余时间,单位秒
+        this.leftTime = 30;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
@@ -254,8 +254,9 @@ class God {
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
                 }
                 else {
+                    $("#moneylack").show(300).delay(1000).hide(200);
                     // console.log(this.player.money);
-                    alert("给自己小怪减血技能金币数量不够");
+                    // alert("给自己小怪减血技能金币数量不够");
                 }
             } else {
                 alert("地图上没有小怪，无法减血");
@@ -278,7 +279,8 @@ class God {
                         this.player.money = this.player.money - increase_enemy_level_money;
                         console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
                     } else {
-                        alert("给对方小怪升级金币数量不够");
+                        $("#moneylack").show(300).delay(1000).hide(200);
+                        // alert("给对方小怪升级金币数量不够");
                     }
                 }
             } else {
@@ -297,7 +299,8 @@ class God {
                 this.player.money = this.player.money - add_boss_money;
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
-                alert("给对方增加一个boss金币数量不够");
+                $("#moneylack").show(300).delay(1000).hide(200);
+                // alert("给对方增加一个boss金币数量不够");
             }
         });
 
