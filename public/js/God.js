@@ -441,7 +441,7 @@ class God {
         //     var enemy = new Enemy();
         //     this.enemies.push(enemy);
         //     this.enemyNumber++;
-        }
+        // }
     }
 
     // 传入参数，xy坐标（以格子为单位，横x竖y），防御塔类型（int）
