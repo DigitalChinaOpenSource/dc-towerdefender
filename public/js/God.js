@@ -167,6 +167,7 @@ class God {
         //初始化（1先定义一个可以安置的塔的种类的数组.2创建一个玩家对象。3画出四层画布。4创建一个json形式的敌人数组，根据LEVEL数组被赋值,赋值为另一个数组（敌人的 类型，数量enemyType: EnemyType.DesertMob, num: 10）
         // 5 定义两个变量：地图上敌人数量，需要消灭的敌人数量）
         this.useful_tower = (new TowerFactory()).TowerArr;//定义可以用的塔的类型数组变量，当调用这个对象的factory方法时，往数组里面赋值。
+        this.useful_bullet = (new BulletFactory()).BulletArr;
         this.player = new Player();
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
@@ -299,6 +300,7 @@ class God {
                 alert("给对方增加一个boss金币数量不够");
             }
         });
+
         //动态显示金币
         this.timeMoney = setInterval(() => {
             $("#moneyshow").html(this.player.money);
@@ -439,10 +441,57 @@ class God {
         }
     }
 
+    // 传入参数，xy坐标（以格子为单位，横x竖y），防御塔类型（int）
     createTower(x,y,type){
-        let tower = new Tower(x,y,1,type,this.useful_tower[type-1].range,this.useful_tower[type-1].tower_img,this.useful_tower[type-1].cost,this.useful_tower[type-1].sale);
-        towers.push(tower);
-        this.tower_message[x,y] = (type+1);
+        if(this.player.money<this.useful_tower[type-1].cost){
+            this.money_not_enough();
+        }else{
+            let tower = new Tower(
+                x,
+                y,
+                1,
+                type,
+                this.useful_tower[type-1].range,this.useful_tower[type-1].range,
+                this.useful_tower[type-1].cost,this.useful_tower[type-1].attack_interval,
+                this.useful_tower[type-1].cost,this.useful_tower[type-1].cost,
+                this.useful_tower[type-1].cost,this.useful_tower[type-1].sale
+            );
+            towers.push(tower);
+            this.tower_message[x,y] = (type+1);
+            this.player.money -= tower.cost;
+            this.towersNumber ++ ;
+            tower.check_attack_interval = setInterval(() => {
+                this.tower_attack(tower);
+            },30);
+        }
+    }
+
+    tower_attack(tower){
+        for (let ene in this.enemies) {
+            let distanceX = this.towers[tower].x - this.enemies[ene].x;
+            let distanceY = this.towers[tower].y - this.enemies[ene].y;
+            if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) {
+                this.bullets.push(new Bullet(
+                    this.towers[tower].x,
+                    this.towers[tower].y,
+                    this.enemies[ene].x,
+                    this.enemies[ene].y,
+                    this.useful_bullet[this.useful_tower[(this.towers[tower].type)-1]. bullet_type].speed,
+                    this.useful_bullet[this.useful_tower[(this.towers[tower].type)-1]. bullet_type].damage,
+                    ene
+                ));
+                clearInterval(tower.check_attack_interval);
+                setTimeout(() => {
+                    tower.check_attack_interval = setInterval(() => {
+                        this.tower_attack(tower);
+                    },30)
+                }, tower.attack_interval);
+            }   
+        } 
+    }
+
+    money_not_enough(){
+        alert("money is not enough");
     }
 
     judge_game() {
@@ -540,7 +589,7 @@ class God {
     }
 
     bullet_touch_enemy(){
-        for(let bullet in bullets){
+        for(let bullet in this.bullets){
             if (this.bullets[bullet].x < 0 || this.bullets[bullet].y < 0 ||
                 this.bullets[bullet].x > MAP_WIDTH || this.bullets[bullet].y > MAP_HEIGHT) {
                 this.bullets[bullet].dead();
@@ -577,6 +626,120 @@ class God {
         }
     }
 
+    //升级塔
+    Tower_up(type,x,y){
+        
+        switch (type) {
+            case 1:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                        if (TowerType.two.cost <= this.player.money) {
+                            this.towers[tower].tower_img = "img/tower/tower1-2.png";
+                            this.towers[tower].type = TowerType.two;
+                            this.player.money -= TowerType.two.cost;
+                            tower_message[x,y] = type+1;
+                        }
+                        else {
+                            $("#moneyshow").css("border", "2px solid red");
+                            setTimeout(() => {
+                                $("#moneyshow").css("border", " white");
+                            }, 500);
+                            //金额不足提示框显示2s后消失
+                            $("#lack_money").show();
+                            setTimeout(() => {
+                                $("#lack_money").hide();
+                            }, 2000);
+                        }
+                    }
+                }
+                break;
+                case 2:
+                    for (var tower in this.towers) {
+                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                            if (TowerType.three.cost <= this.player.money) {
+                                this.towers[tower].tower_img = "img/tower/tower1-3.png";
+                                this.towers[tower].type = TowerType.three;
+                                this.player.money -= TowerType.three.cost;
+                                tower_message[x,y] = type+1;    
+                            }
+                            else {
+                                $("#moneyshow").css("border", "2px solid red");
+                                setTimeout(() => {
+                                    $("#moneyshow").css("border", " white");
+                                }, 500);
+                                //金额不足提示框显示2s后消失
+                                $("#lack_money").show();
+                                setTimeout(() => {
+                                    $("#lack_money").hide();
+                                }, 2000);
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    break;               
+                case 4:
+                    for (var tower in this.towers) {
+                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                            if (TowerType.five.cost <= this.player.money) {
+                                this.towers[tower].tower_img = "img/tower/tower2-2.png";
+                                this.towers[tower].type = TowerType.five;
+                                this.player.money -= TowerType.five.cost;
+                                tower_message[x,y] = type+1;   
+                            }
+                            else {
+                                $("#moneyshow").css("border", "2px solid red");
+                                setTimeout(() => {
+                                    $("#moneyshow").css("border", " white");
+                                }, 500);
+                                //金额不足提示框显示2s后消失
+                                $("#lack_money").show();
+                                setTimeout(() => {
+                                    $("#lack_money").hide();
+                                }, 2000);
+                            }
+                        }
+                    }
+                    break;
+                    case 5:
+                        for (var tower in this.towers) {
+                            if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                                if (TowerType.six.cost <= this.player.money) {
+                                    this.towers[tower].tower_img = "img/tower/tower2-3.png";
+                                    this.towers[tower].type = TowerType.six;
+                                    this.player.money -= TowerType.six.cost;
+                                    tower_message[x,y] = type+1;
+                                }
+                                else {
+                                    $("#moneyshow").css("border", "2px solid red");
+                                    setTimeout(() => {
+                                        $("#moneyshow").css("border", " white");
+                                    }, 500);
+                                    //金额不足提示框显示2s后消失
+                                    $("#lack_money").show();
+                                    setTimeout(() => {
+                                        $("#lack_money").hide();
+                                    }, 2000);
+                                }
+                            }
+                        }
+                        break;
+                    case 6:
+                        break;                
+        }   
+    }
+
+
+    //拆除塔
+    Tower_down(type,x,y) {
+        for (var tower in this.towers) {
+            if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                this.player.money += this.towers[tower].type.sale;
+                this.towers.splice(tower, 1);
+                tower_message[x,y] = 1;
+            }
+        }
+    }    
 
 
 
