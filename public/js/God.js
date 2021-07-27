@@ -315,6 +315,7 @@ class God {
         this.getGameState = setInterval(() => {
             this.gameState();
         }, 300);
+        this.chat();
 
         // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
         // $("#reduce_enemy_blood").on("click", () => {
@@ -653,7 +654,7 @@ class God {
             // console.log(this.player)
             var player1 = this.player;
             var Words = document.getElementById("words");
-            var Who = document.getElementById("who");
+            var Who = 0;
             var TalkWords = document.getElementById("talkwords");
             var TalkSub = document.getElementById("talksub");
             TalkSub.onclick = function(){
@@ -671,13 +672,15 @@ class God {
                     return;
                 }
                 //判断是谁发出的
-                if(Who.value == 0){
-                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                if(Who== 0){
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                  
                 }
                 else{
-                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                 }
                 Words.innerHTML = Words.innerHTML + str;
+                TalkWords.value="";
             }
         }
 
