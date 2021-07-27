@@ -430,11 +430,11 @@ class God {
         this.enemies.push(enemy);
         // console.log(this.enemies);
         this.enemyNumber++;
-        if (this.enemyNumber <= length) {
-            var enemy = new Enemy();
-            this.enemies.push(enemy);
-            this.enemyNumber++;
-        }
+        // if (this.enemyNumber <= length) {
+        //     var enemy = new Enemy();
+        //     this.enemies.push(enemy);
+        //     this.enemyNumber++;
+        // }
     }
 
     // 传入参数，xy坐标（以格子为单位，横x竖y），防御塔类型（int）
@@ -808,6 +808,75 @@ class God {
         }
     }
   
+
+    //绘制选项
+    drawOptions() {
+        let num = tower_message[option_x][option_y];
+        if (num==1){
+            let cv = document.querySelector('#canvasMap_option');
+            let ctx = cv.getContext('2d');
+            let b = 0;
+            let origin = parseInt(this.towerAndBullets.length / 5); //绘画的初始位置 //解析一个字符串，返回整数
+            for (let a = 0; a < this.towerAndBullets.length; a++) {
+                if (a % 3 >= 0 && a % 3 < 1) {
+                    b++;
+                    let img = new Image;
+                    img.src = this.towerAndBullets[a].tower_img;
+                    for (let option in this.options) {
+                        ctx.drawImage(img, this.options[option].x - (origin - b) * CELL_WIDTH, this.options[option].y - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+
+                    }
+                }
+            }
+        }
+    }
+    //绘制点塔选项标志
+    drawxx(option_x , option_y) {
+        let num = tower_message[option_x][option_y];
+        if (num!==0 && num!==1){
+            let cv = document.querySelector('#canvasMap_option');
+            let ctx = cv.getContext('2d');
+            let img_xx = new Image();
+            let img_up = new Image();
+            img_xx.src = "img/button/sholve.png";
+            img_up.src = "img/button/upgrade.png";
+            for (let cx in this.towerhome) {
+                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                up_position[0]=(option_x + 1) * CELL_WIDTH;      //升级选项
+                up_position[1]=(option_y - 1) * CELL_WIDTH;
+                xx_position[0]= (option_x - 1) * CELL_WIDTH;      //删除选项
+                xx_position[1]=(option_y - 1) * CELL_WIDTH;
+                console.log(up_position[0],up_position[1]);
+            }
+        }
+    }
+
+     //绘制敌人
+     drawEnemies() { 
+        //获取敌人对象
+            var cv = document.querySelector('#canvasMap_enemy');
+            //获取2d平面
+            var ctx = cv.getContext('2d');
+            // 清空敌人图片
+            ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+            var img = new Image;
+            // 遍历数据，绘制敌人
+            for (var ene in this.enemies) {
+                console.log(this.enemies[ene])
+                img.src = this.enemies[ene].enemy_img;
+                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
+                Ca.drawBlood(ctx, this.enemies[ene]);
+                console.log(this.enemies[ene].x)
+                console.log(this.enemies[ene].y)
+            }
+    
+        }
+
+
+
+
+
     //聊天
     chat(){
             // console.log(this.player)
