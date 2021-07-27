@@ -309,7 +309,7 @@ class God {
             this.gameState();
         }, 300);
         // 绘制敌人
-        setInterval(() => {
+        this.drawEnemy = setInterval(() => {
             this.drawEnemies();
         }, 10);
 
@@ -399,6 +399,7 @@ class God {
         clearInterval(this.timeTime);
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
+        clearInterval(this.drawEnemy)
     }
 
     createFirstEnemy() {
@@ -436,24 +437,24 @@ class God {
     }
 
     judge_game() {
-        console.log("into judge_game");
-        //监听怪的数量到了100只
-        if (this.enemyExisted >= 100) {
-            this.stopGame();
-            alert("lose");
-            // //websocket发送失败信息
-            // this.send({type:4,roomCount:this.roomCount,name:linkName})
-            // // 关闭websocket连接
-            //websocketClose()
+        // console.log("into judge_game");
+        // //监听怪的数量到了100只
+        // if (this.enemyExisted >= 100) {
+        //     this.stopGame();
+        //     alert("lose");
+        //     // //websocket发送失败信息
+        //     // this.send({type:4,roomCount:this.roomCount,name:linkName})
+        //     // // 关闭websocket连接
+        //     //websocketClose()
 
-        }
-        //监听时间小于100秒，并且怪的数量小于100只
-        if (this.enemyExisted < 100 && this.leftTime <= 0) {
-            this.stopGame();
-            // // 发送自己的小兵剩余信息给对方
-            // this.send({type:5,roomCount:this.roomCount,name:linkNname,enemy:this.enemyExisted})
-            alert("win");
-        }
+        // }
+        // //监听时间小于100秒，并且怪的数量小于100只
+        // if (this.enemyExisted < 100 && this.leftTime <= 0) {
+        //     this.stopGame();
+        //     // // 发送自己的小兵剩余信息给对方
+        //     // this.send({type:5,roomCount:this.roomCount,name:linkNname,enemy:this.enemyExisted})
+        //     alert("win");
+        // }
     }
 
     stopCountTime() {
@@ -703,6 +704,8 @@ class God {
         for (var ene in this.enemies) {
             console.log(this.enemies[ene])
             img.src = this.enemies[ene].enemy_img;
+            console.log(this.enemies[ene].x)
+            console.log(this.enemies[ene].y)
             ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
             Ca.drawBlood(ctx, this.enemies[ene]);
             console.log(this.enemies[ene].x)

@@ -55,8 +55,8 @@ class Enemy {
     // 根据随机数来确定小怪的随机出生位置
     createlocation() {
             var ran = this.randomNum(route.routeOne.length)
-            this.x = route.routeOne[ran].x * CELL_WIDTH
-            this.y = route.routeOne[ran].y * CELL_WIDTH
+            this.x = moveRoute.MOVEARROne[ran].x * CELL_WIDTH
+            this.y = moveRoute.MOVEARROne[ran].y * CELL_WIDTH
     }
 
     // 怪物dot 伤害叠加 再次dot刷新时间
@@ -125,14 +125,14 @@ class Enemy {
             else if(order < 20){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-2.png";}
             else {this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-3.png";}
             // 判断的时候乘CELL_WIDTH
-            if (this.x != this.moveArr[this.index].x * CELL_WIDTH) {
+            if (this.x != this.moveArr[ran].x * CELL_WIDTH) {
                 // 方向向量 正数向右 负数向左
-                var x_d = this.moveArr[this.index % this.moveArr.length].x - this.moveArr[(this.index - 1) % this.moveArr.length].x;
+                var x_d = this.moveArr[(ran + 1) % this.moveArr.length].x - this.moveArr[ran % this.moveArr.length].x;
                 // x轴每一步的距离
                 this.x = this.x + 1 * (x_d / Math.abs(x_d));
-            } else if (this.y != this.moveArr[this.index].y * CELL_WIDTH) {
+            } else if (this.y != this.moveArr[ran].y * CELL_WIDTH) {
                 // 方向向量 正数向上 负数向下
-                var y_d = this.moveArr[this.index % this.moveArr.length].y - this.moveArr[(this.index - 1) % this.moveArr.length].y;
+                var y_d = this.moveArr[(ran + 1) % this.moveArr.length].y - this.moveArr[ran % this.moveArr.length].y;
                 // y轴每一步的距离
                 this.y = this.y + 1 * (y_d / Math.abs(y_d));
             } else {
