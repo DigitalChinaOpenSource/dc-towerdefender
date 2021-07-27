@@ -203,16 +203,9 @@ class God {
         // 监控 
         $("#canvasMap_option").on("click", (e) => {//jquery语法，在这个图层里面，就是坑位被点击后做的动作。e就是鼠标监听的坐标
             //在建塔的图层上
-            var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-            var option_y = parseInt(e.offsetY / CELL_WIDTH);
-            this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
-            this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
-        });
-
-        $("tower1").mousedown((e) => {
-            var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-            var option_y = parseInt(e.offsetY / CELL_WIDTH);
-            this.tower_move(option_x, option_y);
+            let option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+            let option_y = parseInt(e.offsetY / CELL_WIDTH);
+            console.log("x:" + option_x + " y:" + option_y);
         });
 
 
