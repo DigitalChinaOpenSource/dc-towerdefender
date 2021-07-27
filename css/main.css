@@ -203,10 +203,13 @@ ul.list-login-bottom li a:hover {
 /* 登录注册页面end */
 
 /* 匹配页面样式start */
-/* .match{
-    margin-left: 10%;
-    margin-right: 10%;
+.match{
+    padding-left: 10%;
+    padding-right: 10%;
     text-align: center;
+    width: 1860px;
+    height: 900px;
+    position: absolute;
     
 }
 #match_header{
@@ -214,37 +217,41 @@ ul.list-login-bottom li a:hover {
 }
 .our_part{
     
-    height: 660px;
+    height: 540px;
     background: url(../img/match/my.jpg) no-repeat;
     background-size: 100%;
     float: left;
     width: 40%;
-    padding-top: 75px;
+    padding-top: 45px;
 }
 .enemy_part{
-    height: 660px;
+    height: 540px;
     background: url(../img/match/my.jpg) no-repeat;
     background-size: 100%;
     float: left;
     width: 40%;
-    padding-top: 75px;
+    padding-top: 45px;
 }
 .our_part img,.enemy_part img{
     width: 39%;
     border-radius: 50%;
-    padding-top: 15px;
+    padding-top: 20px;
 }
 .vs{
     float: left;
     width: 20%;
-    padding-top: 45px;
+    padding-top: 10%;
 }
-.match h2{
+.part{
+    padding-top: 11%;
+}
+.sorce{
     padding-top: 20px;
 }
 #match_time{
     padding-top: 30px;
-} */
+}
+
 
 /* 匹配页面end */
 
