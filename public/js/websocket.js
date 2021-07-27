@@ -19,6 +19,7 @@ function websocketLink(){
         if(recv.type==0){
             roomCount = recv.roomCount
             console.log('roomCount========>'+roomCount)
+            // 开始游戏
 
         }
         // 判断信息是否是发给自己的房间的
@@ -30,6 +31,12 @@ function websocketLink(){
                     
                 }else if(recv.type == 2){
                     //小兵增强
+                    if(recv.action == enemy_level_up){
+
+                    }
+                    if(recv.action == add_boss){
+
+                    }
                 }else if(recv.type == 3){
                     //显示聊天msg
                     console.log(recv.msg)
@@ -41,7 +48,7 @@ function websocketLink(){
                 }else if(recv.type == 5){
                     //时间到，对比小兵enemy数量，判断输赢
                     ////调用断开连接方法
-                    if(recv.enemy<this.enemyExisted){
+                    if(recv.enemy<enemyExisted){
                         alert("you losed")
                     }else{
                         alert('you win')

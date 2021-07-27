@@ -34,7 +34,7 @@ class God {
             $("#skill-btns-container").show();
 
             // //绑定连接事件
-            // this.link();
+            // websocketLink();
             this.startGame();
         });
 
@@ -264,6 +264,8 @@ class God {
                         })
                         this.enemy_level++;
                         this.player.money = this.player.money - increase_enemy_level_money;
+                        // websocket发送增强信息
+                         //websocketSend({type:2,roomCount:roomCount,name:linkName,action:enemy_level_up})
                         console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
                     } else {
                         alert("给对方小怪升级金币数量不够");
@@ -283,6 +285,8 @@ class God {
                 pro_boss.boss = 1;
                 pro_boss.check_boss();
                 this.player.money = this.player.money - add_boss_money;
+                // websocket发送增强信息
+                //websocketSend({type:2,roomCount:roomCount,name:linkName,action:add_boss})
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 alert("给对方增加一个boss金币数量不够");
@@ -438,16 +442,16 @@ class God {
             this.stopGame();
             alert("lose");
             // //websocket发送失败信息
-            // this.send({type:4,roomCount:this.roomCount,name:this.name})
+            // this.send({type:4,roomCount:this.roomCount,name:linkName})
             // // 关闭websocket连接
-            // this.close()
+            //websocketClose()
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
         if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
             // // 发送自己的小兵剩余信息给对方
-            // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
+            // this.send({type:5,roomCount:this.roomCount,name:linkNname,enemy:this.enemyExisted})
             alert("win");
         }
     }
@@ -738,6 +742,8 @@ class God {
                 }
                 Words.innerHTML = Words.innerHTML + str;
             }
+            //websocket发送信息
+            // websocketSend({type:3,roomCount:roomCount,name:linkName,msg:})
         }
 
     //选塔------------------------------------------------------------------------------------------------
