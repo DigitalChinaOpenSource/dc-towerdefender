@@ -185,7 +185,7 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
-        let tower_message=[
+        this.tower_message=[
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0],
             [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
@@ -441,7 +441,7 @@ class God {
     createTower(x,y,type){
         let tower = new Tower(x,y,1,type,this.useful_tower[type-1].range,this.useful_tower[type-1].tower_img,this.useful_tower[type-1].cost,this.useful_tower[type-1].sale);
         towers.push(tower);
-        tower_message[x,y] = (type+1);
+        this.tower_message[x,y] = (type+1);
     }
 
     judge_game() {
