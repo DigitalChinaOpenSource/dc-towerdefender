@@ -1,12 +1,29 @@
-
 class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
+
+        this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
-        $("#home_visi").show();
-        $(".match").hide();
+        $("#skill-btns-container").hide();
+        // let e1 = new Enemy();
+        // e1.level = 1;
+        // e1.hp = 5;
+        // e1.boss = 0;
+        // this.enemies.push(e1);
+        // let e2 = new Enemy();
+        // e2.level = 1;
+        // e2.hp = 5;
+        // e2.boss = 0;
+        // this.enemies.push(e2);
+        // let self = this;
+
+        // console.log(new Player().money);
+        // var a = setInterval(() => {
+        //     $("#moneyshow").html(300);
+        // }, 300);
+        // console.log(a);
         $("#startgame_btn").on("click",() => {
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
@@ -14,34 +31,28 @@ class God {
             $("#block_skill").show();
             $("#block_left").show();
             $("#block_right").show();
-
-            //隐藏游戏页面，显示匹配页面，修改start******************
-            //this.showTime();
-            $(".block").hide();
-            $(".match").show();
-            // 修改end******************
+            $("#skill-btns-container").show();
 
             // //绑定连接事件
             // this.link();
             this.startGame();
         });
 
-        $("#logout_btn").on("click",() => {
-            window.location.href='./log.html';
+        $("#logout_btn").on("click", () => {
+            window.location.href = './log.html';
         });
 
 
         // // websocket连接
-		// var ws
-		// // 房间号
-		// var roomCount
-		// // 用户名
-		// var name
-		// //ip地址
+        // var ws
+        // // 房间号
+        // var roomCount
+        // // 用户名
+        // var name
+        // //ip地址
         // var IP='ws://localhost:8888'
-		
-		
-        this._init();//入口
+
+
     }
     
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
@@ -117,26 +128,26 @@ class God {
     //                 }
     //             }
     //         }
-            
+
     //     }
     // }
 
     //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
-		// 通过roomCount判断发给哪个房间组
-		// 通过name确定是否为对方发送的信息
-		// 通过type确定为哪种信息
-		//type:0,msg:
-		//{type:0,score:}
-		// type:1,msg：
-		// {type:1,roomCount: ,name:''}
-		// type:2,msg：
-		// {type:2,roomCount: ,name:''}
-		// type:3,msg：
-		// {type:3,roomCount: ,name:','msg:''}
-		// type:4,msg：
-		// {type:4,roomCount: ,name:''}
-		//type:5,msg:
-		//{type:5,roomConut: ,name:'',enemy: }
+    // 通过roomCount判断发给哪个房间组
+    // 通过name确定是否为对方发送的信息
+    // 通过type确定为哪种信息
+    //type:0,msg:
+    //{type:0,score:}
+    // type:1,msg：
+    // {type:1,roomCount: ,name:''}
+    // type:2,msg：
+    // {type:2,roomCount: ,name:''}
+    // type:3,msg：
+    // {type:3,roomCount: ,name:','msg:''}
+    // type:4,msg：
+    // {type:4,roomCount: ,name:''}
+    //type:5,msg:
+    //{type:5,roomConut: ,name:'',enemy: }
     // send(msg){
     //     // 发送信息转为string发送
     //     this.ws.send(JSON.stringify(msg))
@@ -147,6 +158,8 @@ class God {
     //     this.link()
     // }
 
+
+
     _init() {
         //初始化（1先定义一个可以安置的塔的种类的数组.2创建一个玩家对象。3画出四层画布。4创建一个json形式的敌人数组，根据LEVEL数组被赋值,赋值为另一个数组（敌人的 类型，数量enemyType: EnemyType.DesertMob, num: 10）
         // 5 定义两个变量：地图上敌人数量，需要消灭的敌人数量）
@@ -155,10 +168,9 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.useful_enemy = (new TowerFactory()).EnemyArr; 
         this.leftTime = 5;//剩余时间,单位秒
-        this.leftTimeMin = parseInt(this.leftTime/60);//设置结束的时间也为0
-        this.leftTimeSecond = this.leftTime%60;
+        this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
+        this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
         this.enemyNumber = 0; // 算上正在reborn的敌人的总数量
         this.enemyExisted = 0; // 地图上存在的的敌人数量
@@ -170,6 +182,19 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
+        this.tower_message=[
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0],
+            [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
+            [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
+            [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+            [0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+            [0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+            [0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+            [0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        ]
 
         // 监控 
         $("#canvasMap_option").on("click", (e) => {//jquery语法，在这个图层里面，就是坑位被点击后做的动作。e就是鼠标监听的坐标
@@ -177,7 +202,7 @@ class God {
             var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
             var option_y = parseInt(e.offsetY / CELL_WIDTH);
             this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
-            this.chooseTower(option_x, option_y, e, this.towerAndBullets);//选择一个塔，然后
+            this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
         });
 
         $("tower1").mousedown((e) => {
@@ -195,14 +220,14 @@ class God {
             }
         }
     }
-    
 
     // 开始游戏
     startGame() {
+        // $('block3').css("display","block")
         this.startCountTime();
         this.logEnemyNumber = setInterval(() => {
-            console.log("enemyNuber: "+this.enemyNumber);
-         }, 1000 );
+            console.log("enemyNuber: " + this.enemyNumber);
+        }, 1000);
 
         setTimeout(() => {
             console.log("wait 3s");
@@ -210,23 +235,145 @@ class God {
             this.createFirstEnemy();
         }, 3000);
 
+
+         //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
+        $("#reduce_enemy_blood").on("click", () => {
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + reduce_enemy_blood_money);
+            if (this.enemies.length > 0) {
+                if (reduce_enemy_blood_money <= this.player.money) {
+                    this.enemies.forEach((e) => {
+                        e.check_bloodloss();
+                    })
+                    //金币数量减少
+                    this.player.money = this.player.money - reduce_enemy_blood_money;
+                    console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
+                }
+                else {
+                    // console.log(this.player.money);
+                    alert("给自己小怪减血技能金币数量不够");
+                }
+            } else {
+                alert("地图上没有小怪，无法减血");
+            }
+        });
+
+        //增强对方的小怪等级，点击按钮时调用
+        $("#increase_enemy_level").on("click", () => {
+            // console.log(this.enemies);
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + increase_enemy_level_money);
+            console.log("小怪的数量为" + this.enemies.length);
+            if (this.enemies.length > 0) {
+                if (this.enemies.length > 0) {
+                    if (increase_enemy_level_money <= this.player.money) {
+                        this.enemies.forEach((e) => {
+                            e.check_levelup();
+                        })
+                        this.enemy_level++;
+                        this.player.money = this.player.money - increase_enemy_level_money;
+                        console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+                    } else {
+                        alert("给对方小怪升级金币数量不够");
+                    }
+                }
+            } else {
+                alert("地图上没有小怪，无法升级");
+            }
+        });
+
+        //给对方增加一个boss，点击按钮时调用
+        $("#add_boss").on("click", () => {
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + add_boss_money);
+            if (add_boss_money <= this.player.money) {
+                var pro_boss = new Enemy();
+                pro_boss.boss = 1;
+                pro_boss.check_boss();
+                this.player.money = this.player.money - add_boss_money;
+                console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
+            } else {
+                alert("给对方增加一个boss金币数量不够");
+            }
+        });
         //动态显示金币
-       this.timeMoney = setInterval(() => {
+        this.timeMoney = setInterval(() => {
             $("#moneyshow").html(this.player.money);
         }, 300);
         //动态显示敌人数量
         this.timeEnemies = setInterval(() => {
             $("#lifeshow").html(this.enemyExisted);
-        },300);
+        }, 300);
         // 动态显示游戏时间
         this.timeTime = setInterval(() => {
             $("#timeshow").html(this.leftTimeMin + ":" + this.leftTimeSecond);
-        },300);
+        }, 300);
         // 时刻获取游戏状态
         this.getGameState = setInterval(() => {
             this.gameState();
-        },300);
-        this.chat();//聊天功能
+        }, 300);
+
+        // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
+        // $("#reduce_enemy_blood").on("click", () => {
+        //     // console.log(this.timeMoney);
+        //     if (this.enemies.length > 0) {
+        //         if (reduce_enemy_blood_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     console.log("小怪为"+this.enemies[e]);
+        //             //     // this.enemies[e].check_bloodloss();
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 console.log("进入到循环");
+        //                 e.check_bloodloss();
+        //             })
+        //         } else {
+        //             // console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法减血");
+        //     }
+        // });
+
+        // //增强对方的小怪等级，点击按钮时调用
+        // $("#increase_enemy_level").on("click", () => {
+        //     // console.log(this.enemies);
+        //     if (this.enemies.length > 0) {
+        //         if (increase_enemy_level_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     this.enemies[e].check_levelup();
+        //             //     this.enemy_level++;
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 e.check_levelup();
+        //             })
+        //             this.enemy_level++;
+        //         } else {
+        //             console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法升级");
+        //     }
+        // });
+
+        // //给对方增加一个boss，点击按钮时调用
+        // $("#add_boss").on("click", () => {
+        //     if (add_boss_money < this.player.money) {
+        //         var pro_boss = new Enemy();
+        //         pro_boss.boss = 1;
+        //         pro_boss.check_boss();
+        //     } else {
+        //         console.log(this.timeMoney);
+        //         alert("金币数量不够");
+        //     }
+
+        // });
+
+
+
+
+
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
         // // 初始小兵数量
@@ -243,10 +390,9 @@ class God {
         //         enemies = this.enemyExisted
         //     }
         // },300)
-
     }
 
-    clearAllInterval(){
+    clearAllInterval() {
         console.log("clearallinterval");
         clearInterval(this.timeMoney);
         clearInterval(this.timeEnemies);
@@ -254,16 +400,16 @@ class God {
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
     }
-    
-    createFirstEnemy(){
+
+    createFirstEnemy() {
         this.createEnemy();
         console.log("create firstenemy");
     }
 
     // 生成0~max-1的随机整数
-    randomnum(max){ 
-        return Math.floor(Math.random()*max);  
-    } 
+    randomnum(max) {
+        return Math.floor(Math.random() * max);
+    }
 
     // 生成敌人
     createEnemy() {
@@ -288,11 +434,17 @@ class God {
             this.enemyNumber++;
         }
     }
-           
-    judge_game(){
+
+    createTower(x,y,type){
+        let tower = new Tower(x,y,1,type,this.useful_tower[type-1].range,this.useful_tower[type-1].tower_img,this.useful_tower[type-1].cost,this.useful_tower[type-1].sale);
+        towers.push(tower);
+        this.tower_message[x,y] = (type+1);
+    }
+
+    judge_game() {
         console.log("into judge_game");
         //监听怪的数量到了100只
-        if(this.enemyExisted >= 100){
+        if (this.enemyExisted >= 100) {
             this.stopGame();
             alert("lose");
             // //websocket发送失败信息
@@ -302,41 +454,41 @@ class God {
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
-        if(this.enemyExisted <100 && this.leftTime <=0){
+        if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
             // // 发送自己的小兵剩余信息给对方
             // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
             alert("win");
         }
-        
     }
 
     stopCountTime() {
         clearInterval(this.countDown);
     }
     //点击开始按钮，计时器开始计时，定时器每隔一秒将开始时间加1，将开始时间的值赋值给结束时间
-    startCountTime(){
+    startCountTime() {
         this.countDown = setInterval(() => {
-            if(this.leftTime>0){
-                this.leftTime --;
-                if(this.leftTimeSecond>0){
-                    this.leftTimeSecond --;
+            if (this.leftTime > 0) {
+                this.leftTime--;
+                if (this.leftTimeSecond > 0) {
+                    this.leftTimeSecond--;
                 }
-                else{
-                    if(this.leftTimeMin>0){
+                else {
+                    if (this.leftTimeMin > 0) {
                         this.leftTimeSecond = 59;
-                        this.leftTimeMin --;
+                        this.leftTimeMin--;
                     }
-                    else{
+                    else {
                         this.stopCountTime();
                     }
                 }
             }
-            else{
+            else {
                 this.stopCountTime();
             }
-        },1000)
+        }, 1000)
     }
+
 
     // 暂停游戏
     stopGame() {
@@ -345,6 +497,11 @@ class God {
         this.stopEnemies();
         this.stopBullets();
         this.clearAllInterval();
+        this.kill_all_bullets();
+        // $("#skill-btns-container").hide();
+        document.getElementById("increase_enemy_level").disabled=true;
+        document.getElementById("reduce_enemy_blood").disabled=true;
+        document.getElementById("add_boss").disabled=true;
     }
     //停止产生子弹和敌人
     stopProduce() {
@@ -364,14 +521,57 @@ class God {
             this.enemies[ene].stop();
         }
     }
-    
-    
 
-    // 游戏状态获取
-    gameState() {
-        this.judge_game();
+    kill_all_bullets(){
+        console.log("kill all bullets");
+        this.bullets.forEach((bullet) => {
+            bullet.dead();
+        })
     }
 
+    // 游戏状态获取
+    gameState() {
+        this.judge_game();
+        this.bullet_touch_enemy();
+    }
+
+    bullet_touch_enemy(){
+        for(let bullet in bullets){
+            if (this.bullets[bullet].x < 0 || this.bullets[bullet].y < 0 ||
+                this.bullets[bullet].x > MAP_WIDTH || this.bullets[bullet].y > MAP_HEIGHT) {
+                this.bullets[bullet].dead();
+                this.bullets[bullet] = null;
+                this.bullets.splice(bullet, 1);
+            }else{
+                for (let ene in this.enemies) {
+                    // 触碰到敌人时 敌人血量减少
+                    let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
+                    let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
+                    if ((distanceX*distanceX+distanceY*distanceY)<=
+                        ((this.bullets[bullet].size+30)*(this.bullets[bullet].size+30))) {
+                        // 调用敌人扣血，传入子弹类型与子弹伤害：
+                        // 子弹类型：this.bullets[bullet].type
+                        // 子弹伤害：this.bullets[bullet].atk
+                        this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                        this.bullets[bullet].dead();
+                        this.bullets[bullet] = null;
+                        this.bullets.splice(bullet, 1);
+                        // 生命为0的时候 敌人死去
+                        if (this.enemies[ene].hp <= 0) {
+                            this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
+                            this.enemies[ene].dead();
+                            // console.log("kill");
+                            this.nowenemys--;
+                            this.enemies[ene] = null;
+                            this.enemies.splice(ene, 1);
+                            this.enemyExisted--;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
 
 
@@ -444,20 +644,7 @@ class God {
             ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
         }
     }
-
-    // judge_game(){
-    //     //监听怪的数量到了100只
-    //     if(this.enemyExisted >= 100){
-    //         this.stopGame();
-    //         console.log("lose");
-    //     }
-    //     //监听时间小于100秒，并且怪的数量小于100只
-    //     if(this.enemyExisted <100 && this.leftTime <=0){
-    //         this.stopGame();
-    //         console.log("win");
-    //     }
-    // }
-    
+  
     //聊天
     chat(){
             // console.log(this.player)
@@ -490,6 +677,8 @@ class God {
                 Words.innerHTML = Words.innerHTML + str;
             }
         }
+
+    
 }
 
 

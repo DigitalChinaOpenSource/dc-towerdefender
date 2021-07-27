@@ -21,12 +21,10 @@
           this.TowerArr.push(TowerType.seven);
           this.TowerArr.push(TowerType.eight);
           this.TowerArr.push(TowerType.nine);
-          this.TowerArr.push(TowerType.thirteen);
-          this.TowerArr.push(TowerType.fourteen);
-          this.TowerArr.push(TowerType.fifteen);
-          this.TowerArr.push(TowerType.sixteen);
-          this.TowerArr.push(TowerType.seventeen);
-          this.TowerArr.push(TowerType.eighteen);
+          this.TowerArr.push(TowerType.ten);
+          this.TowerArr.push(TowerType.eleven);
+          this.TowerArr.push(TowerType.twelve);
+          
        
     }
 }
