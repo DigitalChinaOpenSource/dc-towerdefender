@@ -437,10 +437,10 @@ class God {
         this.enemies.push(enemy);
         // console.log(this.enemies);
         this.enemyNumber++;
-        if (this.enemyNumber <= length) {
-            var enemy = new Enemy();
-            this.enemies.push(enemy);
-            this.enemyNumber++;
+        // if (this.enemyNumber <= length) {
+        //     var enemy = new Enemy();
+        //     this.enemies.push(enemy);
+        //     this.enemyNumber++;
         }
     }
 
