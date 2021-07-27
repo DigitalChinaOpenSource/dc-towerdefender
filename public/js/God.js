@@ -176,6 +176,7 @@ class God {
         // 5 定义两个变量：地图上敌人数量，需要消灭的敌人数量）
         this.useful_tower = (new TowerFactory()).TowerArr;//定义可以用的塔的类型数组变量，当调用这个对象的factory方法时，往数组里面赋值。
         this.player = new Player();
+        
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
@@ -424,10 +425,7 @@ class God {
             enemy_level, // 等级
             boss, // 是否为boss
             );
-        this.enemies.push(enemy);
-        // console.log(this.enemies);
-        this.enemyNumber++;
-        if (this.enemyNumber <= length) {
+        if (this.enemyNumber <= enemyNumberLimit) {
             var enemy = new Enemy();
             this.enemies.push(enemy);
             this.enemyNumber++;
