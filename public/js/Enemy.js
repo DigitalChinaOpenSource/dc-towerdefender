@@ -10,7 +10,7 @@ class Enemy {
         this.money = money; // 死后掉落金币
         this.enemy_level = enemy_level || 1; // 怪物等级
         this.boss = boss || 0; // 是否是boss：0=小怪，1=boss
-        this.enemy_img_series = enemy_type; // 怪物图片序列头
+        this.enemy_img_series = enemy_type+1; // 怪物图片序列头
         this._init();//
         this.moveArr = new Search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线
         this.index = 1; // 确定怪物移动方向
@@ -121,9 +121,9 @@ class Enemy {
         //当游戏正常运行时，小怪正常运行
         if (this.flag == 0) {
             // 切换怪物图片 实现动态变化
-            if(order < 10){this.enemy_img = "img/monster"+this.enemy_img_series+"-1.png";}
-            else if(order < 20){this.enemy_img = "img/monster"+this.enemy_img_series+"-2.png";}
-            else {this.enemy_img = "img/monster"+this.enemy_img_series+"-3.png";}
+            if(order < 10){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-1.png";}
+            else if(order < 20){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-2.png";}
+            else {this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-3.png";}
             // 判断的时候乘CELL_WIDTH
             if (this.x != this.moveArr[this.index].x * CELL_WIDTH) {
                 // 方向向量 正数向右 负数向左

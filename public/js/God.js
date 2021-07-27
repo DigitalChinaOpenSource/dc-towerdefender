@@ -304,6 +304,10 @@ class God {
         this.getGameState = setInterval(() => {
             this.gameState();
         }, 300);
+        // 绘制敌人
+        setInterval(() => {
+            this.drawEnemies();
+        }, 10);
 
         // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
         // $("#reduce_enemy_blood").on("click", () => {
@@ -680,6 +684,27 @@ class God {
             ctx.moveTo(CELL_WIDTH * j, 0);
             ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
         }
+    }
+
+    //绘制敌人
+    drawEnemies() { 
+    //获取敌人对象
+        var cv = document.querySelector('#canvasMap_enemy');
+        //获取2d平面
+        var ctx = cv.getContext('2d');
+        // 清空敌人图片
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        var img = new Image;
+        // 遍历数据，绘制敌人
+        for (var ene in this.enemies) {
+            console.log(this.enemies[ene])
+            img.src = this.enemies[ene].enemy_img;
+            ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
+            Ca.drawBlood(ctx, this.enemies[ene]);
+            console.log(this.enemies[ene].x)
+            console.log(this.enemies[ene].y)
+        }
+
     }
   
     //聊天
