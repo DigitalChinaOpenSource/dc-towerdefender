@@ -6,7 +6,6 @@ class God {
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
-        $("#skill-btns-container").hide();
         // let e1 = new Enemy();
         // e1.level = 1;
         // e1.hp = 5;
@@ -29,6 +28,7 @@ class God {
             $("#logout_btn").hide();
             $("#home_visi").hide();
             $("#block_skill").show();
+            $("#block1_box").show();
             $("#block_left").show();
             $("#block_right").show();
             $("#skill-btns-container").show();
