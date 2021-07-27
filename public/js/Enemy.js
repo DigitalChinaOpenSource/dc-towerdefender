@@ -125,21 +125,14 @@ class Enemy {
             else if(order < 20){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-2.png";}
             else {this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-3.png";}
             // 判断的时候乘CELL_WIDTH
-            // console.log(this.ran)
-            // console.log(this.x)
-            // console.log(this.y)
-            // console.log(this.moveArr[this.ran + 1].x * CELL_WIDTH)
-            // console.log(this.moveArr[this.ran + 1].y * CELL_WIDTH)
             if (this.x != this.moveArr[this.ran + 1].x * CELL_WIDTH) {
                 // 方向向量 正数向右 负数向左
                 var x_d = this.moveArr[(this.ran + 1) % this.moveArr.length].x - this.moveArr[this.ran % this.moveArr.length].x;
-                // console.log(x_d)
                 // x轴每一步的距离
                 this.x = this.x + 1 * (x_d / Math.abs(x_d));
             } else if (this.y != this.moveArr[this.ran + 1].y * CELL_WIDTH) {
                 // 方向向量 正数向上 负数向下
                 var y_d = this.moveArr[(this.ran + 1) % this.moveArr.length].y - this.moveArr[this.ran % this.moveArr.length].y;
-                // console.log(y_d)
                 // y轴每一步的距离
                 this.y = this.y + 1 * (y_d / Math.abs(y_d));
             } else {
