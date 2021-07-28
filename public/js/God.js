@@ -464,19 +464,19 @@ class God {
 
     // 传入参数，xy坐标（以格子为单位，横x竖y），防御塔类型（int）
     createTower(x,y,type){
-        if(this.player.money<this.useful_tower[type-1].cost){
+        if(this.player.money<TowerType[type-1][4]){
             this.money_not_enough();
         }else{
             let tower = new Tower(
                 x,
                 y,
                 type,
-                TowerType[type-1].range,
-                TowerType[type-1].attack_interval,
-                TowerType[type-1].cost,
-                TowerType[type-1].sale
+                TowerType[type-1][1],
+                TowerType[type-1][2],
+                TowerType[type-1][4],
+                TowerType[type-1][5]
             );
-            towers.push(tower);
+            this.towers.push(tower);
             this.tower_message[y][x] = (type+1);
             this.player.money -= tower.cost;
             this.towersNumber ++ ;
@@ -496,8 +496,8 @@ class God {
                     tower.y,
                     this.enemies[ene].x,
                     this.enemies[ene].y,
-                    TowerType.speed,
-                    TowerType.damage,
+                    BulletType[tower.type-1][0],
+                    BulletType[tower.type-1][1],
                     ene
                 ));
                 clearInterval(tower.check_attack_interval);

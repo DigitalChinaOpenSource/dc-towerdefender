@@ -39,7 +39,7 @@ const BULLET_UP_SPEED = 0.2; //升一级 子弹速度加快
 const MAP_ARR = new Array();
 
 //人物设置
-const PlAYER_BASE_MONEY = 300; //玩家的初始金币
+const PlAYER_BASE_MONEY = 10000; //玩家的初始金币
 const END_HP = 100; //基地血量
 //控制小兵出生间隔速度
 var TIMEOUT = 10;
