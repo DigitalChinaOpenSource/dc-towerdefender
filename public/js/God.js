@@ -170,7 +170,7 @@ class God {
         this.useful_bullet = (new BulletFactory()).BulletArr;
         this.player = new Player();
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
-        this.enemy_level = 1; // 怪物等级
+        this.enemy_level = 0; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
         this.leftTime = 180;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
@@ -178,6 +178,7 @@ class God {
         this.map_a = new map();
         this.enemyNumber = 0; // 算上正在reborn的敌人的总数量
         this.enemyExisted = 0; // 地图上存在的的敌人数量
+        this.killed_enemies = 0; // 杀敌数
         this.enemyNumberLimit = 200;
         this.rebornEnemy = [];
         this.towersNumber = 0; // 地图上塔的数量
@@ -241,6 +242,19 @@ class God {
                 if (reduce_enemy_blood_money <= this.player.money) {
                     this.enemies.forEach((e) => {
                         e.check_bloodloss();
+                        // 生命为0的时候 敌人死去
+                        if (e.hp <= 1) {
+                            this.player.money += e.money; 
+                            e.dead();
+                            // console.log("kill");
+                            this.killed_enemies++;
+                            this.nowenemys--;
+                            e = null;
+                            this.enemies.splice(e, 1);
+                            this.enemyExisted--;
+                            this.createEnemy();
+                            this.createEnemy();
+                        }
                     })
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
@@ -264,19 +278,15 @@ class God {
             console.log("技能需要金币数量:" + increase_enemy_level_money);
             console.log("小怪的数量为" + this.enemies.length);
             if (this.enemies.length > 0) {
-                if (this.enemies.length > 0) {
-                    if (increase_enemy_level_money <= this.player.money) {
-                        this.enemies.forEach((e) => {
-                            e.check_levelup();
-                        })
-                        this.enemy_level++;
-                        this.player.money = this.player.money - increase_enemy_level_money;
-                        console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
-                    } else {
-                        this.money_not_enough();
-                        // $("#moneylack").show(300).delay(1000).hide(200);
-                        // alert("给对方小怪升级金币数量不够");
-                    }
+                if (increase_enemy_level_money <= this.player.money) {
+                    this.enemy_level++;
+                    console.log("当前小怪等级：" + this.enemy_level);
+                    this.player.money = this.player.money - increase_enemy_level_money;
+                    console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+                } else {
+                    this.money_not_enough();
+                    // $("#moneylack").show(300).delay(1000).hide(200);
+                    // alert("给对方小怪升级金币数量不够");
                 }
             } else {
                 alert("地图上没有小怪，无法升级");
@@ -433,6 +443,7 @@ class God {
             enemy_level, // 等级
             boss, // 是否为boss
             );
+        enemy.check_levelup();
         this.enemies.push(enemy);
         // console.log(this.enemies);
         this.enemyNumber++;
@@ -617,10 +628,13 @@ class God {
                             this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
                             this.enemies[ene].dead();
                             // console.log("kill");
+                            this.killed_enemies++;
                             this.nowenemys--;
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
+                            this.createEnemy();
+                            this.createEnemy();
                         }
                         break;
                     }
@@ -875,7 +889,7 @@ class God {
             for (var ene in this.enemies) {
                 console.log(this.enemies[ene])
                 img.src = this.enemies[ene].enemy_img;
-                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
                 Ca.drawBlood(ctx, this.enemies[ene]);
                 console.log(this.enemies[ene].x)
                 console.log(this.enemies[ene].y)

@@ -46,6 +46,6 @@ var TIMEOUT = 10;
 var all_ghost_num;
 
 //技能所需金币设置
-const _money=100;
+const increase_enemy_level_money=100;
 const reduce_enemy_blood_money=100;
 const add_boss_money=50;
