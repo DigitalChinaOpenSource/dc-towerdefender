@@ -667,7 +667,7 @@ class God {
                             this.towers[tower].tower_img = "img/tower/tower1-2.png";
                             this.towers[tower].type = TowerType.two;
                             this.player.money -= TowerType.two.cost;
-                            tower_message[x,y] = type+1;
+                            this.tower_message[x,y] = type+1;
                         }
                         else {
                             $("#moneyshow").css("border", "2px solid red");
@@ -690,7 +690,7 @@ class God {
                                 this.towers[tower].tower_img = "img/tower/tower1-3.png";
                                 this.towers[tower].type = TowerType.three;
                                 this.player.money -= TowerType.three.cost;
-                                tower_message[x,y] = type+1;    
+                                this.tower_message[x,y] = type+1;    
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -715,7 +715,7 @@ class God {
                                 this.towers[tower].tower_img = "img/tower/tower2-2.png";
                                 this.towers[tower].type = TowerType.five;
                                 this.player.money -= TowerType.five.cost;
-                                tower_message[x,y] = type+1;   
+                                this.tower_message[x,y] = type+1;   
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -738,7 +738,7 @@ class God {
                                     this.towers[tower].tower_img = "img/tower/tower2-3.png";
                                     this.towers[tower].type = TowerType.six;
                                     this.player.money -= TowerType.six.cost;
-                                    tower_message[x,y] = type+1;
+                                    this.tower_message[x,y] = type+1;
                                 }
                                 else {
                                     $("#moneyshow").css("border", "2px solid red");
@@ -766,7 +766,7 @@ class God {
             if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
                 this.player.money += this.towers[tower].type.sale;
                 this.towers.splice(tower, 1);
-                tower_message[x,y] = 1;
+                this.tower_message[x,y] = 1;
             }
         }
     }    
