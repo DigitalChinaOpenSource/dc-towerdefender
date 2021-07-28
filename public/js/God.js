@@ -170,15 +170,14 @@ class God {
         this.useful_bullet = (new BulletFactory()).BulletArr;
         this.player = new Player();
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
-        this.enemy_level = 0; // 怪物等级
+        this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 180;//剩余时间,单位秒
+        this.leftTime = 30;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
         this.enemyNumber = 0; // 算上正在reborn的敌人的总数量
         this.enemyExisted = 0; // 地图上存在的的敌人数量
-        this.killed_enemies = 0; // 杀敌数
         this.enemyNumberLimit = 200;
         this.rebornEnemy = [];
         this.towersNumber = 0; // 地图上塔的数量
@@ -204,10 +203,18 @@ class God {
         // 监控 
         $("#canvasMap_option").on("click", (e) => {//jquery语法，在这个图层里面，就是坑位被点击后做的动作。e就是鼠标监听的坐标
             //在建塔的图层上
-            let option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-            let option_y = parseInt(e.offsetY / CELL_WIDTH);
-            console.log("x:" + option_x + " y:" + option_y);
+            var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+            var option_y = parseInt(e.offsetY / CELL_WIDTH);
+            this.drawOptions(option_x,option_y)
+            // this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
+            // this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
         });
+
+        // $("tower1").mousedown((e) => {
+        //     var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+        //     var option_y = parseInt(e.offsetY / CELL_WIDTH);
+        //     this.tower_move(option_x, option_y);
+        // });
 
 
         //  画地图所占据的所有出格子
@@ -242,27 +249,13 @@ class God {
                 if (reduce_enemy_blood_money <= this.player.money) {
                     this.enemies.forEach((e) => {
                         e.check_bloodloss();
-                        // 生命为0的时候 敌人死去
-                        if (e.hp <= 1) {
-                            this.player.money += e.money; 
-                            e.dead();
-                            // console.log("kill");
-                            this.killed_enemies++;
-                            this.nowenemys--;
-                            e = null;
-                            this.enemies.splice(e, 1);
-                            this.enemyExisted--;
-                            this.createEnemy(0);
-                            this.createEnemy(0);
-                        }
                     })
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
                 }
                 else {
-                    this.money_not_enough();
-                    // $("#moneylack").show(300).delay(1000).hide(200);
+                    $("#moneylack").show(300).delay(1000).hide(200);
                     // console.log(this.player.money);
                     // alert("给自己小怪减血技能金币数量不够");
                 }
@@ -278,15 +271,18 @@ class God {
             console.log("技能需要金币数量:" + increase_enemy_level_money);
             console.log("小怪的数量为" + this.enemies.length);
             if (this.enemies.length > 0) {
-                if (increase_enemy_level_money <= this.player.money) {
-                    this.enemy_level++;
-                    console.log("当前小怪等级：" + this.enemy_level);
-                    this.player.money = this.player.money - increase_enemy_level_money;
-                    console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
-                } else {
-                    this.money_not_enough();
-                    // $("#moneylack").show(300).delay(1000).hide(200);
-                    // alert("给对方小怪升级金币数量不够");
+                if (this.enemies.length > 0) {
+                    if (increase_enemy_level_money <= this.player.money) {
+                        this.enemies.forEach((e) => {
+                            e.check_levelup();
+                        })
+                        this.enemy_level++;
+                        this.player.money = this.player.money - increase_enemy_level_money;
+                        console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+                    } else {
+                        $("#moneylack").show(300).delay(1000).hide(200);
+                        // alert("给对方小怪升级金币数量不够");
+                    }
                 }
             } else {
                 alert("地图上没有小怪，无法升级");
@@ -298,11 +294,13 @@ class God {
             console.log("现有金币数量:" + this.player.money);
             console.log("技能需要金币数量:" + add_boss_money);
             if (add_boss_money <= this.player.money) {
-                this.createEnemy(1);
+                var pro_boss = new Enemy();
+                pro_boss.boss = 1;
+                pro_boss.check_boss();
                 this.player.money = this.player.money - add_boss_money;
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
-                this.money_not_enough();
+                $("#moneylack").show(300).delay(1000).hide(200);
                 // alert("给对方增加一个boss金币数量不够");
             }
         });
@@ -323,11 +321,74 @@ class God {
         this.getGameState = setInterval(() => {
             this.gameState();
         }, 300);
+
+
+        this.drawEnemy = setInterval(()=>{
+            this.drawEnemies()
+        },30)
+
         this.chat();
 
-        this.draw_enemy = setInterval(() => {
-            this.drawEnemies();
-        }, 10);
+        // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
+        // $("#reduce_enemy_blood").on("click", () => {
+        //     // console.log(this.timeMoney);
+        //     if (this.enemies.length > 0) {
+        //         if (reduce_enemy_blood_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     console.log("小怪为"+this.enemies[e]);
+        //             //     // this.enemies[e].check_bloodloss();
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 console.log("进入到循环");
+        //                 e.check_bloodloss();
+        //             })
+        //         } else {
+        //             // console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法减血");
+        //     }
+        // });
+
+        // //增强对方的小怪等级，点击按钮时调用
+        // $("#increase_enemy_level").on("click", () => {
+        //     // console.log(this.enemies);
+        //     if (this.enemies.length > 0) {
+        //         if (increase_enemy_level_money < this.player.money) {
+        //             // for (var e = 0; e < this.enemies.length; e++) {
+        //             //     this.enemies[e].check_levelup();
+        //             //     this.enemy_level++;
+        //             // }
+        //             this.enemies.forEach((e) => {
+        //                 e.check_levelup();
+        //             })
+        //             this.enemy_level++;
+        //         } else {
+        //             console.log(this.timeMoney);
+        //             alert("金币数量不够");
+        //         }
+        //     } else {
+        //         alert("地图上没有小怪，无法升级");
+        //     }
+        // });
+
+        // //给对方增加一个boss，点击按钮时调用
+        // $("#add_boss").on("click", () => {
+        //     if (add_boss_money < this.player.money) {
+        //         var pro_boss = new Enemy();
+        //         pro_boss.boss = 1;
+        //         pro_boss.check_boss();
+        //     } else {
+        //         console.log(this.timeMoney);
+        //         alert("金币数量不够");
+        //     }
+
+        // });
+
+
+
+
 
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
@@ -368,7 +429,7 @@ class God {
     }
 
     createFirstEnemy() {
-        this.createEnemy(0);
+        this.createEnemy();
         console.log("create firstenemy");
     }
 
@@ -378,21 +439,19 @@ class God {
     }
 
     // 生成敌人
-    createEnemy(boss) {
+    createEnemy() {
         var enemy_type = this.randomnum(4)
-        // var enemy_level = this.enemy_level //需要传入怪物当前等级
-        // var boss = this.boss //需要传入是否为boss
+        var enemy_level = this.enemy_level //需要传入怪物当前等级
+        var boss = this.boss //需要传入是否为boss
         var enemy = new Enemy(enemy_type,
             EnemyType[enemy_type][0], // 血量
             EnemyType[enemy_type][1], // 速度
             EnemyType[enemy_type][2], // 大小
             EnemyType[enemy_type][3], // 图片
             EnemyType[enemy_type][4], // 死亡掉落金币
-            this.enemy_level, // 等级
+            enemy_level, // 等级
             boss, // 是否为boss
             );
-        enemy.check_levelup();
-        enemy.check_boss();
         this.enemies.push(enemy);
         // console.log(this.enemies);
         this.enemyNumber++;
@@ -453,8 +512,7 @@ class God {
     }
 
     money_not_enough(){
-        $("#moneylack").show(300).delay(1000).hide(200);
-        // alert("money is not enough");
+        alert("money is not enough");
     }
 
     judge_game() {
@@ -577,13 +635,10 @@ class God {
                             this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
                             this.enemies[ene].dead();
                             // console.log("kill");
-                            this.killed_enemies++;
                             this.nowenemys--;
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
-                            this.createEnemy(0);
-                            this.createEnemy(0);
                         }
                         break;
                     }
@@ -731,7 +786,7 @@ class God {
         var cv_enemy = document.querySelector('#canvasMap_enemy');
         cv_enemy.setAttribute("height", MAP_HEIGHT);
         cv_enemy.setAttribute("width", MAP_WIDTH);
-        cv_enemy.setAttribute("z-index", 3);
+        cv_enemy.setAttribute("z-index", 10);
 
         this.drawTowerMap();
 
@@ -784,72 +839,154 @@ class God {
     }
   
 
-    //绘制选项
-    drawOptions() {
-        let num = tower_message[option_x][option_y];
-        if (num==1){
-            let cv = document.querySelector('#canvasMap_option');
-            let ctx = cv.getContext('2d');
-            let b = 0;
-            let origin = parseInt(this.towerAndBullets.length / 5); //绘画的初始位置 //解析一个字符串，返回整数
-            for (let a = 0; a < this.towerAndBullets.length; a++) {
-                if (a % 3 >= 0 && a % 3 < 1) {
-                    b++;
-                    let img = new Image;
-                    img.src = this.towerAndBullets[a].tower_img;
-                    for (let option in this.options) {
-                        ctx.drawImage(img, this.options[option].x - (origin - b) * CELL_WIDTH, this.options[option].y - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+   //点塔选项，有塔可操作，无塔可建塔
+    drawOptions(option_x,option_y){
+        let cv = document.querySelector('#canvasMap_option');
+        let ctx = cv.getContext('2d');
+        let img_xx = new Image();
+        let img_up = new Image();
+        let num = this.tower_message[option_x][option_y];
+        if (num==1){   //没有塔，开始建塔
+            img_xx.src = "img/tower/tower1-1.png";
+            img_up.src = "img/tower/tower2-1.png";
+            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
 
-                    }
+            $("#canvasMap_option").on("click", (e) => {
+                var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                if (on_x==option_x+1 && on_y==option_y-1){  //右边
+                    this.createTower(option_x,option_y,2);
                 }
-            }
-        }
-    }
-    //绘制点塔选项标志
-    drawxx(option_x , option_y) {
-        let num = tower_message[option_x][option_y];
-        if (num!==0 && num!==1){
-            let cv = document.querySelector('#canvasMap_option');
-            let ctx = cv.getContext('2d');
-            let img_xx = new Image();
-            let img_up = new Image();
+                else if(on_x==option_x-1 && on_y==option_y-1){    //左边
+                    this.createTower(option_x,option_y,1);
+                    }
+                else{
+                    this.drawTowers();
+                }
+            })}
+
+
+        else if (num!==0 && num!==1){
             img_xx.src = "img/button/sholve.png";
             img_up.src = "img/button/upgrade.png";
-            for (let cx in this.towerhome) {
-                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                up_position[0]=(option_x + 1) * CELL_WIDTH;      //升级选项
-                up_position[1]=(option_y - 1) * CELL_WIDTH;
-                xx_position[0]= (option_x - 1) * CELL_WIDTH;      //删除选项
-                xx_position[1]=(option_y - 1) * CELL_WIDTH;
-                console.log(up_position[0],up_position[1]);
-            }
+            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            up_position[0]=(option_x + 1) * CELL_WIDTH;      //升级选项
+            up_position[1]=(option_y - 1) * CELL_WIDTH;
+            xx_position[0]= (option_x - 1) * CELL_WIDTH;      //删除选项
+            xx_position[1]=(option_y - 1) * CELL_WIDTH;
+            $("#canvasMap_option").on("click", (e) => {
+                var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                if (on_x==option_x+1 && on_y==option_y-1){  //右边 拆塔
+                    this.Tower_down(num-1,option_x,option_y);
+                }
+                else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
+                    this.Tower_up(num-1,option_x,option_y);
+                    }
+                else{
+                    this.drawTowers();
+                }
+            })}
+        else{
+            this.drawTowers();
         }
     }
 
      //绘制敌人
      drawEnemies() { 
         //获取敌人对象
-            let cv = document.querySelector('#canvasMap_enemy');
+            var cv = document.querySelector('#canvasMap_enemy');
             //获取2d平面
-            let ctx = cv.getContext('2d');
-
-            
-
+            var ctx = cv.getContext('2d');
             // 清空敌人图片
             ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
             var img = new Image;
             // 遍历数据，绘制敌人
             for (var ene in this.enemies) {
                 // console.log(this.enemies[ene])
+                // if(this.enemies[ene].hp<=0){
+
+                // }
                 img.src = this.enemies[ene].enemy_img;
-                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
+                ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
                 Ca.drawBlood(ctx, this.enemies[ene]);
                 // console.log(this.enemies[ene].x)
                 // console.log(this.enemies[ene].y)
             }
     
         }
+    
+
+        drawOptions(option_x,option_y){
+     
+            let cv = document.querySelector('#canvasMap_option');
+            let ctx = cv.getContext('2d');
+            let img_xx = new Image();
+            let img_up = new Image();
+            let num = this.tower_message[option_x][option_y];
+            if (num==1){   //没有塔，开始建塔
+                img_xx.src = "img/tower/tower1-1.png";
+                img_up.src = "img/tower/tower2-1.png";
+                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+    
+                $("#canvasMap_option").on("click", (e) => {
+                    var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                    var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                    if (on_x==option_x+1 && on_y==option_y-1){  //右边
+                        this.createTower(option_x,option_y,2);
+                    }
+                    else if(on_x==option_x-1 && on_y==option_y-1){    //左边
+                        this.createTower(option_x,option_y,1);
+                        }
+                    else{
+                        this.drawTowers();
+                    }
+                })
+            } else if (num!==0 && num!==1){
+                img_xx.src = "img/button/sholve.png";
+                img_up.src = "img/button/upgrade.png";
+                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+             
+                $("#canvasMap_option").on("click", (e) => {
+                    var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                    var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                    if (on_x==option_x+1 && on_y==option_y-1){  //右边 拆塔
+                        this.Tower_down(num-1,option_x,option_y);
+                    }
+                    else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
+                        this.Tower_up(num-1,option_x,option_y);
+                        }
+                    else{
+                        this.drawTowers();
+                    }
+                })}
+            else{
+                this.drawTowers();
+            }
+        }
+        // 绘制塔------------------------------------------------------------------------------------------------
+    drawTowers() {
+        var cv = document.querySelector('#canvasMap_tower');
+        var ctx = cv.getContext('2d');
+
+        for (var tower in this.towers) {
+            var img = new Image;
+            for (var a = 0; a < this.towerAndBullets.length; a++) {
+                if (this.towers[tower].type.type == this.towerAndBullets[a].type) {
+                    // if(this.towerAndBullets[a].type==16){
+                    //     img.src = this.towerAndBullets[a].tower_img;
+                    // ctx.drawImage(img, this.towers[tower].x-300, this.towers[tower].y-300, 600, 600);
+                    // }
+                    img.src = this.towerAndBullets[a].tower_img;
+                    ctx.drawImage(img, this.towers[tower].x, this.towers[tower].y, CELL_WIDTH, CELL_WIDTH);
+                }
+            }
+        }
+    }
 
 
 

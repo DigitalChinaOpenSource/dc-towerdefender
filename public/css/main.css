@@ -449,6 +449,8 @@ ul.list-login-bottom li a:hover {
     top: 1%;
     z-index: 6;
 }
+
+
 .content_banner{
     margin-left:190px;
     /* background-color: aquamarine; */
@@ -583,10 +585,14 @@ ul.list-login-bottom li a:hover {
     position: absolute;
     background: url(../img/map/mapbar.png) no-repeat;
     width: 100%;
-    height:100%;
-    background-size:110% 110%;
+    height: 100%;
     margin-left: 26px;
     background-size:auto;
-    margin-top:-10px;
+    margin-top:0px;
 }
-
+.index{
+    z-index: 10;
+}
+.index2{
+    z-index: 10;
+}
