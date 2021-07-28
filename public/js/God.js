@@ -319,6 +319,8 @@ class God {
             this.drawEnemies();
         }, 10);
 
+        
+
         // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
         // $("#reduce_enemy_blood").on("click", () => {
         //     // console.log(this.timeMoney);
@@ -396,6 +398,17 @@ class God {
         //         enemies = this.enemyExisted
         //     }
         // },300)
+    }
+
+    test_create_tower(){
+        this.createTower();
+    }
+
+    converse_px_2_cell(px_num){
+        return (parseInt(px_num/60)+1);
+    }
+    converse_cell_2_px(cell_num){
+        return (parseInt((cell_num-1)*CELL_WIDTH));
     }
 
     clearAllInterval() {
