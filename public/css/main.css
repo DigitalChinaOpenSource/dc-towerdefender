@@ -285,6 +285,10 @@ ul.list-login-bottom li a:hover {
     z-index: 5;
 }
 
+.allcanvas{
+    position: absolute;
+}
+
 .block .block3 .btn-item {
     width: 200px;
     height: 120px;

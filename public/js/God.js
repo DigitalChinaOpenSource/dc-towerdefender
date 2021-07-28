@@ -172,7 +172,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 30;//剩余时间,单位秒
+        this.leftTime = 180;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
@@ -314,6 +314,10 @@ class God {
             this.gameState();
         }, 300);
         this.chat();
+
+        this.draw_enemy = setInterval(() => {
+            this.drawEnemies();
+        }, 10);
 
         // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
         // $("#reduce_enemy_blood").on("click", () => {
@@ -855,9 +859,12 @@ class God {
      //绘制敌人
      drawEnemies() { 
         //获取敌人对象
-            var cv = document.querySelector('#canvasMap_enemy');
+            let cv = document.querySelector('#canvasMap_enemy');
             //获取2d平面
-            var ctx = cv.getContext('2d');
+            let ctx = cv.getContext('2d');
+
+            
+
             // 清空敌人图片
             ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
             var img = new Image;
