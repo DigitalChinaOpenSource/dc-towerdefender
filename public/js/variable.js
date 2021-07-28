@@ -1,7 +1,7 @@
 // 游戏设置
 var LEVEL = 0; // 游戏难度
 const MAP_HEIGHT = 660; // 地图高度
-const MAP_WIDTH = 1200; // 游戏宽度
+const MAP_WIDTH = 1020; // 游戏宽度
 const CELL_WIDTH = 60; // 每格的长度
 const MAP_X = MAP_WIDTH / CELL_WIDTH; // 地图X格子数
 const MAP_Y = MAP_HEIGHT / CELL_WIDTH; // 地图Y格子数
