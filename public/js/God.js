@@ -459,15 +459,14 @@ class God {
             let tower = new Tower(
                 x,
                 y,
-                1,
                 type,
-                this.useful_tower[type-1].range,this.useful_tower[type-1].range,
-                this.useful_tower[type-1].cost,this.useful_tower[type-1].attack_interval,
-                this.useful_tower[type-1].cost,this.useful_tower[type-1].cost,
-                this.useful_tower[type-1].cost,this.useful_tower[type-1].sale
+                TowerType[type-1].range,
+                TowerType[type-1].attack_interval,
+                TowerType[type-1].cost,
+                TowerType[type-1].sale
             );
             towers.push(tower);
-            this.tower_message[x,y] = (type+1);
+            this.tower_message[y][x] = (type+1);
             this.player.money -= tower.cost;
             this.towersNumber ++ ;
             tower.check_attack_interval = setInterval(() => {
@@ -478,16 +477,16 @@ class God {
 
     tower_attack(tower){
         for (let ene in this.enemies) {
-            let distanceX = this.towers[tower].x - this.enemies[ene].x;
-            let distanceY = this.towers[tower].y - this.enemies[ene].y;
-            if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) {
+            let distanceX = tower.x - this.enemies[ene].x;
+            let distanceY = tower.y - this.enemies[ene].y;
+            if (Math.abs(distanceX) <= tower.range * CELL_WIDTH && Math.abs(distanceY) <= tower.range * CELL_WIDTH) {
                 this.bullets.push(new Bullet(
-                    this.towers[tower].x,
-                    this.towers[tower].y,
+                    tower.x,
+                    tower.y,
                     this.enemies[ene].x,
                     this.enemies[ene].y,
-                    this.useful_bullet[this.useful_tower[(this.towers[tower].type)-1]. bullet_type].speed,
-                    this.useful_bullet[this.useful_tower[(this.towers[tower].type)-1]. bullet_type].damage,
+                    TowerType.speed,
+                    TowerType.damage,
                     ene
                 ));
                 clearInterval(tower.check_attack_interval);
@@ -829,7 +828,7 @@ class God {
         let ctx = cv.getContext('2d');
         let img_xx = new Image();
         let img_up = new Image();
-        let num = this.tower_message[option_x][option_y];
+        let num = this.tower_message[option_y][option_x];
         if (num==1){   //没有塔，开始建塔
             img_xx.src = "img/tower/tower1-1.png";
             img_up.src = "img/tower/tower2-1.png";
@@ -845,9 +844,7 @@ class God {
                 else if(on_x==option_x-1 && on_y==option_y-1){    //左边
                     this.createTower(option_x,option_y,1);
                     }
-                else{
-                    this.drawTowers();
-                }
+                
             })}
 
 
@@ -856,10 +853,7 @@ class God {
             img_up.src = "img/button/upgrade.png";
             ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
             ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-            up_position[0]=(option_x + 1) * CELL_WIDTH;      //升级选项
-            up_position[1]=(option_y - 1) * CELL_WIDTH;
-            xx_position[0]= (option_x - 1) * CELL_WIDTH;      //删除选项
-            xx_position[1]=(option_y - 1) * CELL_WIDTH;
+           
             $("#canvasMap_option").on("click", (e) => {
                 var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
                 var on_y = parseInt(e.offsetY / CELL_WIDTH);
@@ -869,14 +863,11 @@ class God {
                 else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
                     this.Tower_up(num-1,option_x,option_y);
                     }
-                else{
-                    this.drawTowers();
-                }
+                
             })}
-        else{
-            this.drawTowers();
+        
         }
-    }
+    
 
      //绘制敌人
      drawEnemies() { 
@@ -903,55 +894,6 @@ class God {
         }
     
 
-        drawOptions(option_x,option_y){
-     
-            let cv = document.querySelector('#canvasMap_option');
-            let ctx = cv.getContext('2d');
-            let img_xx = new Image();
-            let img_up = new Image();
-            let num = this.tower_message[option_x][option_y];
-            if (num==1){   //没有塔，开始建塔
-                img_xx.src = "img/tower/tower1-1.png";
-                img_up.src = "img/tower/tower2-1.png";
-                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-    
-                $("#canvasMap_option").on("click", (e) => {
-                    var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-                    var on_y = parseInt(e.offsetY / CELL_WIDTH);
-                    if (on_x==option_x+1 && on_y==option_y-1){  //右边
-                        this.createTower(option_x,option_y,2);
-                    }
-                    else if(on_x==option_x-1 && on_y==option_y-1){    //左边
-                        this.createTower(option_x,option_y,1);
-                        }
-                    else{
-                        this.drawTowers();
-                    }
-                })
-            } else if (num!==0 && num!==1){
-                img_xx.src = "img/button/sholve.png";
-                img_up.src = "img/button/upgrade.png";
-                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-             
-                $("#canvasMap_option").on("click", (e) => {
-                    var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-                    var on_y = parseInt(e.offsetY / CELL_WIDTH);
-                    if (on_x==option_x+1 && on_y==option_y-1){  //右边 拆塔
-                        this.Tower_down(num-1,option_x,option_y);
-                    }
-                    else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
-                        this.Tower_up(num-1,option_x,option_y);
-                        }
-                    else{
-                        this.drawTowers();
-                    }
-                })}
-            else{
-                this.drawTowers();
-            }
-        }
         // 绘制塔------------------------------------------------------------------------------------------------
     drawTowers() {
         var cv = document.querySelector('#canvasMap_tower');
