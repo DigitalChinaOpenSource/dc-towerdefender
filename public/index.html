@@ -40,54 +40,54 @@
     <!-- 匹配页面end -->
     
     <!--游戏主页-->
-    <div class="block" id="jump2">
+    <div class="block" id= "jump2">
+        <div class="box_block hide_it" id="block1_box"></div>
         <div class="block1 hide_it" id="block_left">
-            <canvas id="canvasMap_backgroud">当前浏览器不支持canvas画布</canvas>
-            <canvas id="canvasMap_backgroud2"></canvas>
-            <canvas id="canvasMap_enemy"></canvas>
-            <canvas id="canvasMap_tower"></canvas>
-            <canvas id="canvasMap_bullet"></canvas>
-            <canvas id="canvasMap_option"></canvas>
+            <canvas id="canvasMap_backgroud" height="660" width="1020" class="allcanvas">当前浏览器不支持canvas画布</canvas>
+            <canvas id="canvasMap_backgroud2" height="660" width="1020" class="allcanvas"></canvas>
+            <canvas id="canvasMap_enemy" height="660" width="1020" class="allcanvas"></canvas>
+            <canvas id="canvasMap_tower" height="660" width="1020" class="allcanvas"></canvas>
+            <canvas id="canvasMap_bullet" height="660" width="1020" class="allcanvas"></canvas>
+            <canvas id="canvasMap_option" height="660" width="1020" class="allcanvas"></canvas> 
+            
         </div>
-
-        <div class="block3" id="skill-btns-container">
+        <div class="lackmoney hide_it" id="moneylack">
+        </div>
+        <div class="block3 hide_it" id="skill-btns-container">
             <div class='btn-item'>
-                <p>增强敌方小怪等级</p>
                 <div id="increase_enemy_level"></div>
             </div>
             <div class='btn-item'>
-                <p>减少小怪血量</p>
                 <div id="reduce_enemy_blood"></div>
             </div>
             <div class='btn-item'>
-                <p>增加boss</p>
                 <div id="add_boss"></div>
             </div>
         </div>
         <div class="block2 hide_it" id="block_right">
             <div class="content_banner">
-                <table class="banner" id="banner">
+                <table id="banner">
                     <tr>                       
                         <td  width="40">
                             <img src="img/items/money.png" class="money" id="money">                       
                         </td>
-                        <td  width="40"> <div class="moneyshow p1" id="moneyshow">金币</div></td>
+                        <td  width="40"> <div class="moneyshow p1" id="moneyshow"></div></td>
                         <td width="10"></td>
                         <td width="40">
                             <img src="img/items/fight.png" class="life" id="life">                       
                         </td>
-                        <td  width="40"><div class="lifeshow p1" id="lifeshow">双方场上怪物差值</div></td>
+                        <td  width="40"><div class="lifeshow p1" id="lifeshow"></div></td>
                         <td width="10"></td>
                         <td width="40">
-                            <img src="img/items/clock.png" class="time" id="time">                       
+                            <img src="img/items/time.png" class="time" id="time">                       
                         </td>
-                        <td  width="40"><div class="timeshow p1" id="timeshow">时间</div></td>
+                        <td  width="40"><div class="timeshow p1" id="timeshow"></div></td>
                         <td width="40"></td>
                     </tr>
                 </table>
             </div>
             <div class="content_player">
-                <ul style="list-style: none;font-size:100%;margin-top:10px;margin-left: 45px" id="player1">
+                <ul style="list-style: none;font-size:100%;margin-top:10px;margin-left: 5px" id="player1">
                     <li class="title">我方信息:</li>
                     <li class="mess">昵称:</li>
                     <li class="mess" id="p1nameshow">name</li>
@@ -100,7 +100,7 @@
                     <li class="mess">场上还剩怪物:</li>
                     <li class="mess" id="p1leaveenemyshow">leave</li>
                 </ul>
-                <ul style="list-style: none;font-size: 100%;float: left;margin-top:10px; margin-left: -30px;" id="player1">
+                <ul style="list-style: none;font-size: 100%;float: left;margin-top:10px; margin-left: 10px;" id="player1">
                     <li class="title">敌方信息:</li>
                     <li class="mess">昵称:</li>
                     <li class="mess" id="p2nameshow">name</li>
@@ -114,18 +114,13 @@
                     <li class="mess" id="p2leaveenemyshow">leave</li>
                 </ul>
             </div>
-            
             <div class="content_chat">
                 <div class="talk_con">
                     <div class="talk_show" id="words">
-                        <div class="atalk"><span id="asay">起飞</span></div>
-                        <div class="btalk"><span id="bsay">芜湖</span></div>
+        
                     </div>
+
                     <div class="talk_input">
-                        <select class="whotalk" id="who">
-                            <option value="0">一号玩家:</option>
-                            <option value="1">二号玩家:</option>
-                        </select>
                         <input type="text" class="talk_word" id="talkwords">
                         <input type="button" value="发送" class="talk_sub" id="talksub" >
                     </div>

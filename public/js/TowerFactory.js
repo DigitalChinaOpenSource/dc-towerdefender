@@ -24,7 +24,5 @@
           this.TowerArr.push(TowerType.ten);
           this.TowerArr.push(TowerType.eleven);
           this.TowerArr.push(TowerType.twelve);
-          
-       
     }
 }
