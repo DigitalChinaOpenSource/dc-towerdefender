@@ -247,7 +247,8 @@ class God {
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
                 }
                 else {
-                    $("#moneylack").show(300).delay(1000).hide(200);
+                    this.money_not_enough();
+                    // $("#moneylack").show(300).delay(1000).hide(200);
                     // console.log(this.player.money);
                     // alert("给自己小怪减血技能金币数量不够");
                 }
@@ -272,7 +273,8 @@ class God {
                         this.player.money = this.player.money - increase_enemy_level_money;
                         console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
                     } else {
-                        $("#moneylack").show(300).delay(1000).hide(200);
+                        this.money_not_enough();
+                        // $("#moneylack").show(300).delay(1000).hide(200);
                         // alert("给对方小怪升级金币数量不够");
                     }
                 }
@@ -292,7 +294,7 @@ class God {
                 this.player.money = this.player.money - add_boss_money;
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
-                $("#moneylack").show(300).delay(1000).hide(200);
+                this.money_not_enough();
                 // alert("给对方增加一个boss金币数量不够");
             }
         });
@@ -491,7 +493,8 @@ class God {
     }
 
     money_not_enough(){
-        alert("money is not enough");
+        $("#moneylack").show(300).delay(1000).hide(200);
+        // alert("money is not enough");
     }
 
     judge_game() {
