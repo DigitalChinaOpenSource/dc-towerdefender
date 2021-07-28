@@ -7,10 +7,10 @@ class Tower {
         this.type = type ;
         this.range = range ;
         this.attack_interval = attack_interval;
-        this.tower_img = tower_img;
+        this.tower_img = undefined;
         this.cost = cost; //建塔所需金币
         this.sale = sale; //卖塔所得金币 
         this.check_attack_interval = undefined;  
+        console.log("tower: x:"+this.x+" y:"+this.y);
     }
 }
-
