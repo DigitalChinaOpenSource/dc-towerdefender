@@ -248,6 +248,18 @@ class God {
                 if (reduce_enemy_blood_money <= this.player.money) {
                     this.enemies.forEach((e) => {
                         e.check_bloodloss();
+                        // 生命为0的时候 敌人死去
+                        if (this.enemies[e].hp <= 0) {
+                            this.player.money += this.enemies[e].money; 
+                            this.enemies[e].dead();
+                            this.createEnemy();
+                            this.createEnemy();
+                            // console.log("kill");
+                            this.nowenemys--;
+                            this.enemies[e] = null;
+                            this.enemies.splice(e, 1);
+                            this.enemyExisted--;
+                        }
                     })
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
@@ -616,6 +628,8 @@ class God {
                         if (this.enemies[ene].hp <= 0) {
                             this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
                             this.enemies[ene].dead();
+                            this.createEnemy();
+                            this.createEnemy();
                             // console.log("kill");
                             this.nowenemys--;
                             this.enemies[ene] = null;
