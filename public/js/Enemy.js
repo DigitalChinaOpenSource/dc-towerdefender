@@ -3,12 +3,12 @@ class Enemy {
     // enemy_img传入敌人的图片url
     constructor(enemy_type, hp, speed, size, enemy_img, money, enemy_level, boss) {
         this.flag = 0; // 移动状态：1=移动中，0=停止
-        this.hp = hp || ENEMY_BASE_HP; // 不同种类的enemy有不同的血量，默认是10
+        this.hp = hp; // 不同种类的enemy有不同的血量
         this.speed = speed || ENEMY_BASE_SPEED; // 不同种类的enemy有不同的速度
         this.size = size || 60; // 敌人的大小，默认60
         this.enemy_img = enemy_img || "img/TowerDefense.png";
         this.money = money; // 死后掉落金币
-        this.enemy_level = enemy_level || 1; // 怪物等级
+        this.enemy_level = enemy_level; // 怪物等级
         this.boss = boss || 0; // 是否是boss：0=小怪，1=boss
         this.enemy_img_series = enemy_type+1; // 怪物图片序列头
         this._init();//
@@ -262,13 +262,13 @@ class Enemy {
 
     // 技能：怪物升级
     check_levelup(){
-        this.hp = this.hp*(1+0.1*this.enemy_level);
+        this.hp = this.originHp*(1+0.1*this.enemy_level);
         this.money = this.money*(1+0.1*this.enemy_level);
     }
 
     // 技能：怪物扣血
     check_bloodloss(){
-        reduce_hp(this.originHp*0.5)
+        this.reduce_hp(this.originHp*(1+0.1*this.enemy_level)*0.5)
     }
 
     // 怪物死亡

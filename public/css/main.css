@@ -538,9 +538,17 @@ ul.list-login-bottom li a:hover {
     position: absolute;
     background: url(../img/map/mapbar.png) no-repeat;
     width: 100%;
-    height: 100%;
+    height:100%;
+    background-size:110% 110%;
     margin-left: 26px;
     background-size:auto;
-    margin-top:0px;
+    margin-top:-10px;
 }
 
+.qwe{
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* height: 660px;
+    width: 1020px; */
+}

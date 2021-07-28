@@ -172,7 +172,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 180;//剩余时间,单位秒
+        this.leftTime = 30;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
@@ -203,10 +203,18 @@ class God {
         // 监控 
         $("#canvasMap_option").on("click", (e) => {//jquery语法，在这个图层里面，就是坑位被点击后做的动作。e就是鼠标监听的坐标
             //在建塔的图层上
-            let option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-            let option_y = parseInt(e.offsetY / CELL_WIDTH);
-            console.log("x:" + option_x + " y:" + option_y);
+            var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+            var option_y = parseInt(e.offsetY / CELL_WIDTH);
+            this.drawOptions(option_x,option_y)
+            // this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
+            // this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
         });
+
+        // $("tower1").mousedown((e) => {
+        //     var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+        //     var option_y = parseInt(e.offsetY / CELL_WIDTH);
+        //     this.tower_move(option_x, option_y);
+        // });
 
 
         //  画地图所占据的所有出格子
@@ -313,11 +321,13 @@ class God {
         this.getGameState = setInterval(() => {
             this.gameState();
         }, 300);
-        this.chat();
 
-        this.draw_enemy = setInterval(() => {
-            this.drawEnemies();
-        }, 10);
+
+        this.drawEnemy = setInterval(()=>{
+            this.drawEnemies()
+        },30)
+
+        this.chat();
 
         // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
         // $("#reduce_enemy_blood").on("click", () => {
@@ -637,7 +647,7 @@ class God {
                             this.towers[tower].tower_img = "img/tower/tower1-2.png";
                             this.towers[tower].type = TowerType.two;
                             this.player.money -= TowerType.two.cost;
-                            tower_message[x,y] = type+1;
+                            this.tower_message[x,y] = type+1;
                         }
                         else {
                             $("#moneyshow").css("border", "2px solid red");
@@ -660,7 +670,7 @@ class God {
                                 this.towers[tower].tower_img = "img/tower/tower1-3.png";
                                 this.towers[tower].type = TowerType.three;
                                 this.player.money -= TowerType.three.cost;
-                                tower_message[x,y] = type+1;    
+                                this.tower_message[x,y] = type+1;    
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -685,7 +695,7 @@ class God {
                                 this.towers[tower].tower_img = "img/tower/tower2-2.png";
                                 this.towers[tower].type = TowerType.five;
                                 this.player.money -= TowerType.five.cost;
-                                tower_message[x,y] = type+1;   
+                                this.tower_message[x,y] = type+1;   
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -708,7 +718,7 @@ class God {
                                     this.towers[tower].tower_img = "img/tower/tower2-3.png";
                                     this.towers[tower].type = TowerType.six;
                                     this.player.money -= TowerType.six.cost;
-                                    tower_message[x,y] = type+1;
+                                    this.tower_message[x,y] = type+1;
                                 }
                                 else {
                                     $("#moneyshow").css("border", "2px solid red");
@@ -736,7 +746,7 @@ class God {
             if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
                 this.player.money += this.towers[tower].type.sale;
                 this.towers.splice(tower, 1);
-                tower_message[x,y] = 1;
+                this.tower_message[x,y] = 1;
             }
         }
     }    
@@ -760,7 +770,7 @@ class God {
         var cv_enemy = document.querySelector('#canvasMap_enemy');
         cv_enemy.setAttribute("height", MAP_HEIGHT);
         cv_enemy.setAttribute("width", MAP_WIDTH);
-        cv_enemy.setAttribute("z-index", 3);
+        cv_enemy.setAttribute("z-index", 10);
 
         this.drawTowerMap();
 
@@ -819,7 +829,7 @@ class God {
         let ctx = cv.getContext('2d');
         let img_xx = new Image();
         let img_up = new Image();
-        let num = tower_message[option_x][option_y];
+        let num = this.tower_message[option_x][option_y];
         if (num==1){   //没有塔，开始建塔
             img_xx.src = "img/tower/tower1-1.png";
             img_up.src = "img/tower/tower2-1.png";
@@ -871,26 +881,96 @@ class God {
      //绘制敌人
      drawEnemies() { 
         //获取敌人对象
-            let cv = document.querySelector('#canvasMap_enemy');
+            var cv = document.querySelector('#canvasMap_enemy');
             //获取2d平面
-            let ctx = cv.getContext('2d');
-
-            
-
+            var ctx = cv.getContext('2d');
             // 清空敌人图片
             ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
             var img = new Image;
             // 遍历数据，绘制敌人
             for (var ene in this.enemies) {
-                console.log(this.enemies[ene])
+                // console.log(this.enemies[ene])
+                // if(this.enemies[ene].hp<=0){
+
+                // }
                 img.src = this.enemies[ene].enemy_img;
-                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
                 Ca.drawBlood(ctx, this.enemies[ene]);
-                console.log(this.enemies[ene].x)
-                console.log(this.enemies[ene].y)
+                // console.log(this.enemies[ene].x)
+                // console.log(this.enemies[ene].y)
             }
     
         }
+    
+
+        drawOptions(option_x,option_y){
+     
+            let cv = document.querySelector('#canvasMap_option');
+            let ctx = cv.getContext('2d');
+            let img_xx = new Image();
+            let img_up = new Image();
+            let num = this.tower_message[option_x][option_y];
+            if (num==1){   //没有塔，开始建塔
+                img_xx.src = "img/tower/tower1-1.png";
+                img_up.src = "img/tower/tower2-1.png";
+                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+    
+                $("#canvasMap_option").on("click", (e) => {
+                    var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                    var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                    if (on_x==option_x+1 && on_y==option_y-1){  //右边
+                        this.createTower(option_x,option_y,2);
+                    }
+                    else if(on_x==option_x-1 && on_y==option_y-1){    //左边
+                        this.createTower(option_x,option_y,1);
+                        }
+                    else{
+                        this.drawTowers();
+                    }
+                })
+            } else if (num!==0 && num!==1){
+                img_xx.src = "img/button/sholve.png";
+                img_up.src = "img/button/upgrade.png";
+                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+             
+                $("#canvasMap_option").on("click", (e) => {
+                    var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                    var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                    if (on_x==option_x+1 && on_y==option_y-1){  //右边 拆塔
+                        this.Tower_down(num-1,option_x,option_y);
+                    }
+                    else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
+                        this.Tower_up(num-1,option_x,option_y);
+                        }
+                    else{
+                        this.drawTowers();
+                    }
+                })}
+            else{
+                this.drawTowers();
+            }
+        }
+        // 绘制塔------------------------------------------------------------------------------------------------
+    drawTowers() {
+        var cv = document.querySelector('#canvasMap_tower');
+        var ctx = cv.getContext('2d');
+
+        for (var tower in this.towers) {
+            var img = new Image;
+            for (var a = 0; a < this.towerAndBullets.length; a++) {
+                if (this.towers[tower].type.type == this.towerAndBullets[a].type) {
+                    // if(this.towerAndBullets[a].type==16){
+                    //     img.src = this.towerAndBullets[a].tower_img;
+                    // ctx.drawImage(img, this.towers[tower].x-300, this.towers[tower].y-300, 600, 600);
+                    // }
+                    img.src = this.towerAndBullets[a].tower_img;
+                    ctx.drawImage(img, this.towers[tower].x, this.towers[tower].y, CELL_WIDTH, CELL_WIDTH);
+                }
+            }
+        }
+    }
 
 
 
