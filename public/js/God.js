@@ -172,7 +172,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 30;//剩余时间,单位秒
+        this.leftTime = 180;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
@@ -203,16 +203,9 @@ class God {
         // 监控 
         $("#canvasMap_option").on("click", (e) => {//jquery语法，在这个图层里面，就是坑位被点击后做的动作。e就是鼠标监听的坐标
             //在建塔的图层上
-            var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-            var option_y = parseInt(e.offsetY / CELL_WIDTH);
-            this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
-            this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
-        });
-
-        $("tower1").mousedown((e) => {
-            var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-            var option_y = parseInt(e.offsetY / CELL_WIDTH);
-            this.tower_move(option_x, option_y);
+            let option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+            let option_y = parseInt(e.offsetY / CELL_WIDTH);
+            console.log("x:" + option_x + " y:" + option_y);
         });
 
 
@@ -266,7 +259,8 @@ class God {
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
                 }
                 else {
-                    $("#moneylack").show(300).delay(1000).hide(200);
+                    this.money_not_enough();
+                    // $("#moneylack").show(300).delay(1000).hide(200);
                     // console.log(this.player.money);
                     // alert("给自己小怪减血技能金币数量不够");
                 }
@@ -291,7 +285,8 @@ class God {
                         this.player.money = this.player.money - increase_enemy_level_money;
                         console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
                     } else {
-                        $("#moneylack").show(300).delay(1000).hide(200);
+                        this.money_not_enough();
+                        // $("#moneylack").show(300).delay(1000).hide(200);
                         // alert("给对方小怪升级金币数量不够");
                     }
                 }
@@ -311,7 +306,7 @@ class God {
                 this.player.money = this.player.money - add_boss_money;
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
-                $("#moneylack").show(300).delay(1000).hide(200);
+                this.money_not_enough();
                 // alert("给对方增加一个boss金币数量不够");
             }
         });
@@ -333,6 +328,10 @@ class God {
             this.gameState();
         }, 300);
         this.chat();
+
+        this.draw_enemy = setInterval(() => {
+            this.drawEnemies();
+        }, 10);
 
         // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
         // $("#reduce_enemy_blood").on("click", () => {
@@ -506,7 +505,8 @@ class God {
     }
 
     money_not_enough(){
-        alert("money is not enough");
+        $("#moneylack").show(300).delay(1000).hide(200);
+        // alert("money is not enough");
     }
 
     judge_game() {
@@ -876,9 +876,12 @@ class God {
      //绘制敌人
      drawEnemies() { 
         //获取敌人对象
-            var cv = document.querySelector('#canvasMap_enemy');
+            let cv = document.querySelector('#canvasMap_enemy');
             //获取2d平面
-            var ctx = cv.getContext('2d');
+            let ctx = cv.getContext('2d');
+
+            
+
             // 清空敌人图片
             ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
             var img = new Image;

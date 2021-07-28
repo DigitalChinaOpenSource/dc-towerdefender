@@ -10,10 +10,10 @@ class Enemy {
         this.money = money; // 死后掉落金币
         this.enemy_level = enemy_level || 1; // 怪物等级
         this.boss = boss || 0; // 是否是boss：0=小怪，1=boss
-        this.enemy_img_series = enemy_type; // 怪物图片序列头
+        this.enemy_img_series = enemy_type+1; // 怪物图片序列头
         this._init();//
         this.moveArr = new Search().searchEnemyRoute(LEVEL);  // 根据关卡数来设定敌人的路线
-        this.index = 1; // 确定怪物移动方向
+        // this.ran = 1; // 确定怪物移动方向
         // 怪物初始参数
         this.originHp = hp; // 原始hp
         // this.origin_spd = this.speed; // 初始速度 用于速度改变使用
@@ -54,9 +54,9 @@ class Enemy {
 
     // 根据随机数来确定小怪的随机出生位置
     createlocation() {
-            var ran = this.randomNum(route.routeOne.length)
-            this.x = route.routeOne[ran].x * CELL_WIDTH
-            this.y = route.routeOne[ran].y * CELL_WIDTH
+            this.ran = this.randomNum(moveRoute.MOVEARROne.length)
+            this.x = moveRoute.MOVEARROne[this.ran].x * CELL_WIDTH
+            this.y = moveRoute.MOVEARROne[this.ran].y * CELL_WIDTH
     }
 
     // 怪物dot 伤害叠加 再次dot刷新时间
@@ -112,7 +112,7 @@ class Enemy {
                 order = order % 30; // 控制order的数值大小 四张图片顺次切换 每10次切换一次
                 this.move(order); // 移动
                 order++;
-            }, 10000 / spd); // 控制enemy移动速度，每10000毫秒刷新一次
+            }, 10000 / spd); // 控制enemy移动速度
         }
     }
 
@@ -121,9 +121,9 @@ class Enemy {
         //当游戏正常运行时，小怪正常运行
         if (this.flag == 0) {
             // 切换怪物图片 实现动态变化
-            if (order < 10) { this.enemy_img = "img/monster" + this.enemy_img_series + "-1.png"; }
-            else if (order < 20) { this.enemy_img = "img/monster" + this.enemy_img_series + "-2.png"; }
-            else { this.enemy_img = "img/monster" + this.enemy_img_series + "-3.png"; }
+            if(order < 10){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-1.png";}
+            else if(order < 20){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-2.png";}
+            else {this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-3.png";}
 
             // 判断的时候乘CELL_WIDTH
             if (this.x != this.moveArr[(this.ran + 1) % this.moveArr.length].x * CELL_WIDTH) {
