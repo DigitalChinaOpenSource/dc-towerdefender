@@ -6,6 +6,7 @@ class God {
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
+        $(".total").hide();
         // let e1 = new Enemy();
         // e1.level = 1;
         // e1.hp = 5;
@@ -32,6 +33,13 @@ class God {
             $("#block_left").show();
             $("#block_right").show();
             $("#skill-btns-container").show();
+
+             //隐藏游戏页面，显示匹配页面，修改start******************
+            this.showTime();
+            $(".block").hide();
+            $(".match").show();
+            $(".total").hide();
+            // 修改end******************
 
             // //绑定连接事件
             // this.link();
@@ -76,6 +84,45 @@ class God {
         }, 1000);
     }
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面end
+
+    // 跳转到成功时的结算页面
+    to_total_win(){
+        $(".block").hide();
+        $(".match").hide();
+        $(".total").show();
+        document.getElementById('total_name').innerHTML = "bk";
+        $("#total_continue").on("click", () => {
+            this.to_match();
+        });
+    }
+
+    // 跳转到失败时的结算页面
+    to_total_lose(){
+        $("#total_win").hide();
+        $("#total_lose").show();
+        $(".block").hide();
+        $(".match").hide();
+        $(".total").show();
+        $("#total_continue").on("click", () => {
+            this.to_match();
+        });
+        
+    }
+
+    // 跳转到匹配页面
+    to_match(){
+        $("#match_before").show();
+        $("#match_after").hide();
+        document.getElementById('match_time').innerHTML = "倒计时";
+        this.showTime();
+        $(".block").hide();
+        $(".match").show();
+        $(".total").hide();
+        // this._init();
+        // this.startGame();
+        
+    }
+
 
     // // websocket建立连接
     // link(){
@@ -169,7 +216,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 0; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 180;//剩余时间,单位秒
+        this.leftTime = 10;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
@@ -449,6 +496,8 @@ class God {
         if (this.enemyExisted >= 100) {
             this.stopGame();
             alert("lose");
+            // 跳转到结算页面
+            this.to_total_lose();
             // //websocket发送失败信息
             // this.send({type:4,roomCount:this.roomCount,name:this.name})
             // // 关闭websocket连接
@@ -461,6 +510,8 @@ class God {
             // // 发送自己的小兵剩余信息给对方
             // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
             alert("win");
+             // 跳转到结算页面
+            this.to_total_win();
         }
     }
 

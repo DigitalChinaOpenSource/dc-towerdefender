@@ -254,6 +254,65 @@ ul.list-login-bottom li a:hover {
 
 
 /* 匹配页面end */
+/* 结算页面start */
+.total{
+    font-size: 30px;
+    font-family: 'Courier New', Courier, monospace;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: center;
+    width: 1860px;
+    height: 900px;
+    position: absolute;
+    background-color: aquamarine;
+    background:url(../img/total/total_bj.png) no-repeat;
+    background-size: auto 100%;
+    background-position: center;
+    z-index: 1;
+    
+}
+#total_logo{
+    height: 30%;
+    /* background-color: rgb(255, 127, 234); */
+}
+#total_logo img{
+    height: 100%;
+    margin-top: 75px;
+}
+#total_context{
+    height: 70%;
+    /* background:url(../img/total/total_bj.png) no-repeat; */
+    background-position: center;
+    background-size: auto 100%;
+    padding-top: 9%;
+    /* padding-left:30%; */
+    text-align: center;
+}
+#total_context span{
+    padding-bottom: 20px;
+}
+.total_span_left{
+    display: inline-block;
+    width: 230px;
+    text-align: right;
+}
+.total_span_right{
+    display: inline-block;
+    width: 230px;
+    text-align: left;
+}
+#total_lose{
+    display:none;
+}
+#total_btn{
+    padding-top: 75px;
+}
+#total_continue{
+    /* background:url(../img/total/total_continue.png) no-repeat;  */
+    cursor: pointer;
+}
+
+/* 结算页面end */
 
 /*游戏主页----------------------------------------------------------------------------*/
 /* 总界面 */
