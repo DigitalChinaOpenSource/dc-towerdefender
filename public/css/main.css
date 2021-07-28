@@ -540,3 +540,10 @@ ul.list-login-bottom li a:hover {
     margin-top:0px;
 }
 
+.qwe{
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* height: 660px;
+    width: 1020px; */
+}

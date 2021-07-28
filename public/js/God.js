@@ -320,6 +320,12 @@ class God {
         this.getGameState = setInterval(() => {
             this.gameState();
         }, 300);
+
+
+        this.drawEnemy = setInterval(()=>{
+            this.drawEnemies()
+        },30)
+
         this.chat();
 
         // //给对方小怪减血，点击技能按钮，如果现在金币的数量大于技能所需数量，触发技能，否则提示金币数量不够
@@ -763,7 +769,7 @@ class God {
         var cv_enemy = document.querySelector('#canvasMap_enemy');
         cv_enemy.setAttribute("height", MAP_HEIGHT);
         cv_enemy.setAttribute("width", MAP_WIDTH);
-        cv_enemy.setAttribute("z-index", 3);
+        cv_enemy.setAttribute("z-index", 10);
 
         this.drawTowerMap();
 
@@ -884,7 +890,7 @@ class God {
             for (var ene in this.enemies) {
                 console.log(this.enemies[ene])
                 img.src = this.enemies[ene].enemy_img;
-                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, CELL_WIDTH, CELL_WIDTH);
+                ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
                 Ca.drawBlood(ctx, this.enemies[ene]);
                 console.log(this.enemies[ene].x)
                 console.log(this.enemies[ene].y)
