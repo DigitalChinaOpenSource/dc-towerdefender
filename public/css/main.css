@@ -31,7 +31,7 @@
     left: 25%;
     top: 73%;
     cursor: pointer;
-    background: url("../img/button/button-start\(2\).png") no-repeat;
+    background: url("../img/button/button-start.png") no-repeat;
     background-size:100%;
     border-style: none;
 }
@@ -42,7 +42,7 @@
 }
 .btn_logout {
     cursor: pointer;
-    background: url("../img/button/button-logout\(2\).png") no-repeat;
+    background: url("../img/button/button-logout.png") no-repeat;
     border-style: none;
     position: absolute;
     background-size: 100%;
@@ -273,28 +273,36 @@ ul.list-login-bottom li a:hover {
     height: 660px;
     margin-left: 60px;
     background-size:auto;
-    margin-top: 40px;
-    background: url(../img/map/map1.png) no-repeat;
+    margin-top: 25px;
+    background: url(../img/map/map-volcano-2.png) no-repeat;
 }
 /* 技能页面 */
 .block3{
     position: absolute;
-    display: flex;
+    float: left;
     justify-content: center;
     align-items: center;
-    background:#a3b955;
-    width: 1020px;
-    height:220px;
+    background:url(../img/items/skillbar.png) no-repeat;
+    margin-top: 42px;
+    width: 50%;
+    height:50%;
     float: left;
-    margin-left: 30px;
+    margin-left: 110px;
     top:75%;
-    z-index: 6;
+    z-index: 5;
+}
+
+.allcanvas{
+    position: absolute;
 }
 
 .block .block3 .btn-item {
     width: 200px;
     height: 120px;
+    float: left;
     /* background: tomato; */
+    align-content: center;
+    /* z-index: 5; */
 }
 .block .block3 .btn-item > div {
     width: 200px;
@@ -309,11 +317,13 @@ ul.list-login-bottom li a:hover {
 
 /* 技能按钮 */
 #increase_enemy_level {
+    margin-left: 48px;
+    margin-top: 15px;
     width: 200px;
-    height: 80px;
+    height: 110px;
     border: none;
     position: relative;
-    background: url(../img/button/increase_level.png) no-repeat center center;
+    background: url(../img/items/special_icons_0034.png) no-repeat center center;
 }
 #increase_enemy_level:hover::after {
     content: '对战玩家所有的小怪升级';
@@ -333,11 +343,13 @@ ul.list-login-bottom li a:hover {
 }
 
 #reduce_enemy_blood {
+    margin-top: 15px;
+    margin-left: -30px;
     width: 200px;
-    height: 80px;
+    height: 110px;
     border: none;
     position: relative;
-    background: url(../img/button/less_blood.gif) no-repeat center center;
+    background: url(../img/items/special_icons_0024.png) no-repeat center center;
 }
 #reduce_enemy_blood:hover::after {
     content: '减少小怪血量';
@@ -357,82 +369,12 @@ ul.list-login-bottom li a:hover {
 }
 #add_boss {
     width: 200px;
-    height: 80px;
+    height: 110px;
     border: none;
+    margin-left: -108px;
+    margin-top: 15px;
     position: relative;
-    background: url(../img/button/add_boss.png) no-repeat center center;
-}
-#add_boss:hover::after {
-    content: '对战玩家新增大boss';
-    position: absolute;
-    bottom: -50px;
-    left: 60px;
-    font-size: 10px;
-    width: 80px;
-    height: 40px;
-    line-height: 20px;
-    background: cornflowerblue;
-    border-radius: 10px;
-    border: rgba(0, 0, 0, 0.01);
-}
-#add_boss:active {
-    transform: scale(1.5);
-}
-
-/* 技能按钮 */
-#increase_enemy_level {
-    width: 200px;
-    height: 80px;
-    border: none;
-    position: relative;
-    background: url(../img/button/increase_level.png) no-repeat center center;
-}
-#increase_enemy_level:hover::after {
-    content: '对战玩家所有的小怪升级';
-    position: absolute;
-    bottom: -50px;
-    left: 60px;
-    font-size: 10px;
-    width: 80px;
-    height: 40px;
-    line-height: 20px;
-    background: cornflowerblue;
-    border-radius: 10px;
-    border: rgba(0, 0, 0, 0.01);
-}
-#increase_enemy_level:active {
-    transform: scale(1.5);
-}
-
-#reduce_enemy_blood {
-    width: 200px;
-    height: 80px;
-    border: none;
-    position: relative;
-    background: url(../img/button/less_blood.gif) no-repeat center center;
-}
-#reduce_enemy_blood:hover::after {
-    content: '减少小怪血量';
-    position: absolute;
-    bottom: -50px;
-    left: 60px;
-    font-size: 10px;
-    width: 80px;
-    height: 40px;
-    line-height: 20px;
-    background: cornflowerblue;
-    border-radius: 10px;
-    border: rgba(0, 0, 0, 0.01);
-}
-#reduce_enemy_blood:active {
-    transform: scale(1.5);
-}
-#add_boss {
-    width: 200px;
-    height: 80px;
-    border: none;
-    position: relative;
-    background: url(../img/button/add_boss.png) no-repeat center center;
+    background: url(../img/items/special_icons_0049.png) no-repeat center center;
 }
 #add_boss:hover::after {
     content: '对战玩家新增大boss';
@@ -460,7 +402,15 @@ ul.list-login-bottom li a:hover {
     background: url(../img/map/info-2\(1\).png) no-repeat;
     /* background-color: chocolate; */
 }
-
+.lackmoney{
+    background:url(../img/items/lackofmoney.png) no-repeat;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left:60%;
+    top: 1%;
+    z-index: 6;
+}
 .content_banner{
     margin-left:190px;
     /* background-color: aquamarine; */
@@ -595,9 +545,10 @@ ul.list-login-bottom li a:hover {
     position: absolute;
     background: url(../img/map/mapbar.png) no-repeat;
     width: 100%;
-    height: 100%;
+    height:100%;
+    background-size:110% 110%;
     margin-left: 26px;
     background-size:auto;
-    margin-top: 10px;
+    margin-top:-10px;
 }
 
