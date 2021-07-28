@@ -669,6 +669,7 @@ class God {
                 if(TalkWords.value=="show me the money"){
                     player1.money = 10000;
                     // console.log(player1)
+                    TalkWords.value="";
                     return;
                 }
                 //判断是谁发出的
