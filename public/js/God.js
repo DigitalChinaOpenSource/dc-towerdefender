@@ -663,11 +663,12 @@ class God {
             case 1:
                 for (var tower in this.towers) {
                     if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                        if (TowerType.two.cost <= this.player.money) {
-                            this.towers[tower].tower_img = "img/tower/tower1-2.png";
-                            this.towers[tower].type = TowerType.two;
-                            this.player.money -= TowerType.two.cost;
+                        if (TowerType[1][4] <= this.player.money) {
+                            this.towers[tower].type = 2;
+                            this.player.money -= TowerType[1][4];
                             this.tower_message[y][x] = type+1;
+                            // 画塔
+
                         }
                         else {
                             $("#moneyshow").css("border", "2px solid red");
@@ -683,15 +684,67 @@ class God {
                     }
                 }
                 break;
-                case 2:
-                    for (var tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType.three.cost <= this.player.money) {
-                                this.towers[tower].tower_img = "img/tower/tower1-3.png";
-                                this.towers[tower].type = TowerType.three;
-                                this.player.money -= TowerType.three.cost;
-                                this.tower_message[y][x] = type+1;    
-                            }
+            case 2:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                        if (TowerType[2][4] <= this.player.money) {
+                            this.towers[tower].type = 3;
+                            this.player.money -= TowerType[2][4];
+                            this.tower_message[y][x] = type+1;
+                            // 画塔
+
+                        }
+                        else {
+                            $("#moneyshow").css("border", "2px solid red");
+                            setTimeout(() => {
+                                $("#moneyshow").css("border", " white");
+                            }, 500);
+                            //金额不足提示框显示2s后消失
+                            $("#lack_money").show();
+                            setTimeout(() => {
+                                $("#lack_money").hide();
+                            }, 2000);
+                        }
+                    }
+                }
+                break;
+            case 3:
+                console.log("已经到最高等级啦")
+                break;               
+            case 4:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                        if (TowerType[4][4] <= this.player.money) {
+                            this.towers[tower].type = 5;
+                            this.player.money -= TowerType[4][4];
+                            this.tower_message[y][x] = type+1;
+                            // 画塔
+
+                        }
+                        else {
+                            $("#moneyshow").css("border", "2px solid red");
+                            setTimeout(() => {
+                                $("#moneyshow").css("border", " white");
+                            }, 500);
+                            //金额不足提示框显示2s后消失
+                            $("#lack_money").show();
+                            setTimeout(() => {
+                                $("#lack_money").hide();
+                            }, 2000);
+                        }
+                    }
+                }
+                break;
+            case 5:
+                for (var tower in this.towers) {
+                    if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                        if (TowerType[5][4] <= this.player.money) {
+                            this.towers[tower].type = 6;
+                            this.player.money -= TowerType[5][4];
+                            this.tower_message[y][x] = type+1;
+                            // 画塔
+
+                        }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
                                 setTimeout(() => {
@@ -705,57 +758,9 @@ class God {
                             }
                         }
                     }
-                    break;
-                case 3:
-                    break;               
-                case 4:
-                    for (var tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType.five.cost <= this.player.money) {
-                                this.towers[tower].tower_img = "img/tower/tower2-2.png";
-                                this.towers[tower].type = TowerType.five;
-                                this.player.money -= TowerType.five.cost;
-                                this.tower_message[y][x] = type+1;   
-                            }
-                            else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-                            }
-                        }
-                    }
-                    break;
-                    case 5:
-                        for (var tower in this.towers) {
-                            if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                                if (TowerType.six.cost <= this.player.money) {
-                                    this.towers[tower].tower_img = "img/tower/tower2-3.png";
-                                    this.towers[tower].type = TowerType.six;
-                                    this.player.money -= TowerType.six.cost;
-                                    this.tower_message[y][x] = type+1;
-                                }
-                                else {
-                                    $("#moneyshow").css("border", "2px solid red");
-                                    setTimeout(() => {
-                                        $("#moneyshow").css("border", " white");
-                                    }, 500);
-                                    //金额不足提示框显示2s后消失
-                                    $("#lack_money").show();
-                                    setTimeout(() => {
-                                        $("#lack_money").hide();
-                                    }, 2000);
-                                }
-                            }
-                        }
-                        break;
-                    case 6:
-                        break;                
+                break;
+            case 6:
+                break;                
         }   
     }
 
@@ -764,7 +769,7 @@ class God {
     Tower_down(type,x,y) {
         for (var tower in this.towers) {
             if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                this.player.money += this.towers[tower].type.sale;
+                this.player.money += TowerType[type-1][5];
                 this.towers.splice(tower, 1);
                 this.tower_message[y][x] = 1;
             }
