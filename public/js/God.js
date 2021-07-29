@@ -591,7 +591,7 @@ class God {
             // 跳转到结算页面
             this.to_total_lose();
             //websocket发送失败信息
-            this.send({type:4,roomCount:roomCount,name:linkName})
+            this.websocketSend({type:4,roomCount:roomCount,name:linkName})
             // // 关闭websocket连接
             // this.close()
 
@@ -600,7 +600,7 @@ class God {
         if (this.enemyNumber < 100 && this.leftTime <= 0) {
             this.stopGame();
             // 发送自己的小兵剩余信息给对方
-            this.send({type:5,roomCount:roomCount,name:linkName,enemy:enemyExisted})
+            this.websocketSend({type:5,roomCount:roomCount,name:linkName,enemyNumber:this.enemyNumber})
             // alert("win");
              // 跳转到结算页面
             this.to_total_win();
