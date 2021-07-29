@@ -17,12 +17,6 @@
      [5, 4, 1000, "img/tower/tower2-2.png", 200, 260],
      [6, 5, 1000, "img/tower/tower2-3.png", 240, 300],
  ]
-    //  one:{type :1,range: 3,attack_interval:1000, tower_img: "img/tower/tower1-1.png", bullet_type: BulletType.one, cost: 100, sale: 80 },
-    //  two:{type :2,range: 4,attack_interval:1000, tower_img: "img/tower/tower1-2.png", bullet_type: BulletType.two, cost: 130, sale: 180 },
-    //  three:{type :3,range:5,attack_interval:1000, tower_img: "img/tower/tower1-3.png", bullet_type: BulletType.three, cost: 180, sale: 270 },
-    //  four:{type :4,range:3,attack_interval:1000, tower_img: "img/tower/tower2-1.png", bullet_type: BulletType.four, cost: 180, sale: 100 },
-    //  five:{type :5,range:4,attack_interval:1000, tower_img: "img/tower/tower2-2.png", bullet_type: BulletType.five, cost: 200, sale: 260 },
-    //  six:{type :6,range:5,attack_interval:1000, tower_img: "img/tower/tower2-3.png", bullet_type: BulletType.six, cost: 240, sale: 300 },
      
  
  

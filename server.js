@@ -1,3 +1,8 @@
+//部署时须引入四个必备依赖
+//npm install express
+//npm install mysql
+//npm install express-session
+//npm install ejs
 //引入必备依赖
 var express = require('express');
 var app = express();
@@ -79,12 +84,14 @@ app.get('/regist', function (req, res) {
 
 //注册
 app.post('/regist', urlEncodedParser, function (req, res) {
-    var userName = req.body.username;
+    var userName = req.body.userName;
     var password = req.body.password;
     var params = [userName, password];
     var sql = 'insert into users(name,password,score) values(?,?,0)';
     connection.query(sql, params, function (error, result) {
         if (error) {
+            console.log(sql);
+            console.log(params);
             console.log('ERROR--' + error.message);
             return;
         }
@@ -92,6 +99,7 @@ app.post('/regist', urlEncodedParser, function (req, res) {
         console.log(result);
         console.log('----------------------------------\n\n');
     })
+    res.redirect('/index');
 })
 
 //登录，post请求，从数据库中选择相应字段匹配
