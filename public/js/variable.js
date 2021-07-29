@@ -1,7 +1,7 @@
 // 游戏设置
 var LEVEL = 0; // 游戏难度
 const MAP_HEIGHT = 660; // 地图高度
-const MAP_WIDTH = 1200; // 游戏宽度
+const MAP_WIDTH = 1020; // 游戏宽度
 const CELL_WIDTH = 60; // 每格的长度
 const MAP_X = MAP_WIDTH / CELL_WIDTH; // 地图X格子数
 const MAP_Y = MAP_HEIGHT / CELL_WIDTH; // 地图Y格子数
@@ -39,7 +39,7 @@ const BULLET_UP_SPEED = 0.2; //升一级 子弹速度加快
 const MAP_ARR = new Array();
 
 //人物设置
-const PlAYER_BASE_MONEY = 300; //玩家的初始金币
+const PlAYER_BASE_MONEY = 10000; //玩家的初始金币
 const END_HP = 100; //基地血量
 //控制小兵出生间隔速度
 var TIMEOUT = 10;
