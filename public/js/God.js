@@ -217,14 +217,17 @@ class God {
                         //调用获胜方法赢了
                         alert('you win')
                         //调用断开连接方法
+                        winSign = 1
                         ws.close()
                     }else if(recv.type == 5){
                         //时间到，对比小兵enemy数量，判断输赢
                         ////调用断开连接方法
                         if(recv.enemy<enemyExisted){
                             alert("you losed")
+                            winSign =0
                         }else{
                             alert('you win')
+                            winSign = 1
                         }
                         ws.close()
                     }
@@ -241,7 +244,7 @@ class God {
     websocketClose(){
         ws.close()
         console.log('success close websocket link')
-        this.websocketLink()
+        // this.websocketLink()
     }
 
     
@@ -349,10 +352,10 @@ class God {
                             // this.createEnemy(0);
                         }
                     }
-                    for(var q=0;q<kill_enemy_num_of_this_click;q++){
-                        this.createEnemy(0)
-                        this.createEnemy(0)
-                    }
+                    // for(var q=0;q<kill_enemy_num_of_this_click;q++){
+                    //     this.createEnemy(0)
+                    //     this.createEnemy(0)
+                    // }
                     this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click})
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
@@ -378,7 +381,7 @@ class God {
             if (this.enemies.length > 0) {
                 if (increase_enemy_level_money <= this.player.money) {
                     // this.enemy_level++;
-                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:3})
+                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0})
                     console.log("当前小怪等级：" + this.enemy_level);
                     this.player.money = this.player.money - increase_enemy_level_money;
                     console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
@@ -444,6 +447,15 @@ class God {
             }
             createEnemySign = 0
         },40)
+
+        this.winSignAAAA = setInterval(()=>{
+            if(winSign == 0){
+                this.to_total_lose()
+            }
+            if(winSign == 1){
+                this.to_total_win()
+            }
+        })
 
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
@@ -571,8 +583,8 @@ class God {
             alert("lose");
             // 跳转到结算页面
             this.to_total_lose();
-            // //websocket发送失败信息
-            // this.send({type:4,roomCount:this.roomCount,name:this.name})
+            //websocket发送失败信息
+            this.send({type:4,roomCount:roomCount,name:linkName})
             // // 关闭websocket连接
             // this.close()
 
@@ -580,9 +592,9 @@ class God {
         //监听时间小于100秒，并且怪的数量小于100只
         if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
-            // // 发送自己的小兵剩余信息给对方
-            // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
-            alert("win");
+            // 发送自己的小兵剩余信息给对方
+            this.send({type:5,roomCount:roomCount,name:linkName,enemy:enemyExisted})
+            // alert("win");
              // 跳转到结算页面
             this.to_total_win();
         }
