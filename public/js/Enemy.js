@@ -18,6 +18,9 @@ class Enemy {
         this.originHp = hp; // 原始hp
         // this.origin_spd = this.speed; // 初始速度 用于速度改变使用
 
+
+        
+
         
     //     状态参数 
     
@@ -112,6 +115,29 @@ class Enemy {
                 order = order % 30; // 控制order的数值大小 四张图片顺次切换 每10次切换一次
                 this.move(order); // 移动
                 order++;
+
+
+                // let cv = document.querySelector('#canvasMap_enemy');
+                // //获取2d平面
+                // let ctx = cv.getContext('2d');
+                // //清空敌人图片
+                // ctx.clearRect(this.x, this.y, this.size, this.size);
+                // let img = new Image;
+                // // 遍历数据，绘制敌人
+                // // for (var ene in this.enemies) {
+                //     // if(this.enemies[ene]==null){
+                //     //     continue
+                //     // }
+                //     // console.log(this.enemies[ene])
+                //     img.src = this.enemy_img;
+                //     ctx.drawImage(img, this.x, this.y, this.size, this.size);
+                //     Ca.drawBlood(ctx, this);
+                //     // console.log(this.enemies[ene].x)
+                //     // console.log(this.enemies[ene].y)
+                // // }
+
+
+
             }, 10000 / spd); // 控制enemy移动速度
         }
     }
