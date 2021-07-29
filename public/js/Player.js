@@ -1,7 +1,13 @@
 class Player {
+<<<<<<< HEAD
     constructor(nickName,score) {
         this.nickname = nickName; //数据库昵称字段
         this.score = score; //数据库积分字段
+=======
+    constructor() {
+        this.money = PlAYER_BASE_MONEY ;
+        this.end_hp = END_HP; //基地血量
+>>>>>>> develop
 
     }
         //set方法
