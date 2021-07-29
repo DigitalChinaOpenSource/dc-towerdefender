@@ -6,6 +6,7 @@ class God {
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
+        $(".total").hide();
         // let e1 = new Enemy();
         // e1.level = 1;
         // e1.hp = 5;
@@ -33,6 +34,13 @@ class God {
             $("#block_right").show();
             $("#skill-btns-container").show();
 
+             //隐藏游戏页面，显示匹配页面，修改start******************
+            this.showTime();
+            $(".block").hide();
+            $(".match").show();
+            $(".total").hide();
+            // 修改end******************
+
             // //绑定连接事件
             // this.link();
             this.startGame();
@@ -56,29 +64,65 @@ class God {
     }
     
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
-    // showTime() {
-    //     var count=6;        
-    //     var time=setInterval(function () {
-    //         count -= 1;
-    //         if(count==3){
-    //             $("#match_before").hide();
-    //             $("#match_after").show();
-    //         }
-    //         if (count == 0) {
-    //             clearInterval(time);
-    //             $("#startgame_btn").hide();
-    //             $("#logout_btn").hide();
-    //             $("#block_left").show();
-    //             $("#block_right").show();
-    //             $(".match").hide();
-    //         }else{    
-    //             // console.log("*****"+count);
-    //             document.getElementById('match_time').innerHTML = count;
-    //         } 
+    showTime() {
+        var count=6;        
+        var time=setInterval(function () {
+            count -= 1;
+            if(count==3){
+                $("#match_before").hide();
+                $("#match_after").show();
+            }
+            if (count == 0) {
+                clearInterval(time);    
+                $(".match").hide();
+                $(".block").show();
+            }else{    
+                // console.log("*****"+count);
+                document.getElementById('match_time').innerHTML = count;
+            } 
             
-    //     }, 1000);
-    // }
+        }, 1000);
+    }
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面end
+
+    // 跳转到成功时的结算页面
+    to_total_win(){
+        $(".block").hide();
+        $(".match").hide();
+        $(".total").show();
+        document.getElementById('total_name').innerHTML = "bk";
+        $("#total_continue").on("click", () => {
+            this.to_match();
+        });
+    }
+
+    // 跳转到失败时的结算页面
+    to_total_lose(){
+        $("#total_win").hide();
+        $("#total_lose").show();
+        $(".block").hide();
+        $(".match").hide();
+        $(".total").show();
+        $("#total_continue").on("click", () => {
+            this.to_match();
+        });
+        
+    }
+
+    // 跳转到匹配页面
+    to_match(){
+        $("#match_before").show();
+        $("#match_after").hide();
+        document.getElementById('match_time').innerHTML = "倒计时";
+        this.showTime();
+        $(".block").hide();
+        $(".match").show();
+        $(".total").hide();
+        // this._init();
+        // this.startGame();
+        
+    }
+
 
     // // websocket建立连接
     // link(){
@@ -207,6 +251,7 @@ class God {
             let option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
             let option_y = parseInt(e.offsetY / CELL_WIDTH);
             console.log("x:" + option_x + " y:" + option_y);
+            this.drawOptions(option_x,option_y)
         });
 
 
@@ -240,22 +285,34 @@ class God {
             console.log("技能需要金币数量:" + reduce_enemy_blood_money);
             if (this.enemies.length > 0) {
                 if (reduce_enemy_blood_money <= this.player.money) {
-                    this.enemies.forEach((e) => {
-                        e.check_bloodloss();
+                    let kill_enemy_num_of_this_click=0;
+                    for(let ene2 in this.enemies) {
+                        if(this.enemies[ene2]==null){
+                            continue
+                        }
+                        this.enemies[ene2].check_bloodloss();
                         // 生命为0的时候 敌人死去
-                        if (e.hp <= 1) {
-                            this.player.money += e.money; 
-                            e.dead();
+                        if (this.enemies[ene2].hp <= 1) {
+                            this.player.money += this.enemies[ene2].money; 
+                            this.enemies[ene2].dead();
                             // console.log("kill");
                             this.killed_enemies++;
                             this.nowenemys--;
-                            e = null;
-                            this.enemies.splice(e, 1);
+                            this.enemies[ene2] = null;
+                            // this.enemies.splice(e, 1);
+                            this.enemies.splice(ene2, 1,null);
                             this.enemyExisted--;
-                            this.createEnemy(0);
-                            this.createEnemy(0);
+                            kill_enemy_num_of_this_click++
+                            this.enemyNumber--
+                            console.log('现在杀死一个还剩'+this.enemyNumber)
+                            // this.createEnemy(0);
+                            // this.createEnemy(0);
                         }
-                    })
+                    }
+                    for(var q=0;q<kill_enemy_num_of_this_click;q++){
+                        this.createEnemy(0)
+                        this.createEnemy(0)
+                    }
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
@@ -273,24 +330,25 @@ class God {
 
         //增强对方的小怪等级，点击按钮时调用
         $("#increase_enemy_level").on("click", () => {
-            // console.log(this.enemies);
-            console.log("现有金币数量:" + this.player.money);
-            console.log("技能需要金币数量:" + increase_enemy_level_money);
-            console.log("小怪的数量为" + this.enemies.length);
-            if (this.enemies.length > 0) {
-                if (increase_enemy_level_money <= this.player.money) {
-                    this.enemy_level++;
-                    console.log("当前小怪等级：" + this.enemy_level);
-                    this.player.money = this.player.money - increase_enemy_level_money;
-                    console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
-                } else {
-                    this.money_not_enough();
-                    // $("#moneylack").show(300).delay(1000).hide(200);
-                    // alert("给对方小怪升级金币数量不够");
-                }
-            } else {
-                alert("地图上没有小怪，无法升级");
-            }
+            this.createEnemy(0);
+            // // console.log(this.enemies);
+            // console.log("现有金币数量:" + this.player.money);
+            // console.log("技能需要金币数量:" + increase_enemy_level_money);
+            // console.log("小怪的数量为" + this.enemies.length);
+            // if (this.enemies.length > 0) {
+            //     if (increase_enemy_level_money <= this.player.money) {
+            //         this.enemy_level++;
+            //         console.log("当前小怪等级：" + this.enemy_level);
+            //         this.player.money = this.player.money - increase_enemy_level_money;
+            //         console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+            //     } else {
+            //         this.money_not_enough();
+            //         // $("#moneylack").show(300).delay(1000).hide(200);
+            //         // alert("给对方小怪升级金币数量不够");
+            //     }
+            // } else {
+            //     alert("地图上没有小怪，无法升级");
+            // }
         });
 
         //给对方增加一个boss，点击按钮时调用
@@ -327,7 +385,7 @@ class God {
 
         this.draw_enemy = setInterval(() => {
             this.drawEnemies();
-        }, 10);
+        }, 40);
 
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
@@ -368,7 +426,7 @@ class God {
 
     // 生成敌人
     createEnemy(boss) {
-        var enemy_type = this.randomnum(4)
+        var enemy_type = this.randomnum(3)
         // var enemy_level = this.enemy_level //需要传入怪物当前等级
         // var boss = this.boss //需要传入是否为boss
         var enemy = new Enemy(enemy_type,
@@ -452,6 +510,8 @@ class God {
         if (this.enemyExisted >= 100) {
             this.stopGame();
             alert("lose");
+            // 跳转到结算页面
+            this.to_total_lose();
             // //websocket发送失败信息
             // this.send({type:4,roomCount:this.roomCount,name:this.name})
             // // 关闭websocket连接
@@ -464,6 +524,8 @@ class God {
             // // 发送自己的小兵剩余信息给对方
             // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
             alert("win");
+             // 跳转到结算页面
+            this.to_total_win();
         }
     }
 
@@ -523,6 +585,9 @@ class God {
     //   敌人停止移动
     stopEnemies() {
         for (var ene in this.enemies) {
+            if(this.enemies[ene]==null){
+                continue
+            }
             this.enemies[ene].stop();
         }
     }
@@ -592,7 +657,7 @@ class God {
                             this.towers[tower].tower_img = "img/tower/tower1-2.png";
                             this.towers[tower].type = TowerType.two;
                             this.player.money -= TowerType.two.cost;
-                            tower_message[x,y] = type+1;
+                            this.tower_message[x,y] = type+1;
                         }
                         else {
                             $("#moneyshow").css("border", "2px solid red");
@@ -615,7 +680,7 @@ class God {
                                 this.towers[tower].tower_img = "img/tower/tower1-3.png";
                                 this.towers[tower].type = TowerType.three;
                                 this.player.money -= TowerType.three.cost;
-                                tower_message[x,y] = type+1;    
+                                this.tower_message[x,y] = type+1;    
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -640,7 +705,7 @@ class God {
                                 this.towers[tower].tower_img = "img/tower/tower2-2.png";
                                 this.towers[tower].type = TowerType.five;
                                 this.player.money -= TowerType.five.cost;
-                                tower_message[x,y] = type+1;   
+                                this.tower_message[x,y] = type+1;   
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -663,7 +728,7 @@ class God {
                                     this.towers[tower].tower_img = "img/tower/tower2-3.png";
                                     this.towers[tower].type = TowerType.six;
                                     this.player.money -= TowerType.six.cost;
-                                    tower_message[x,y] = type+1;
+                                    this.tower_message[x,y] = type+1;
                                 }
                                 else {
                                     $("#moneyshow").css("border", "2px solid red");
@@ -691,56 +756,128 @@ class God {
             if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
                 this.player.money += this.towers[tower].type.sale;
                 this.towers.splice(tower, 1);
-                tower_message[x,y] = 1;
+                this.tower_message[x,y] = 1;
             }
         }
     }    
+
+    //绘制塔
+    drawTowers(option_x,option_y,type) {
+        let cv = document.querySelector('#canvasMap_tower');
+        let ctx = cv.getContext('2d');
+        let img_tower = new Image()
+        console.log('绘制塔')
+    
+        if (type==1){
+            img_tower.src = "img/tower/tower1-1.png";
+            ctx.drawImage(img_tower, (option_x) * CELL_WIDTH, (option_y) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+        }
+        else if(type==2){
+            img_tower.src = "img/tower/tower2-1.png";
+            ctx.drawImage(img_tower, (option_x) * CELL_WIDTH, (option_y) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+        }
+    
+        
+    }
+
+    //监听
+    drawOptions(option_x,option_y){
+     
+        let cv = document.querySelector('#canvasMap_option');
+        let ctx = cv.getContext('2d');
+        let img_xx = new Image();
+        let img_up = new Image();
+        let num = this.tower_message[option_x][option_y];
+        if (num==1){   //没有塔，开始建塔
+            img_xx.src = "img/tower/tower1-1.png";
+            img_up.src = "img/tower/tower2-1.png";
+            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+
+            $("#canvasMap_option").on("click", (e) => {
+                var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                if (on_x==option_x+1 && on_y==option_y-1){  //右边
+                    this.createTower(option_x,option_y,2);
+                }
+                else if(on_x==option_x-1 && on_y==option_y-1){    //左边
+                    this.createTower(option_x,option_y,1);
+                    }
+                else{
+                    this.drawTowers();
+                }
+            })}
+
+
+        else if (num!==0 && num!==1){
+            img_xx.src = "img/button/sholve.png";
+            img_up.src = "img/button/upgrade.png";
+            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+         
+            $("#canvasMap_option").on("click", (e) => {
+                var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+                var on_y = parseInt(e.offsetY / CELL_WIDTH);
+                if (on_x==option_x+1 && on_y==option_y-1){  //右边 拆塔
+                    this.Tower_down(num-1,option_x,option_y);
+                }
+                else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
+                    this.Tower_up(num-1,option_x,option_y);
+                    }
+                else{
+                    this.drawTowers();
+                }
+            })}
+        else{
+            this.drawTowers();
+        }
+    }
 
 
 
 
     // canvas部分*******************************************************
-    //生成布板
-    drawMap() {
-        var cv_backgroud = document.querySelector('#canvasMap_backgroud');
-        cv_backgroud.setAttribute("height", MAP_HEIGHT);
-        cv_backgroud.setAttribute("width", MAP_WIDTH);
-        cv_backgroud.setAttribute("z-index", 1);
+    // //生成布板
+    // drawMap() {
+    //     var cv_backgroud = document.querySelector('#canvasMap_backgroud');
+    //     cv_backgroud.setAttribute("height", MAP_HEIGHT);
+    //     cv_backgroud.setAttribute("width", MAP_WIDTH);
+    //     cv_backgroud.setAttribute("z-index", 1);
 
-        var cv_backgroud2 = document.querySelector('#canvasMap_backgroud2');
-        cv_backgroud2.setAttribute("height", MAP_HEIGHT);
-        cv_backgroud2.setAttribute("width", MAP_WIDTH);
-        cv_backgroud2.setAttribute("z-index", 2);
+    //     var cv_backgroud2 = document.querySelector('#canvasMap_backgroud2');
+    //     cv_backgroud2.setAttribute("height", MAP_HEIGHT);
+    //     cv_backgroud2.setAttribute("width", MAP_WIDTH);
+    //     cv_backgroud2.setAttribute("z-index", 2);
 
-        var cv_enemy = document.querySelector('#canvasMap_enemy');
-        cv_enemy.setAttribute("height", MAP_HEIGHT);
-        cv_enemy.setAttribute("width", MAP_WIDTH);
-        cv_enemy.setAttribute("z-index", 3);
+    //     var cv_enemy = document.querySelector('#canvasMap_enemy');
+    //     cv_enemy.setAttribute("height", MAP_HEIGHT);
+    //     cv_enemy.setAttribute("width", MAP_WIDTH);
+    //     cv_enemy.setAttribute("z-index", 3);
 
-        this.drawTowerMap();
+    //     this.drawTowerMap();
 
-        var cv_tower = document.querySelector('#canvasMap_bullet');
-        cv_tower.setAttribute("height", MAP_HEIGHT);
-        cv_tower.setAttribute("width", MAP_WIDTH);
-        cv_tower.setAttribute("z-index", 5);
+    //     var cv_tower = document.querySelector('#canvasMap_bullet');
+    //     cv_tower.setAttribute("height", MAP_HEIGHT);
+    //     cv_tower.setAttribute("width", MAP_WIDTH);
+    //     cv_tower.setAttribute("z-index", 5);
 
-        this.drawss();
-    }
+    //     this.drawss();
+    // }
 
-    //绘制选项幕布
-    drawss() {
-        var cv_option = document.querySelector('#canvasMap_option');
-        cv_option.setAttribute("height", MAP_HEIGHT);
-        cv_option.setAttribute("width", MAP_WIDTH);
-        cv_option.setAttribute("z-index", 6);
-    }
+    // //绘制选项幕布
+    // drawss() {
+    //     var cv_option = document.querySelector('#canvasMap_option');
+    //     cv_option.setAttribute("height", MAP_HEIGHT);
+    //     cv_option.setAttribute("width", MAP_WIDTH);
+    //     cv_option.setAttribute("z-index", 6);
+    // }
 
-    drawTowerMap() {
-        var cv_bullet = document.querySelector('#canvasMap_tower');
-        cv_bullet.setAttribute("height", MAP_HEIGHT);
-        cv_bullet.setAttribute("width", MAP_WIDTH);
-        cv_bullet.setAttribute("z-index", 4);
-    }
+    // drawTowerMap() {
+    //     var cv_bullet = document.querySelector('#canvasMap_tower');
+    //     cv_bullet.setAttribute("height", MAP_HEIGHT);
+    //     cv_bullet.setAttribute("width", MAP_WIDTH);
+    //     cv_bullet.setAttribute("z-index", 4);
+    // }
     // 绘制背景
     drawBackgound(){
         var cv = document.querySelector('#canvasMap_backgroud2');
@@ -769,29 +906,29 @@ class God {
   
 
     //绘制选项
-    drawOptions() {
-        let num = tower_message[option_x][option_y];
-        if (num==1){
-            let cv = document.querySelector('#canvasMap_option');
-            let ctx = cv.getContext('2d');
-            let b = 0;
-            let origin = parseInt(this.towerAndBullets.length / 5); //绘画的初始位置 //解析一个字符串，返回整数
-            for (let a = 0; a < this.towerAndBullets.length; a++) {
-                if (a % 3 >= 0 && a % 3 < 1) {
-                    b++;
-                    let img = new Image;
-                    img.src = this.towerAndBullets[a].tower_img;
-                    for (let option in this.options) {
-                        ctx.drawImage(img, this.options[option].x - (origin - b) * CELL_WIDTH, this.options[option].y - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+    // drawOptions() {
+    //     let num = this.tower_message[option_x][option_y];
+    //     if (num==1){
+    //         let cv = document.querySelector('#canvasMap_option');
+    //         let ctx = cv.getContext('2d');
+    //         let b = 0;
+    //         let origin = parseInt(this.towerAndBullets.length / 5); //绘画的初始位置 //解析一个字符串，返回整数
+    //         for (let a = 0; a < this.towerAndBullets.length; a++) {
+    //             if (a % 3 >= 0 && a % 3 < 1) {
+    //                 b++;
+    //                 let img = new Image;
+    //                 img.src = this.towerAndBullets[a].tower_img;
+    //                 for (let option in this.options) {
+    //                     ctx.drawImage(img, this.options[option].x - (origin - b) * CELL_WIDTH, this.options[option].y - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
 
-                    }
-                }
-            }
-        }
-    }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     //绘制点塔选项标志
     drawxx(option_x , option_y) {
-        let num = tower_message[option_x][option_y];
+        let num = this.tower_message[option_x][option_y];
         if (num!==0 && num!==1){
             let cv = document.querySelector('#canvasMap_option');
             let ctx = cv.getContext('2d');
@@ -812,28 +949,31 @@ class God {
     }
 
      //绘制敌人
-     drawEnemies() { 
+    drawEnemies() { 
         //获取敌人对象
-            let cv = document.querySelector('#canvasMap_enemy');
-            //获取2d平面
-            let ctx = cv.getContext('2d');
+        let cv = document.querySelector('#canvasMap_enemy');
+        //获取2d平面
+        let ctx = cv.getContext('2d');
 
-            
+        
 
-            // 清空敌人图片
-            ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-            var img = new Image;
-            // 遍历数据，绘制敌人
-            for (var ene in this.enemies) {
-                // console.log(this.enemies[ene])
-                img.src = this.enemies[ene].enemy_img;
-                ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
-                Ca.drawBlood(ctx, this.enemies[ene]);
-                // console.log(this.enemies[ene].x)
-                // console.log(this.enemies[ene].y)
+        // 清空敌人图片
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        var img = new Image;
+        // 遍历数据，绘制敌人
+        for (var ene in this.enemies) {
+            if(this.enemies[ene]==null){
+                continue
             }
-    
+            // console.log(this.enemies[ene])
+            img.src = this.enemies[ene].enemy_img;
+            ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
+            Ca.drawBlood(ctx, this.enemies[ene]);
+            // console.log(this.enemies[ene].x)
+            // console.log(this.enemies[ene].y)
         }
+    
+    }
 
 
 
