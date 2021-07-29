@@ -200,12 +200,15 @@ class God {
                         //生成两个小兵
                         createEnemySign = 1
                         killNum = recv.killNum
+                        this.otherEneNum = recv.enemyNumber
                     }else if(recv.type == 2){
                         //小兵增强
                         if(recv.action == 0){
                             createEnemySign =3
+                            this.otherEneNum = recv.enemyNumber
                         }else if(recv.action == 1){
                             createEnemySign = 2
+                            this.otherEneNum = recv.enemyNumber
                         }
                     }else if(recv.type == 3){
                         //显示聊天msg
@@ -274,6 +277,7 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
+        this.otherEneNum = 1;
         this.tower_message=[
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0],
@@ -356,7 +360,7 @@ class God {
                     //     this.createEnemy(0)
                     //     this.createEnemy(0)
                     // }
-                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click})
+                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,enemyNumber:this.enemyNumber})
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
@@ -381,7 +385,7 @@ class God {
             if (this.enemies.length > 0) {
                 if (increase_enemy_level_money <= this.player.money) {
                     // this.enemy_level++;
-                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0})
+                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,enemyNumber:this.enemyNumber})
                     console.log("当前小怪等级：" + this.enemy_level);
                     this.player.money = this.player.money - increase_enemy_level_money;
                     console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
@@ -403,7 +407,7 @@ class God {
                 // this.createEnemy(1);
                 this.player.money = this.player.money - add_boss_money;
                 // websocket发送增强信息
-                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1})
+                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,enemyNumber:this.enemyNumber})
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 this.money_not_enough();
@@ -451,10 +455,13 @@ class God {
         this.winSignAAAA = setInterval(()=>{
             if(winSign == 0){
                 this.to_total_lose()
+                winSign = -1
             }
             if(winSign == 1){
                 this.to_total_win()
+                winSign = -1
             }
+
         })
 
 
