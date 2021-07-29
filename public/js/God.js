@@ -715,6 +715,36 @@ class God {
         }
     }    
 
+    // canvas部分*******************************************************
+
+
+     //绘制敌人
+    drawEnemies() { 
+        //获取敌人对象
+        let cv = document.querySelector('#canvasMap_enemy');
+        //获取2d平面
+        let ctx = cv.getContext('2d');
+
+        
+
+        // 清空敌人图片
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        let img = new Image;
+        // 遍历数据，绘制敌人
+        for (let ene in this.enemies) {
+            if(this.enemies[ene]==null){
+                continue
+            }
+            // console.log(this.enemies[ene])
+            img.src = this.enemies[ene].enemy_img;
+            ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
+            Ca.drawBlood(ctx, this.enemies[ene]);
+            // console.log(this.enemies[ene].x)
+            // console.log(this.enemies[ene].y)
+        }
+    
+    }
+
     //绘制塔
     drawTower(option_x,option_y) {
         let cv = document.querySelector('#canvasMap_tower');
@@ -726,7 +756,7 @@ class God {
         ctx.drawImage(img_tower, (option_x) * CELL_WIDTH, (option_y) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
     }
 
-    //监听
+    //绘制选项
     drawOptions(){
         let cv = document.querySelector('#canvasMap_option');
         let ctx = cv.getContext('2d');
@@ -774,148 +804,6 @@ class God {
                 this.last_option_y = this.option_y;
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
             }
-    }
-
-
-
-
-    // canvas部分*******************************************************
-    // //生成布板
-    // drawMap() {
-    //     let cv_backgroud = document.querySelector('#canvasMap_backgroud');
-    //     cv_backgroud.setAttribute("height", MAP_HEIGHT);
-    //     cv_backgroud.setAttribute("width", MAP_WIDTH);
-    //     cv_backgroud.setAttribute("z-index", 1);
-
-    //     let cv_backgroud2 = document.querySelector('#canvasMap_backgroud2');
-    //     cv_backgroud2.setAttribute("height", MAP_HEIGHT);
-    //     cv_backgroud2.setAttribute("width", MAP_WIDTH);
-    //     cv_backgroud2.setAttribute("z-index", 2);
-
-    //     let cv_enemy = document.querySelector('#canvasMap_enemy');
-    //     cv_enemy.setAttribute("height", MAP_HEIGHT);
-    //     cv_enemy.setAttribute("width", MAP_WIDTH);
-    //     cv_enemy.setAttribute("z-index", 3);
-
-    //     this.drawTowerMap();
-
-    //     let cv_tower = document.querySelector('#canvasMap_bullet');
-    //     cv_tower.setAttribute("height", MAP_HEIGHT);
-    //     cv_tower.setAttribute("width", MAP_WIDTH);
-    //     cv_tower.setAttribute("z-index", 5);
-
-    //     this.drawss();
-    // }
-
-    // //绘制选项幕布
-    // drawss() {
-    //     let cv_option = document.querySelector('#canvasMap_option');
-    //     cv_option.setAttribute("height", MAP_HEIGHT);
-    //     cv_option.setAttribute("width", MAP_WIDTH);
-    //     cv_option.setAttribute("z-index", 6);
-    // }
-
-    // drawTowerMap() {
-    //     let cv_bullet = document.querySelector('#canvasMap_tower');
-    //     cv_bullet.setAttribute("height", MAP_HEIGHT);
-    //     cv_bullet.setAttribute("width", MAP_WIDTH);
-    //     cv_bullet.setAttribute("z-index", 4);
-    // }
-    // 绘制背景
-    drawBackgound(){
-        let cv = document.querySelector('#canvasMap_backgroud2');
-        let ctx = cv.getContext('2d');
-        new search().DrawBackground(LEVEL);
-
-        //根据关卡数来画小兵行进路线
-        new search().DrawEnemyRoad(LEVEL);
-        //根据关卡数来线画塔位
-        new search().DrawTowerPlace(LEVEL);
-        //水平方向
-        ctx.beginPath();
-        ctx.fillstyle = "red";
-        for (let i = 0; i <= MAP_HEIGHT / CELL_WIDTH; i++) {
-            ctx.moveTo(0, i * CELL_WIDTH);
-            ctx.lineTo(MAP_WIDTH, i * CELL_WIDTH);
-        }
-        // 竖直方向
-        ctx.beginPath();
-        ctx.fillstyle = "red";
-        for (let j = 0; j <= MAP_WIDTH / CELL_WIDTH; j++) {
-            ctx.moveTo(CELL_WIDTH * j, 0);
-            ctx.lineTo(CELL_WIDTH * j, MAP_HEIGHT);
-        }
-    }
-  
-
-    //绘制选项
-    // drawOptions() {
-    //     let num = this.tower_message[option_x][option_y];
-    //     if (num==1){
-    //         let cv = document.querySelector('#canvasMap_option');
-    //         let ctx = cv.getContext('2d');
-    //         let b = 0;
-    //         let origin = parseInt(this.towerAndBullets.length / 5); //绘画的初始位置 //解析一个字符串，返回整数
-    //         for (let a = 0; a < this.towerAndBullets.length; a++) {
-    //             if (a % 3 >= 0 && a % 3 < 1) {
-    //                 b++;
-    //                 let img = new Image;
-    //                 img.src = this.towerAndBullets[a].tower_img;
-    //                 for (let option in this.options) {
-    //                     ctx.drawImage(img, this.options[option].x - (origin - b) * CELL_WIDTH, this.options[option].y - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    //绘制点塔选项标志
-    drawxx(option_x , option_y) {
-        let num = this.tower_message[option_x][option_y];
-        if (num!==0 && num!==1){
-            let cv = document.querySelector('#canvasMap_option');
-            let ctx = cv.getContext('2d');
-            let img_xx = new Image();
-            let img_up = new Image();
-            img_xx.src = "img/button/sholve.png";
-            img_up.src = "img/button/upgrade.png";
-            for (let cx in this.towerhome) {
-                ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                up_position[0]=(option_x + 1) * CELL_WIDTH;      //升级选项
-                up_position[1]=(option_y - 1) * CELL_WIDTH;
-                xx_position[0]= (option_x - 1) * CELL_WIDTH;      //删除选项
-                xx_position[1]=(option_y - 1) * CELL_WIDTH;
-                console.log(up_position[0],up_position[1]);
-            }
-        }
-    }
-
-     //绘制敌人
-    drawEnemies() { 
-        //获取敌人对象
-        let cv = document.querySelector('#canvasMap_enemy');
-        //获取2d平面
-        let ctx = cv.getContext('2d');
-
-        
-
-        // 清空敌人图片
-        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        let img = new Image;
-        // 遍历数据，绘制敌人
-        for (let ene in this.enemies) {
-            if(this.enemies[ene]==null){
-                continue
-            }
-            // console.log(this.enemies[ene])
-            img.src = this.enemies[ene].enemy_img;
-            ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
-            Ca.drawBlood(ctx, this.enemies[ene]);
-            // console.log(this.enemies[ene].x)
-            // console.log(this.enemies[ene].y)
-        }
-    
     }
 
 
