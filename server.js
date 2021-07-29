@@ -61,14 +61,14 @@ app.get('/index', function (req, res) {
         console.log(nickName); 
         console.log(score);
         console.log(count);
-        res.render('index',{
+        return res.render('index',{
             userName : name,
             nickName:nickName,
             score:score,
             count:count
         });
     }else{
-        res.redirect('login');
+        return res.redirect('login');
     }
 })
 
@@ -87,20 +87,32 @@ app.post('/regist', urlEncodedParser, function (req, res) {
     var userName = req.body.userName;
     var password = req.body.password;
     var params = [userName, password];
-    var sql = 'insert into users(name,password,score) values(?,?,0)';
-    connection.query(sql, params, function (error, result) {
+    var searchSql="select * from users where name=?";
+    console.log(userName);
+    connection.query(searchSql, userName, function (error, sameName) {
         if (error) {
-            console.log(sql);
-            console.log(params);
             console.log('ERROR--' + error.message);
-            return;
+            
         }
-        console.log('----------SELECT RESULT----------');
-        console.log(result);
-        console.log('----------------------------------\n\n');
-        console.log('test------')
+        if(sameName.length!=0){
+            return res.json({msg:"用户名已存在！"});
+        }else{
+            var sql = 'insert into users(name,password,score) values(?,?,0)';
+            connection.query(sql, params, function (error, result) {
+            if (error) {
+                console.log(sql);
+                console.log(params);
+                console.log('ERROR--' + error.message);
+            
+            }
+            console.log('----------SELECT RESULT----------');
+            console.log(result);
+            console.log('----------------------------------\n\n');
+            })
+            return res.redirect('/index');
+        }
     })
-    res.redirect('/index');
+    
 })
 
 //登录，post请求，从数据库中选择相应字段匹配 
@@ -118,7 +130,7 @@ app.post('/login', urlEncodedParser, function (req, res) {
         if (result.length == 0) {
             console.log("用户名或者密码错误！");
             // res.sendFile(staticPath + '/login_fail.html');
-            res.json({msg:"用户名或密码错误，请重新登录！"});
+            return res.json({msg:"用户名或密码错误，请重新登录！"});
         }
         
         //登录成功，取出返回值
