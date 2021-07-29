@@ -885,9 +885,10 @@ class God {
                     this.Tower_up(num-1,option_x,option_y);
                     }
                 
-            })}
+            }
         
-        }
+        
+    }
     
 
      //绘制敌人
@@ -930,6 +931,7 @@ class God {
                     // }
                     img.src = this.towerAndBullets[a].tower_img;
                     ctx.drawImage(img, this.towers[tower].x, this.towers[tower].y, CELL_WIDTH, CELL_WIDTH);
+                }
                 else if (num!==0 && num!==1){
                     img_xx.src = "img/button/sholve.png";
                     img_up.src = "img/button/upgrade.png";
@@ -939,7 +941,8 @@ class God {
                 this.last_option_x = this.option_x;
                 this.last_option_y = this.option_y;
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
-            }
+           }
+        }
     }
 
         //绘制子弹
@@ -1005,5 +1008,3 @@ class God {
 
     
 }
-
-    }
