@@ -158,6 +158,7 @@ app.post('/login', urlEncodedParser, function (req, res) {
                 }
                 console.log('----------SELECT RESULT----------');
                 console.log(infoResult);
+                console.log(infoResult+"test");
                 console.log('----------------------------------\n\n');
             })
             res.redirect('/index');
