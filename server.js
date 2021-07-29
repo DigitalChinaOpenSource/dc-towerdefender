@@ -99,7 +99,8 @@ app.post('/regist', urlEncodedParser, function (req, res) {
         }else{
             var sql = 'insert into users(name,password,score) values(?,?,0)';
             connection.query(sql, params, function (error, result) {
-            if (error) {
+           
+                if (error) {
                 console.log(sql);
                 console.log(params);
                 console.log('ERROR--' + error.message);
