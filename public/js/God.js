@@ -423,6 +423,7 @@ class God {
                 TowerType[type-1][4],
                 TowerType[type-1][5]
             );
+            console.log(tower);
             this.towers.push(tower);
             this.tower_message[y-1][x-1] = (type+1);
             this.player.money -= tower.cost;
@@ -721,7 +722,7 @@ class God {
         let img_tower = new Image()
         console.log('绘制塔:');
         console.log(this.tower_message);
-        img_tower.src = TowerType[this.tower_messagep[option_y][option_x]-1-1][3];
+        img_tower.src = TowerType[this.tower_message[option_y-1][option_x-1]-1-1][3];
         ctx.drawImage(img_tower, (option_x) * CELL_WIDTH, (option_y) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
     }
 
