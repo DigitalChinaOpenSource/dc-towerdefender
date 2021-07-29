@@ -2,7 +2,6 @@ class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
-
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
@@ -42,8 +41,14 @@ class God {
             // 修改end******************
 
             // //绑定连接事件
-            // this.link();
-            this.startGame();
+            this.websocketLink();
+            //监听开始游戏标识
+            this.startGameAAAA = setInterval(()=>{
+                if(startGameSign == 1){
+                    this.startGame()
+                }
+                startGameSign = 0
+            },100)
         });
 
         $("#logout_btn").on("click", () => {
@@ -176,35 +181,87 @@ class God {
     //             }
     //         }
 
-    //     }
-    // }
 
-    //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
-    // 通过roomCount判断发给哪个房间组
-    // 通过name确定是否为对方发送的信息
-    // 通过type确定为哪种信息
-    //type:0,msg:
-    //{type:0,score:}
-    // type:1,msg：
-    // {type:1,roomCount: ,name:''}
-    // type:2,msg：
-    // {type:2,roomCount: ,name:''}
-    // type:3,msg：
-    // {type:3,roomCount: ,name:','msg:''}
-    // type:4,msg：
-    // {type:4,roomCount: ,name:''}
-    //type:5,msg:
-    //{type:5,roomConut: ,name:'',enemy: }
-    // send(msg){
-    //     // 发送信息转为string发送
-    //     this.ws.send(JSON.stringify(msg))
-    // }
-    // //websocket 关闭连接，再玩需要重新建立连接
-    // close(){
-    //     this.ws.onclose()
-    //     this.link()
-    // }
+    websocketLink(){
+        console.log(ip)
+        ws = new WebSocket(ip)
+        ws.onopen = function(){
+            console.log('success liked the server')
+            let i = parseInt(Math.random()*5)
+            console.log('score======>'+i)
+            score = i
+            linkName = 123
+            ws.send(JSON.stringify({score:i,name:123}))
+        }
+    
+        ws.onmessage = function(evt){
+            // 消息转为json类型
+            var recv = JSON.parse(evt.data)
+            //设定房间号
+            if(recv.type==0){
+                roomCount = recv.roomCount
+                console.log('roomCount========>'+roomCount)
+                startGameSign = 1
+            }
+            // 判断信息是否是发给自己的房间的
+            if(recv.roomCount == roomCount){
+                // 判断是否为自己发的信息
+                if(recv.name != linkName){
+                    if(recv.type == 1){
+                        //生成两个小兵
+                        createEnemySign = 1
+                        killNum = recv.killNum
+                        this.otherEneNum = recv.enemyNumber
+                    }else if(recv.type == 2){
+                        //小兵增强
+                        if(recv.action == 0){
+                            createEnemySign =3
+                            this.otherEneNum = recv.enemyNumber
+                        }else if(recv.action == 1){
+                            createEnemySign = 2
+                            this.otherEneNum = recv.enemyNumber
+                        }
+                    }else if(recv.type == 3){
+                        //显示聊天msg
+                        var wordsRecv = document.getElementById('talkwords')
+                        var str = '<div class="atalk"><span>' + wordsRecv.value +'</span></div>';
+                        wordsRecv.innerHTML = wordsRecv.innerHTML + str
+                        console.log(recv.msg)
+                    }else if(recv.type == 4){
+                        //调用获胜方法赢了
+                        alert('you win')
+                        //调用断开连接方法
+                        winSign = 1
+                        ws.close()
+                    }else if(recv.type == 5){
+                        //时间到，对比小兵enemy数量，判断输赢
+                        ////调用断开连接方法
+                        if(recv.enemy<enemyExisted){
+                            alert("you losed")
+                            winSign =0
+                        }else{
+                            alert('you win')
+                            winSign = 1
+                        }
+                        ws.close()
+                    }
+                }
+            }
+        }
+        
+    }
 
+    websocketSend(msg){
+        ws.send(JSON.stringify(msg))
+    }
+
+    websocketClose(){
+        ws.close()
+        console.log('success close websocket link')
+        // this.websocketLink()
+    }
+
+    
 
 
     _init() {
@@ -229,6 +286,7 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
+        this.otherEneNum = 1;
         this.last_option_x = undefined;
         this.last_option_y = undefined;
         this.tower_message=[
@@ -296,7 +354,7 @@ class God {
                             this.player.money += this.enemies[ene2].money; 
                             this.enemies[ene2].dead();
                             // console.log("kill");
-                            this.killed_enemies++;
+                            this.killed_enemies++;                            
                             this.nowenemys--;
                             this.enemies[ene2] = null;
                             // this.enemies.splice(e, 1);
@@ -309,10 +367,11 @@ class God {
                             // this.createEnemy(0);
                         }
                     }
-                    for(let q=0;q<kill_enemy_num_of_this_click;q++){
-                        this.createEnemy(0)
-                        this.createEnemy(0)
-                    }
+                    // for(var q=0;q<kill_enemy_num_of_this_click;q++){
+                    //     this.createEnemy(0)
+                    //     this.createEnemy(0)
+                    // }
+                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,enemyNumber:this.enemyNumber})
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
@@ -330,25 +389,25 @@ class God {
 
         //增强对方的小怪等级，点击按钮时调用
         $("#increase_enemy_level").on("click", () => {
-            this.createEnemy(0);
-            // // console.log(this.enemies);
-            // console.log("现有金币数量:" + this.player.money);
-            // console.log("技能需要金币数量:" + increase_enemy_level_money);
-            // console.log("小怪的数量为" + this.enemies.length);
-            // if (this.enemies.length > 0) {
-            //     if (increase_enemy_level_money <= this.player.money) {
-            //         this.enemy_level++;
-            //         console.log("当前小怪等级：" + this.enemy_level);
-            //         this.player.money = this.player.money - increase_enemy_level_money;
-            //         console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
-            //     } else {
-            //         this.money_not_enough();
-            //         // $("#moneylack").show(300).delay(1000).hide(200);
-            //         // alert("给对方小怪升级金币数量不够");
-            //     }
-            // } else {
-            //     alert("地图上没有小怪，无法升级");
-            // }
+            // console.log(this.enemies);
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + increase_enemy_level_money);
+            console.log("小怪的数量为" + this.enemies.length);
+            if (this.enemies.length > 0) {
+                if (increase_enemy_level_money <= this.player.money) {
+                    // this.enemy_level++;
+                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,enemyNumber:this.enemyNumber})
+                    console.log("当前小怪等级：" + this.enemy_level);
+                    this.player.money = this.player.money - increase_enemy_level_money;
+                    console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+                } else {
+                    this.money_not_enough();
+                    // $("#moneylack").show(300).delay(1000).hide(200);
+                    // alert("给对方小怪升级金币数量不够");
+                }
+            } else {
+                alert("地图上没有小怪，无法升级");
+            }
         });
 
         //给对方增加一个boss，点击按钮时调用
@@ -356,8 +415,10 @@ class God {
             console.log("现有金币数量:" + this.player.money);
             console.log("技能需要金币数量:" + add_boss_money);
             if (add_boss_money <= this.player.money) {
-                this.createEnemy(1);
+                // this.createEnemy(1);
                 this.player.money = this.player.money - add_boss_money;
+                // websocket发送增强信息
+                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,enemyNumber:this.enemyNumber})
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 this.money_not_enough();
@@ -387,6 +448,33 @@ class God {
             this.drawEnemies();
         }, 40);
 
+        this.createEnemyAAAA = setInterval(()=>{
+            if(createEnemySign == 1){
+                for(var i = 0 ;i < killNum*2 ;i++){
+                    this.createEnemy(0)
+                }
+                killNum = 0
+            }if(createEnemySign == 2){
+                this.createEnemy(1)
+            }
+            if(createEnemySign == 3){
+                this.enemy_level++
+            }
+            createEnemySign = 0
+        },40)
+
+        this.winSignAAAA = setInterval(()=>{
+            if(winSign == 0){
+                this.to_total_lose()
+                winSign = -1
+            }
+            if(winSign == 1){
+                this.to_total_win()
+                winSign = -1
+            }
+
+        })
+
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
         // // 初始小兵数量
@@ -412,6 +500,7 @@ class God {
         clearInterval(this.timeTime);
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
+        clearInterval(this.drawEnemy)
     }
 
     createFirstEnemy() {
@@ -441,7 +530,7 @@ class God {
         enemy.check_levelup();
         enemy.check_boss();
         this.enemies.push(enemy);
-        // console.log(this.enemies);
+        console.log(this.enemies);
         this.enemyNumber++;
         // if (this.enemyNumber <= length) {
         //     let enemy = new Enemy();
@@ -509,23 +598,23 @@ class God {
 
     judge_game() {
         //监听怪的数量到了100只
-        if (this.enemyExisted >= 100) {
+        if (this.enemyNumber >= 100) {
             this.stopGame();
             alert("lose");
             // 跳转到结算页面
             this.to_total_lose();
-            // //websocket发送失败信息
-            // this.send({type:4,roomCount:this.roomCount,name:this.name})
+            //websocket发送失败信息
+            this.websocketSend({type:4,roomCount:roomCount,name:linkName})
             // // 关闭websocket连接
             // this.close()
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
-        if (this.enemyExisted < 100 && this.leftTime <= 0) {
+        if (this.enemyNumber < 100 && this.leftTime <= 0) {
             this.stopGame();
-            // // 发送自己的小兵剩余信息给对方
-            // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
-            alert("win");
+            // 发送自己的小兵剩余信息给对方
+            this.websocketSend({type:5,roomCount:roomCount,name:linkName,enemyNumber:this.enemyNumber})
+            // alert("win");
              // 跳转到结算页面
             this.to_total_win();
         }
@@ -974,14 +1063,16 @@ class God {
     //聊天
     chat(){
             // console.log(this.player)
-            let player1 = this.player;
-            let Words = document.getElementById("words");
-            let Who = 0;
-            let TalkWords = document.getElementById("talkwords");
-            let TalkSub = document.getElementById("talksub");
+            var player1 = this.player;
+            var Words = document.getElementById("words");
+            var Who = 0;
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
+            let sendSign = 0
+            let str = "";
             TalkSub.onclick = function(){
                 //定义空字符串
-                let str = "";
+                 
                 if(TalkWords.value == ""){
                     // 消息为空时弹窗
                     alert("消息不能为空");
@@ -994,44 +1085,35 @@ class God {
                     TalkWords.value="";
                     return;
                 }
-                //判断是谁发出的
-                if(Who== 0){
-                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                // //判断是谁发出的
+                // if(Who== 0){
+                //     str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
                   
-                }
-                else{
-                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                }
-                Words.innerHTML = Words.innerHTML + str;
-                TalkWords.value="";
+                // }
+                // else{
+                //     str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // }
+                // console.log('=========================================================')
+                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // //websocket发送信息
+                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                // Words.innerHTML = Words.innerHTML + str;
+                // TalkWords.value="";
+                sendSign = 1
             }
-            
-            document.onkeydown = function(event) {
-               
-                var e = event || window.event;
-                
-                if (e && e.keyCode == 13&&TalkWords.value!="") { 
-        
-                    var str = "";
-                    if(TalkWords.value=="show me the money"){
-                        player1.money += 10000;
-                        // console.log(player1)
-                        TalkWords.value="";
-                        return;
-                    }
-                    //判断是谁发出的
-                    if(Who== 0){
-                        str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
-                      
-                    }
-                    else{
-                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                    }
+            setInterval(()=>{
+                if(sendSign == 1){
+                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                    //websocket发送信息
+                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                     Words.innerHTML = Words.innerHTML + str;
                     TalkWords.value="";
-      
+                    sendSign = 0
                 }
-            }
+                
+            },80)
+            
+            
         }
 
     
