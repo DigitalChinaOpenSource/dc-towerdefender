@@ -390,7 +390,7 @@ class God {
 
         this.draw_bullet = setInterval(() =>{
             this.drawBullet();
-        })
+        }, 40)
 
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
@@ -786,18 +786,18 @@ class God {
                         this.towersNumber[tower].type,
                         ene
                     )); 
-                    
+                    console.log('有子弹生成！');
                 }       
 
-                //如果当前怪的血量小于等于1，那它一定会死，进行死亡相关结算
-                if (this.enemies[ene].hp <= 1) {
-                    this.player.money += this.enemies[ene].money;
-                    this.enemies[ene].dead();
-                    this.enemyNumber--;  
-                    this.enemies[ene] = null;
-                    this.enemies.splice(ene, 1); //从数组中删除已死的怪物
-                    this.enemyExisted--;
-                } 
+                // //如果当前怪的血量小于等于1，那它一定会死，进行死亡相关结算
+                // if (this.enemies[ene].hp <= 1) {
+                //     this.player.money += this.enemies[ene].money;
+                //     this.enemies[ene].dead();
+                //     this.enemyNumber--;  
+                //     this.enemies[ene] = null;
+                //     this.enemies.splice(ene, 1); //从数组中删除已死的怪物
+                //     this.enemyExisted--;
+                // } 
             }   
         }            
 
@@ -981,11 +981,13 @@ class God {
                 let x=this.bullets[bullet].x;
                 let y=this.bullets[bullet].y;
                 //将画布原点（0,0）移动到绘制出子弹的坐标点
-                ctx.translate(x, y);
+                // ctx.translate(x, y);
                 //旋转画布，效果是子弹对着敌人的方向直线移动
-                ctx.rotate(this.bullets[bullet].direction[2]);//direction[2]是子弹类中的旋转角度
-                ctx.drawImage(img, -10,-10,20,20);//待修改，根据不同种类的塔发出的子弹类型规定放置子弹图像的位置及子弹图片大小
-    
+                // ctx.rotate(this.bullets[bullet].direction[2]);//direction[2]是子弹类中的旋转角度
+                ctx.drawImage(img, x,y,20,20);//待修改，根据不同种类的塔发出的子弹类型规定放置子弹图像的位置及子弹图片大小
+                this.bullets[bullet].x++;
+                this.bullets[bullet].y++;
+
             }
         }
 
