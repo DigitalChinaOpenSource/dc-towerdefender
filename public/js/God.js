@@ -997,7 +997,7 @@ class God {
                 }
                 //作弊
                 if(TalkWords.value=="show me the money"){
-                    player1.money = 10000;
+                    player1.money += 10000;
                     // console.log(player1)
                     TalkWords.value="";
                     return;
@@ -1022,7 +1022,7 @@ class God {
         
                     var str = "";
                     if(TalkWords.value=="show me the money"){
-                        player1.money = 10000;
+                        player1.money += 10000;
                         // console.log(player1)
                         TalkWords.value="";
                         return;
