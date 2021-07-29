@@ -14,7 +14,7 @@
     <div class="home" >
         <div class="home_back" id="home_visi"></div>
         <button class="btn_startgame hide_it" id="startgame_btn"></button>
-        <button class="btn_logout hide_it" id="logout_btn"></button>
+        <a href="../logout"><button class="btn_logout hide_it" id="logout_btn"></button></a>
     </div>
     <!-- 匹配页面start -->
     <div class="match" >
@@ -124,11 +124,11 @@
                 <ul style="list-style: none;font-size:100%;margin-top:10px;margin-left: 5px" id="player1">
                     <li class="title">我方信息:</li>
                     <li class="mess">昵称:</li>
-                    <li class="mess" id="p1nameshow">name</li>
+                    <li class="mess" id="p1nameshow"><%=nickName%></li>
                     <li class="mess">积分:</li>
-                    <li class="mess" id="p1pointshow">point</li>
+                    <li class="mess" id="p1pointshow"><%=score%></li>
                     <li class="mess">历史胜利:</li>
-                    <li class="mess" id="p1historywinshow">history</li>
+                    <li class="mess" id="p1historywinshow"><%=count%></li>
                     <li class="mess">已消灭怪物:</li>
                     <li class="mess" id="p1killenemyshow">kill</li>
                     <li class="mess">场上还剩怪物:</li>
