@@ -98,11 +98,12 @@ app.post('/regist', urlEncodedParser, function (req, res) {
         console.log('----------SELECT RESULT----------');
         console.log(result);
         console.log('----------------------------------\n\n');
+        console.log('test---------')
     })
     res.redirect('/index');
 })
 
-//登录，post请求，从数据库中选择相应字段匹配
+//登录，post请求，从数据库中选择相应字段匹配 
 app.post('/login', urlEncodedParser, function (req, res) {
     var userName = req.body.username;
     var password = req.body.password;
