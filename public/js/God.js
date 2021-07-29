@@ -576,9 +576,9 @@ class God {
     }
 
     judge_game() {
-        console.log("into judge_game");
+        console.log("into judge_game"+this.enemyExisted);
         //监听怪的数量到了100只
-        if (this.enemyExisted >= 100) {
+        if (this.enemyNumber >= 100) {
             this.stopGame();
             alert("lose");
             // 跳转到结算页面
@@ -590,7 +590,7 @@ class God {
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
-        if (this.enemyExisted < 100 && this.leftTime <= 0) {
+        if (this.enemyNumber < 100 && this.leftTime <= 0) {
             this.stopGame();
             // 发送自己的小兵剩余信息给对方
             this.send({type:5,roomCount:roomCount,name:linkName,enemy:enemyExisted})
