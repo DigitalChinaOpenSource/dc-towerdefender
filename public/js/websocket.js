@@ -5,7 +5,7 @@ let score
 let ip='ws://localhost:8888'
 let startGameSign = 0
 let createEnemySign = 0
-killNum = 0
+let killNum = 0
 // function websocketLink(){
 //     ws = new WebSocket(ip)
 //     ws.onopen = function(){
