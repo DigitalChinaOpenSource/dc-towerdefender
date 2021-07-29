@@ -611,7 +611,7 @@ class God {
                             this.towers[tower].tower_img = "img/tower/tower1-2.png";
                             this.towers[tower].type = TowerType.two;
                             this.player.money -= TowerType.two.cost;
-                            this.tower_message[x,y] = type+1;
+                            this.tower_message[y-1][x-1] = type+1;
                         }
                         else {
                             $("#moneyshow").css("border", "2px solid red");
@@ -634,7 +634,7 @@ class God {
                                 this.towers[tower].tower_img = "img/tower/tower1-3.png";
                                 this.towers[tower].type = TowerType.three;
                                 this.player.money -= TowerType.three.cost;
-                                this.tower_message[x,y] = type+1;    
+                                this.tower_message[y-1][x-1] = type+1;    
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -753,6 +753,7 @@ class God {
         console.log('绘制塔:');
         console.log(this.tower_message);
         img_tower.src = TowerType[this.tower_message[option_y-1][option_x-1]-1-1][3];
+        console.log(img_tower.src);
         ctx.drawImage(img_tower, (option_x) * CELL_WIDTH, (option_y) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
     }
 
@@ -768,21 +769,17 @@ class God {
         if((this.option_x!=this.last_option_x-1||this.option_y!=this.last_option_y-1)
             &&(this.option_x!=this.last_option_x+1||this.option_y!=this.last_option_y-1)){
                 console.log("点击不是选项的位置");
-                console.log("last:"+this.last_option_x+" "+this.last_option_y);
-                console.log("this:"+this.option_x+" "+this.option_y);
                 this.last_option_x = this.option_x;
                 this.last_option_y = this.option_y;
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
             }else{
                 console.log("in draw option before create tower: x:"+this.last_option_x+" y:"+this.last_option_y);
-                console.log("last:"+this.last_option_x+" "+this.last_option_y);
-                console.log("this:"+this.option_x+" "+this.option_y);
                 console.log(this.tower_message);
-                let num = this.tower_message[this.last_option_x][this.last_option_y];
-                console.log(num);
+                let num = this.tower_message[this.last_option_y-1][this.last_option_x-1];
+                console.log("num:"+num);
                 if (num==1){   //没有塔，开始建塔
-                    img_xx.src = "img/tower/tower1-1.png";
-                    img_up.src = "img/tower/tower2-1.png";
+                    img_xx.src = "img/tower/tower2-1.png";
+                    img_up.src = "img/tower/tower1-1.png";
                     ctx.drawImage(img_xx, (this.last_option_x + 1) * CELL_WIDTH, (this.lasgt_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
                     ctx.drawImage(img_up, (this.last_option_x - 1) * CELL_WIDTH, (this.last_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
@@ -797,8 +794,8 @@ class God {
                 else if (num!==0 && num!==1){
                     img_xx.src = "img/button/sholve.png";
                     img_up.src = "img/button/upgrade.png";
-                    ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                    ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                    ctx.drawImage(img_xx, (this.last_option_x + 1) * CELL_WIDTH, (this.last_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+                    ctx.drawImage(img_up, (this.last_option_x - 1) * CELL_WIDTH, (this.last_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
                 }
                 this.last_option_x = this.option_x;
                 this.last_option_y = this.option_y;
