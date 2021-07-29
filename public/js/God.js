@@ -172,7 +172,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 1; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 30;//剩余时间,单位秒
+        this.leftTime = 300;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
@@ -203,9 +203,10 @@ class God {
         // 监控 
         $("#canvasMap_option").on("click", (e) => {//jquery语法，在这个图层里面，就是坑位被点击后做的动作。e就是鼠标监听的坐标
             //在建塔的图层上
-            var option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
-            var option_y = parseInt(e.offsetY / CELL_WIDTH);
-            this.drawOptions(option_x,option_y)
+            this.option_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
+            this.option_y = parseInt(e.offsetY / CELL_WIDTH);
+            console.log(this.option_x,this.option_y);
+            this.drawOptions();
             // this.up_downTower(option_x, option_y);  //把这个坐标上面的塔给拆了，里面会就行判断，是否点了x,是否有塔。
             // this.chooseTower(option_x, option_y, e, this.useful_tower);//选择一个塔，然后
         });
@@ -464,6 +465,7 @@ class God {
 
     // 传入参数，xy坐标（以格子为单位，横x竖y），防御塔类型（int）
     createTower(x,y,type){
+        console.log("x:"+x+" y:"+y);
         if(this.player.money<TowerType[type-1][4]){
             this.money_not_enough();
         }else{
@@ -491,6 +493,7 @@ class God {
             let distanceX = tower.x - this.enemies[ene].x;
             let distanceY = tower.y - this.enemies[ene].y;
             if (Math.abs(distanceX) <= tower.range * CELL_WIDTH && Math.abs(distanceY) <= tower.range * CELL_WIDTH) {
+                console.log("enemy in attack range");
                 this.bullets.push(new Bullet(
                     tower.x,
                     tower.y,
@@ -502,6 +505,7 @@ class God {
                 ));
                 clearInterval(tower.check_attack_interval);
                 setTimeout(() => {
+                    console.log("ready to next attack");
                     tower.check_attack_interval = setInterval(() => {
                         this.tower_attack(tower);
                     },30)
@@ -839,26 +843,28 @@ class God {
   
 
    //点塔选项，有塔可操作，无塔可建塔
-    drawOptions(option_x,option_y){
+    drawOptions(){
         let cv = document.querySelector('#canvasMap_option');
         let ctx = cv.getContext('2d');
         let img_xx = new Image();
         let img_up = new Image();
-        let num = this.tower_message[option_y][option_x];
+        let num = this.tower_message[this.option_y][this.option_x];
+        console.log("num:"+num)
         if (num==1){   //没有塔，开始建塔
             img_xx.src = "img/tower/tower1-1.png";
             img_up.src = "img/tower/tower2-1.png";
-            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_xx, (this.ption_x + 1) * CELL_WIDTH, (this.option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (this.option_x - 1) * CELL_WIDTH, (this.option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
 
             $("#canvasMap_option").on("click", (e) => {
+                console.log("画塔选项里的监听");
                 var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
                 var on_y = parseInt(e.offsetY / CELL_WIDTH);
-                if (on_x==option_x+1 && on_y==option_y-1){  //右边
-                    this.createTower(option_x,option_y,2);
+                if (on_x==this.option_x+1 && on_y==this.option_y-1){  //右边
+                    this.createTower(this.option_x,this.option_y,2);
                 }
-                else if(on_x==option_x-1 && on_y==option_y-1){    //左边
-                    this.createTower(option_x,option_y,1);
+                else if(on_x==this.option_x-1 && on_y==this.option_y-1){    //左边
+                    this.createTower(this.option_x,this.option_y,1);
                     }
                 
             })}
@@ -867,17 +873,17 @@ class God {
         else if (num!==0 && num!==1){
             img_xx.src = "img/button/sholve.png";
             img_up.src = "img/button/upgrade.png";
-            ctx.drawImage(img_xx, (option_x + 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-            ctx.drawImage(img_up, (option_x - 1) * CELL_WIDTH, (option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_xx, (this.option_x + 1) * CELL_WIDTH, (this.option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+            ctx.drawImage(img_up, (this.option_x - 1) * CELL_WIDTH, (this.option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
            
             $("#canvasMap_option").on("click", (e) => {
                 var on_x = parseInt(e.offsetX / CELL_WIDTH); //鼠标监听，然后得到一个坐标。
                 var on_y = parseInt(e.offsetY / CELL_WIDTH);
-                if (on_x==option_x+1 && on_y==option_y-1){  //右边 拆塔
-                    this.Tower_down(num-1,option_x,option_y);
+                if (on_x==this.option_x+1 && on_y==this.option_y-1){  //右边 拆塔
+                    this.Tower_down(num-1,this.option_x,this.option_y);
                 }
-                else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
-                    this.Tower_up(num-1,option_x,option_y);
+                else if(on_x==this.option_x-1 && on_y==this.option_y-1){    //左边 升级
+                    this.Tower_up(num-1,this.option_x,this.option_y);
                     }
                 
             })}
