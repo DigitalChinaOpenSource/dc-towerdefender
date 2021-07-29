@@ -9,7 +9,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var path = require('path');
 var session=require('express-session');
-//var cookieParser=require('cookie-parser')
+//var cookieParser=require('cookie-parser') 
 
 //项目根目录
 app.use(express.static(path.join(__dirname, 'public')));
@@ -99,12 +99,10 @@ app.post('/regist', urlEncodedParser, function (req, res) {
         }else{
             var sql = 'insert into users(name,password,score) values(?,?,0)';
             connection.query(sql, params, function (error, result) {
-           
                 if (error) {
                 console.log(sql);
                 console.log(params);
                 console.log('ERROR--' + error.message);
-            
             }
             console.log('----------SELECT RESULT----------');
             console.log(result);
@@ -113,7 +111,6 @@ app.post('/regist', urlEncodedParser, function (req, res) {
             return res.redirect('/index');
         }
     })
-    
 })
 
 //登录，post请求，从数据库中选择相应字段匹配 
