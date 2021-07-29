@@ -989,8 +989,9 @@ class God {
                 }
                 //作弊
                 if(TalkWords.value=="show me the money"){
-                    player1.money = 10000;
+                    player1.money += 10000;
                     // console.log(player1)
+                    TalkWords.value="";
                     return;
                 }
                 //判断是谁发出的
@@ -1003,6 +1004,33 @@ class God {
                 }
                 Words.innerHTML = Words.innerHTML + str;
                 TalkWords.value="";
+            }
+            
+            document.onkeydown = function(event) {
+               
+                var e = event || window.event;
+                
+                if (e && e.keyCode == 13&&TalkWords.value!="") { 
+        
+                    var str = "";
+                    if(TalkWords.value=="show me the money"){
+                        player1.money += 10000;
+                        // console.log(player1)
+                        TalkWords.value="";
+                        return;
+                    }
+                    //判断是谁发出的
+                    if(Who== 0){
+                        str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                      
+                    }
+                    else{
+                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                    }
+                    Words.innerHTML = Words.innerHTML + str;
+                    TalkWords.value="";
+      
+                }
             }
         }
 
