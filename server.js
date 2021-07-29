@@ -6,7 +6,6 @@ var path = require('path');
 var session=require('express-session');
 //var cookieParser=require('cookie-parser')
 
-
 //项目根目录
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -95,7 +94,7 @@ app.post('/regist', urlEncodedParser, function (req, res) {
     })
 })
 
-//登录
+//登录，post请求，从数据库中选择相应字段匹配
 app.post('/login', urlEncodedParser, function (req, res) {
     var userName = req.body.username;
     var password = req.body.password;
@@ -106,12 +105,13 @@ app.post('/login', urlEncodedParser, function (req, res) {
             console.log('ERROR--' + error.message);
             return;
         }
-        //登录失败
+        //登录失败，输出相关提示
         if (result.length == 0) {
             console.log("用户名或者密码错误！");
             // res.sendFile(staticPath + '/login_fail.html');
             res.json({msg:"用户名或密码错误，请重新登录！"});
         }
+        
         //登录成功，取出返回值
         var data=result[0];
         var id=data.id;
