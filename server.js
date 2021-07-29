@@ -98,7 +98,7 @@ app.post('/regist', urlEncodedParser, function (req, res) {
         console.log('----------SELECT RESULT----------');
         console.log(result);
         console.log('----------------------------------\n\n');
-        console.log('test---------')
+        console.log('test------')
     })
     res.redirect('/index');
 })
