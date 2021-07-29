@@ -763,6 +763,48 @@ class God {
         }
     }    
 
+    ////检查塔的状态并生成子弹
+    checkAndCreateBullets() {
+        if (this.towersNumber <= 0) { //如果场上没有塔，则不生成子弹
+            return false;
+        }
+        for (var tower in this.towers) {
+            for (var ene in this.enemies) {
+                var distanceX = this.towers[tower].x - this.enemies[ene].x; //计算塔到敌人的X坐标距离
+                var distanceY = this.towers[tower].y - this.enemies[ene].y; //计算塔到敌人的Y坐标距离
+                if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) { //判断怪物是否在塔的范围内
+                        this.bullets.push(new Bullet(
+                        this.towers[tower].x,
+                        this.towers[tower].y,
+                        this.enemies[ene].x,
+                        this.enemies[ene].y,
+                        this.towers[tower].type.bullet_type.speed,    //创建塔的时候也确定了塔的子弹的属性
+                        this.towers[tower].type.bullet_type.color,
+                        this.towers[tower].type.bullet_type.size,
+                        this.towers[tower].type.bullet_type.attack,
+                        this.towers[tower].type.bullet_type.type,
+                        this.towers[tower].type.bullet_type.run,
+                        this.towers[tower].type.bullet_type.reduce,
+                        this.towers[tower].type.bullet_type.blood,
+                        this.towers[tower].type.bullet_type.second,
+                    )); 
+                    
+                }       
+
+                //如果当前怪的血量小于等于1，那它一定会死，进行死亡相关结算
+                if (this.enemies[ene].hp <= 1) {
+                    this.player.money += this.enemies[ene].money;
+                    this.enemies[ene].dead();
+                    this.enemyNumber--;  
+                    this.enemies[ene] = null;
+                    this.enemies.splice(ene, 1); //从数组中删除已死的怪物
+                    this.enemyExisted--;
+                } 
+            }   
+        }            
+
+    } 
+
     // canvas部分*******************************************************
 
 
@@ -839,6 +881,57 @@ class God {
                     console.log(this.tower_message);
                     this.drawTower(this.last_option_x,this.last_option_y);
                 }
+                else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
+                    this.Tower_up(num-1,option_x,option_y);
+                    }
+                
+            }
+        
+        
+    }
+    
+
+     //绘制敌人
+     drawEnemies() { 
+        //获取敌人对象
+            var cv = document.querySelector('#canvasMap_enemy');
+            //获取2d平面
+            var ctx = cv.getContext('2d');
+            // 清空敌人图片
+            ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+            var img = new Image;
+            // 遍历数据，绘制敌人
+            for (var ene in this.enemies) {
+                // console.log(this.enemies[ene])
+                // if(this.enemies[ene].hp<=0){
+
+                // }
+                img.src = this.enemies[ene].enemy_img;
+                ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
+                Ca.drawBlood(ctx, this.enemies[ene]);
+                // console.log(this.enemies[ene].x)
+                // console.log(this.enemies[ene].y)
+            }
+    
+        }
+    
+
+        // 绘制塔------------------------------------------------------------------------------------------------
+    drawTowers() {
+        var cv = document.querySelector('#canvasMap_tower');
+        var ctx = cv.getContext('2d');
+        
+        for (var tower in this.towers) {
+            var img = new Image;
+            for (var a = 0; a < this.towerAndBullets.length; a++) {
+                if (this.towers[tower].type.type == this.towerAndBullets[a].type) {
+                    // if(this.towerAndBullets[a].type==16){
+                    //     img.src = this.towerAndBullets[a].tower_img;
+                    // ctx.drawImage(img, this.towers[tower].x-300, this.towers[tower].y-300, 600, 600);
+                    // }
+                    img.src = this.towerAndBullets[a].tower_img;
+                    ctx.drawImage(img, this.towers[tower].x, this.towers[tower].y, CELL_WIDTH, CELL_WIDTH);
+                }
                 else if (num!==0 && num!==1){
                     img_xx.src = "img/button/sholve.png";
                     img_up.src = "img/button/upgrade.png";
@@ -848,9 +941,32 @@ class God {
                 this.last_option_x = this.option_x;
                 this.last_option_y = this.option_y;
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
-            }
+           }
+        }
     }
 
+        //绘制子弹
+        drawBullet() {
+            //获取子弹画布
+            var cv = document.querySelector('#canvasMap_bullet');
+            var ctx = cv.getContext('2d');
+            //清空原子弹画布
+            ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+            for (var bullet in this.bullets) {
+                //获取子弹图片
+                var img = new Image;
+                img.src = this.bullets[bullet].color;
+                //获取子弹的坐标
+                var x=this.bullets[bullet].x;
+                var y=this.bullets[bullet].y;
+                //将画布原点（0,0）移动到绘制出子弹的坐标点
+                ctx.translate(x, y);
+                //旋转画布，效果是子弹对着敌人的方向直线移动
+                ctx.rotate(this.bullets[bullet].direction[2]);//direction[2]是子弹类中的旋转角度
+                ctx.drawImage(img, -10,-10,20,20);//待修改，根据不同种类的塔发出的子弹类型规定放置子弹图像的位置及子弹图片大小
+    
+            }
+        }
 
 
 
@@ -920,5 +1036,3 @@ class God {
 
     
 }
-
-
