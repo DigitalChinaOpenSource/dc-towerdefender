@@ -1,20 +1,17 @@
 class Bullet {
     //子弹的速度，颜色区分子弹的种类
-    constructor(x, y, target_x, target_y, speed, color, size, damage,type,run,reduce,blood,second,target_index) {
+    constructor(x, y, target_x, target_y, type, target_index) {
         this.x = x;
         this.y = y;
         this.target_x = target_x;
         this.target_y = target_y;
-        this.damage = damage || BULLET_BASE_DAMAGE;
-        this.speed = speed || BULLET_BASE_SPEED;
-        this.color = color || "img/z1.png";
-        this.size = size || 5;
-        this.flag = 0;
         this.type = type;
-        this.run=run;
-        this.reduce=reduce;
-        this.blood=blood;
-        this.second=second;
+        this.damage = BulletType[type][1];
+        this.speed = BulletType[type][0];;
+        this.color = BulletType[type][2];
+        this.size = BulletType[type][3];
+        this.flag = 0;
+
        // this.bian=0;
         this.target_index = target_index;
          this._init();
