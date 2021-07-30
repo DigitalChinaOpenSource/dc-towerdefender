@@ -212,6 +212,7 @@ class God {
                         createEnemySign = 1
                         killNum = recv.killNum
                         this.otherEneNum = recv.enemyNumber
+
                     }else if(recv.type == 2){
                         //小兵增强
                         if(recv.action == 0){
@@ -741,8 +742,9 @@ class God {
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
-                            this.createEnemy(0);
-                            this.createEnemy(0);
+                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,enemyNumber:this.enemyNumber})
+                            // this.createEnemy(0);
+                            // this.createEnemy(0);
                         }
                         break;
                     }
@@ -1058,6 +1060,9 @@ class God {
             // console.log(this.enemies[ene])
             // if(this.enemies[ene].hp<=0){
             // }
+            if(this.enemies[ene] == null){
+                continue
+            }
             img.src = this.enemies[ene].enemy_img;
             ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
             Ca.drawBlood(ctx, this.enemies[ene]);
@@ -1134,29 +1139,6 @@ class God {
                 // Words.innerHTML = Words.innerHTML + str;
                 // TalkWords.value="";
                 sendSign = 1
-            }
-            
-            document.onkeydown = function(event) {
-               
-                let e = event || window.event;
-                
-                if (e && e.keyCode == 13&&TalkWords.value!="") { 
-        
-                    let str = "";
-                    if(TalkWords.value=="show me the money"){
-                        player1.money += 10000;
-                        // console.log(player1)
-                        TalkWords.value="";
-                        return;
-                    }
-                    //判断是谁发出的
-                    if(Who== 0){
-                        str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
-                      
-                    }
-                    else{
-                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                    }
                 setInterval(()=>{
                     if(sendSign == 1){
                         str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
@@ -1168,9 +1150,43 @@ class God {
                     }
                     
                 },80)
-            
             }
+            
+            // document.onkeydown = function(event) {
+               
+            //     let e = event || window.event;
+                
+            //     if (e && e.keyCode == 13&&TalkWords.value!="") { 
+        
+            //         let str = "";
+            //         if(TalkWords.value=="show me the money"){
+            //             player1.money += 10000;
+            //             // console.log(player1)
+            //             TalkWords.value="";
+            //             return;
+            //         }
+            //         //判断是谁发出的
+            //         if(Who== 0){
+            //             str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                      
+            //         }
+            //         else{
+            //             str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+            //         }
+            //     setInterval(()=>{
+            //         if(sendSign == 1){
+            //             str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+            //             //websocket发送信息
+            //             this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+            //             Words.innerHTML = Words.innerHTML + str;
+            //             TalkWords.value="";
+            //             sendSign = 0
+            //         }
+                    
+            //     },80)
+            
+            // }
         }
     }
     
-}
+
