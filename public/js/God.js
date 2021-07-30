@@ -381,7 +381,7 @@ class God {
         // 时刻获取游戏状态
         this.getGameState = setInterval(() => {
             this.gameState();
-        }, 300);
+        }, 40);
         this.chat();
 
         this.draw_enemy = setInterval(() => {
@@ -503,6 +503,7 @@ class God {
                         this.tower_attack(tower);
                     },30)
                 }, tower.attack_interval);
+                break;
             }   
         } 
     }
@@ -624,15 +625,24 @@ class God {
                     // 触碰到敌人时 敌人血量减少
                     let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
                     let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
+                    console.log(distanceX);
+                    console.log(distanceY);
                     if ((distanceX*distanceX+distanceY*distanceY)<=
-                        ((this.bullets[bullet].size+30)*(this.bullets[bullet].size+30))) {
+                        ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
                         // 调用敌人扣血，传入子弹类型与子弹伤害：
                         // 子弹类型：this.bullets[bullet].type
                         // 子弹伤害：this.bullets[bullet].atk
+                        console.log('1打中敌人！');
+                        console.log(distanceX);
+                        console.log(distanceY);
+                        
+                        console.log(this.bullets.length);
                         this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
                         this.bullets[bullet].dead();
                         this.bullets[bullet] = null;
                         this.bullets.splice(bullet, 1);
+                        console.log('2子弹已清除');
+                        console.log(this.bullets.length);
                         // 生命为0的时候 敌人死去
                         if (this.enemies[ene].hp <= 0) {
                             this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
@@ -985,8 +995,8 @@ class God {
                 //旋转画布，效果是子弹对着敌人的方向直线移动
                 // ctx.rotate(this.bullets[bullet].direction[2]);//direction[2]是子弹类中的旋转角度
                 ctx.drawImage(img, x,y,20,20);//待修改，根据不同种类的塔发出的子弹类型规定放置子弹图像的位置及子弹图片大小
-                this.bullets[bullet].x++;
-                this.bullets[bullet].y++;
+                // this.bullets[bullet].x++;
+                // this.bullets[bullet].y++;
 
             }
         }
