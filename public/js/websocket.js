@@ -7,6 +7,7 @@ let startGameSign = 0
 let createEnemySign = 0
 let killNum = 0
 let winSign = -1
+let historyWin
 // function websocketLink(){
 //     ws = new WebSocket(ip)
 //     ws.onopen = function(){

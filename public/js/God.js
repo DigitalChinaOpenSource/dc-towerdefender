@@ -45,6 +45,7 @@ class God {
             //监听开始游戏标识
             this.startGameAAAA = setInterval(()=>{
                 if(startGameSign == 1){
+                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:this.otherSocre})
                     this.startGame()
                 }
                 startGameSign = 0
@@ -189,8 +190,10 @@ class God {
             console.log('success liked the server')
             let indexScore = document.getElementById('indexScore')
             let indexName = document.getElementById('indexName')
+            let indexHistoryWin = document.getElementById('indexHistoryWin')
             let indexScoreValue = indexScore.innerHTML.trim()
             let indexNameValue = indexName.innerHTML.trim()
+            historyWin = indexHistoryWin.innerHTML.trim()
             linkName = indexNameValue
             ws.send(JSON.stringify({score:indexScoreValue,name:linkName}))
         }
@@ -212,17 +215,25 @@ class God {
                         //生成两个小兵
                         createEnemySign = 1
                         killNum = recv.killNum
-                        this.otherEneNum = recv.enemyNumber
+
+                        this.otherShaEnemy = recv.otherShaEnemy
+                        this.otherHistoryWin = recv.otherHistoryWin
+                        this.otherEneNum = recv.otherEneNum
+                        this.otherSocre = recv.otherSocre
+                        this.otherName = recv.name
 
                     }else if(recv.type == 2){
                         //小兵增强
                         if(recv.action == 0){
                             createEnemySign =3
-                            this.otherEneNum = recv.enemyNumber
                         }else if(recv.action == 1){
                             createEnemySign = 2
-                            this.otherEneNum = recv.enemyNumber
                         }
+                        this.otherShaEnemy = recv.otherShaEnemy
+                        this.otherHistoryWin = recv.otherHistoryWin
+                        this.otherEneNum = recv.otherEneNum
+                        this.otherSocre = recv.otherSocre
+                        this.otherName = recv.name
                     }else if(recv.type == 3){
                         //显示聊天msg
 
@@ -236,6 +247,11 @@ class God {
                         // wordsRecv.innerHTML = wordsRecv.innerHTML + str
                         // console.log(recv.msg)
                         console.log(m)
+                        this.otherShaEnemy = recv.otherShaEnemy
+                        this.otherHistoryWin = recv.otherHistoryWin
+                        this.otherEneNum = recv.otherEneNum
+                        this.otherSocre = recv.otherSocre
+                        this.otherName = recv.name
                     }else if(recv.type == 4){
                         //调用获胜方法赢了
                         alert('you win')
@@ -295,7 +311,19 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
+
+
+
         this.otherEneNum = 1;
+        this.shaEnemy = 0
+        this.otherSocre = 0
+        this.otherName
+        this.otherHistoryWin = 0
+        this.otherShaEnemy = 0
+
+
+
+
         this.last_option_x = undefined;
         this.last_option_y = undefined;
         this.need_hide_option = 0;
@@ -372,6 +400,7 @@ class God {
                             this.enemyExisted--;
                             kill_enemy_num_of_this_click++
                             this.enemyNumber--
+                            this.shaEnemy++
                             console.log('现在杀死一个还剩'+this.enemyNumber)
                             // this.createEnemy(0);
                             // this.createEnemy(0);
@@ -381,7 +410,7 @@ class God {
                     //     this.createEnemy(0)
                     //     this.createEnemy(0)
                     // }
-                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,enemyNumber:this.enemyNumber})
+                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:this.otherSocre})
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
@@ -406,7 +435,7 @@ class God {
             if (this.enemies.length > 0) {
                 if (increase_enemy_level_money <= this.player.money) {
                     // this.enemy_level++;
-                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,enemyNumber:this.enemyNumber})
+                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:this.otherSocre})
                     console.log("当前小怪等级：" + this.enemy_level);
                     this.player.money = this.player.money - increase_enemy_level_money;
                     console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
@@ -428,7 +457,7 @@ class God {
                 // this.createEnemy(1);
                 this.player.money = this.player.money - add_boss_money;
                 // websocket发送增强信息
-                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,enemyNumber:this.enemyNumber})
+                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:this.otherSocre})
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 this.money_not_enough();
@@ -487,6 +516,18 @@ class God {
             }
 
         })
+
+
+        this.other = setInterval(() => {
+            $("#p2nameshow").html(this.otherName);
+            $("#p2pointshow").html(this.otherSocre);
+            $("#p2historywinshow").html(this.otherHistoryWin);
+            $("#p2killenemyshow").html(this.otherShaEnemy);
+            $("#p2leaveenemyshow").html(this.otherEneNum);
+
+            $("#p1killenemyshow").html(this.shaEnemy);
+            $("#p1leaveenemyshow").html(this.enemyNumber);
+        }, 60);
 
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
@@ -627,7 +668,7 @@ class God {
         if (this.enemyNumber < 100 && this.leftTime <= 0) {
             this.stopGame();
             // 发送自己的小兵剩余信息给对方
-            this.websocketSend({type:5,roomCount:roomCount,name:linkName,enemyNumber:this.enemyNumber})
+            this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
             // alert("win");
              // 跳转到结算页面
             this.to_total_win();
@@ -750,7 +791,8 @@ class God {
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
-                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,enemyNumber:this.enemyNumber})
+                            this.shaEnemy++
+                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:this.otherSocre})
                             // this.createEnemy(0);
                             // this.createEnemy(0);
                         }
@@ -1176,7 +1218,7 @@ class God {
                 if(sendSign == 1){
                      str =  TalkWords.value ;
                     //websocket发送信息
-                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value,otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:this.otherSocre})
                     // Words.innerHTML = Words.innerHTML + str;
                     TalkWords.value="";
                     sendSign = 0
