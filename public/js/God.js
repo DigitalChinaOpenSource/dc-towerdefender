@@ -863,7 +863,7 @@ class God {
                 this.player.money += TowerType[type-1][5];
                 this.towers.splice(tower, 1);
                 this.tower_message[y-1][x-1] = 1;
-                drawTower(x,y)
+                drawTower(x,y);
             }
         }
     }    
