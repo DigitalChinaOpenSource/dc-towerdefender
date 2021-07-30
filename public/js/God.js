@@ -187,11 +187,12 @@ class God {
         ws = new WebSocket(ip)
         ws.onopen = function(){
             console.log('success liked the server')
-            let i = parseInt(Math.random()*5)
-            console.log('score======>'+i)
-            score = i
-            linkName = 123
-            ws.send(JSON.stringify({score:i,name:123}))
+            let indexScore = document.getElementById('indexScore')
+            let indexName = document.getElementById('indexName')
+            let indexScoreValue = indexScore.innerHTML.trim()
+            let indexNameValue = indexName.innerHTML.trim()
+            linkName = indexNameValue
+            ws.send(JSON.stringify({score:indexScoreValue,name:linkName}))
         }
     
         ws.onmessage = function(evt){
