@@ -224,10 +224,16 @@ class God {
                         }
                     }else if(recv.type == 3){
                         //显示聊天msg
-                        var wordsRecv = document.getElementById('talkwords')
-                        var str = '<div class="atalk"><span>' + wordsRecv.value +'</span></div>';
-                        wordsRecv.innerHTML = wordsRecv.innerHTML + str
-                        console.log(recv.msg)
+
+                         var Words = document.getElementById('words')
+                        var m=recv.msg;
+                        // alert(m);
+                        // alert(Words);
+                        var str = '<div class="atalk"><span>' + m +'</span></div>';
+                        Words.innerHTML = Words.innerHTML + str;
+                        // alert(str);
+                        // wordsRecv.innerHTML = wordsRecv.innerHTML + str
+                        // console.log(recv.msg)
                     }else if(recv.type == 4){
                         //调用获胜方法赢了
                         alert('you win')
@@ -1104,7 +1110,6 @@ class God {
             // console.log(this.player)
             var player1 = this.player;
             var Words = document.getElementById("words");
-            var Who = 0;
             var TalkWords = document.getElementById("talkwords");
             var TalkSub = document.getElementById("talksub");
             let sendSign = 0
@@ -1124,69 +1129,60 @@ class God {
                     TalkWords.value="";
                     return;
                 }
-                // //判断是谁发出的
-                // if(Who== 0){
-                //     str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
                   
-                // }
-                // else{
-                //     str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                // }
-                // console.log('=========================================================')
-                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                // //websocket发送信息
-                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
-                // Words.innerHTML = Words.innerHTML + str;
-                // TalkWords.value="";
-                sendSign = 1
-                setInterval(()=>{
-                    if(sendSign == 1){
-                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                        //websocket发送信息
-                        this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
-                        Words.innerHTML = Words.innerHTML + str;
-                        TalkWords.value="";
-                        sendSign = 0
-                    }
-                    
-                },80)
-            }
-            
-            // document.onkeydown = function(event) {
-               
-            //     let e = event || window.event;
+              
+                console.log('=========================================================')
                 
-            //     if (e && e.keyCode == 13&&TalkWords.value!="") { 
+                //websocket发送信息
+                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                Words.innerHTML = Words.innerHTML + str;
+                TalkWords.value="";
+                str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                 sendSign = 1
+                
+            }
+            document.onkeydown = function(event) {
+               
+                let e = event || window.event;
+                
+                if (e && e.keyCode == 13&&TalkWords.value!="") { 
         
-            //         let str = "";
-            //         if(TalkWords.value=="show me the money"){
-            //             player1.money += 10000;
-            //             // console.log(player1)
-            //             TalkWords.value="";
-            //             return;
-            //         }
-            //         //判断是谁发出的
-            //         if(Who== 0){
-            //             str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
-                      
-            //         }
-            //         else{
-            //             str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-            //         }
-            //     setInterval(()=>{
-            //         if(sendSign == 1){
-            //             str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-            //             //websocket发送信息
-            //             this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
-            //             Words.innerHTML = Words.innerHTML + str;
-            //             TalkWords.value="";
-            //             sendSign = 0
-            //         }
-                    
-            //     },80)
+                    let str = "";
+                    if(TalkWords.value=="show me the money"){
+                        player1.money += 10000;
+                        // console.log(player1)
+                        TalkWords.value="";
+                        return;
+                    }
+
+                str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+
+                console.log('=========================================================')
+               
+                //websocket发送信息
+                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                Words.innerHTML = Words.innerHTML + str;
+                TalkWords.value="";
+                str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                 sendSign = 1
             
-            // }
+            }
         }
+            setInterval(()=>{
+                if(sendSign == 1){
+                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                    //websocket发送信息
+                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                    // Words.innerHTML = Words.innerHTML + str;
+                    TalkWords.value="";
+                    sendSign = 0
+                }
+                
+            },80)
+            
+
     }
     
 
+}
