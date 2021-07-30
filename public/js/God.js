@@ -234,6 +234,7 @@ class God {
                         // alert(str);
                         // wordsRecv.innerHTML = wordsRecv.innerHTML + str
                         // console.log(recv.msg)
+                        console.log(m)
                     }else if(recv.type == 4){
                         //调用获胜方法赢了
                         alert('you win')
@@ -1138,7 +1139,7 @@ class God {
                 // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                 Words.innerHTML = Words.innerHTML + str;
                 TalkWords.value="";
-                str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
                 
             }
@@ -1163,15 +1164,16 @@ class God {
                 //websocket发送信息
                 // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                 Words.innerHTML = Words.innerHTML + str;
-                TalkWords.value="";
-                str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // str=TalkWords.value;
+                // TalkWords.value="";
+                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
             
             }
         }
             setInterval(()=>{
                 if(sendSign == 1){
-                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                     str =  TalkWords.value ;
                     //websocket发送信息
                     this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                     // Words.innerHTML = Words.innerHTML + str;
