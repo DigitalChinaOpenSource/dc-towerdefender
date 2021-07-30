@@ -20,6 +20,7 @@
     <div class="match" >
         <h1 id="match_header">正在匹配，请稍等......</h1>
         <div class="our_part" >
+            <label></label>
             <h2 class="part">我方</h2>
             <h2 class="sorce">积分：***</h2>
             <img src="img/match/people.jpg" >
@@ -124,7 +125,7 @@
                 <ul style="list-style: none;font-size:100%;margin-top:10px;margin-left: 5px" id="player1">
                     <li class="title">我方信息:</li>
                     <li class="mess">昵称:</li>
-                    <li class="mess" id="p1nameshow" value="<%=userName%>"><%=userName%></li>
+                    <li class="mess" id="p1nameshow"><%=userName%></li>
                     <li class="mess">积分:</li>
                     <li class="mess" id="p1pointshow"><%=score%></li>
                     <li class="mess">历史胜利:</li>
@@ -162,7 +163,7 @@
             </div>
         </div>
 
-    <script type="text/javascript" src="js/websocket.js"></script>    
+    <script type="text/javascript" src="js/websocket.js"></script>
     <script type="text/javascript" src="js/Bullet.js"></script>
     <script type="text/javascript" src="js/BulletData.js"></script>
     <script type="text/javascript" src="js/BulletFactory.js"></script>
