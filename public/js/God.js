@@ -744,11 +744,12 @@ class God {
             case 1:
                 for (let tower in this.towers) {
                     if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                        if (TowerType.two.cost <= this.player.money) {
-                            this.towers[tower].tower_img = "img/tower/tower1-2.png";
-                            this.towers[tower].type = TowerType.two;
-                            this.player.money -= TowerType.two.cost;
+                        if (TowerType[1][4] <= this.player.money) {
+                            // this.towers[tower].tower_img = "img/tower/tower1-2.png";
+                            this.towers[tower].type = TowerType[1][0];
+                            this.player.money -= TowerType[1][4];
                             this.tower_message[y-1][x-1] = type+1;
+                            drawTower(x,y)
                         }
                         else {
                             $("#moneyshow").css("border", "2px solid red");
@@ -767,11 +768,11 @@ class God {
                 case 2:
                     for (let tower in this.towers) {
                         if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType.three.cost <= this.player.money) {
-                                this.towers[tower].tower_img = "img/tower/tower1-3.png";
-                                this.towers[tower].type = TowerType.three;
-                                this.player.money -= TowerType.three.cost;
-                                this.tower_message[y-1][x-1] = type+1;    
+                            if (TowerType[2][4] <= this.player.money) {
+                                this.towers[tower].type = TowerType[2][0];
+                                this.player.money -= TowerType[2][4];
+                                this.tower_message[y-1][x-1] = type+1;
+                                drawTower(x,y)    
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -792,11 +793,11 @@ class God {
                 case 4:
                     for (let tower in this.towers) {
                         if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType.five.cost <= this.player.money) {
-                                this.towers[tower].tower_img = "img/tower/tower2-2.png";
-                                this.towers[tower].type = TowerType.five;
-                                this.player.money -= TowerType.five.cost;
-                                this.tower_message[x,y] = type+1;   
+                            if (TowerType[4][4] <= this.player.money) {
+                                this.towers[tower].type = TowerType[4][0];
+                                this.player.money -= TowerType[4][4];
+                                this.tower_message[y-1][x-1] = type+1;
+                                drawTower(x,y)     
                             }
                             else {
                                 $("#moneyshow").css("border", "2px solid red");
@@ -812,31 +813,31 @@ class God {
                         }
                     }
                     break;
-                    case 5:
-                        for (let tower in this.towers) {
-                            if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                                if (TowerType.six.cost <= this.player.money) {
-                                    this.towers[tower].tower_img = "img/tower/tower2-3.png";
-                                    this.towers[tower].type = TowerType.six;
-                                    this.player.money -= TowerType.six.cost;
-                                    this.tower_message[x,y] = type+1;
-                                }
-                                else {
-                                    $("#moneyshow").css("border", "2px solid red");
-                                    setTimeout(() => {
-                                        $("#moneyshow").css("border", " white");
-                                    }, 500);
-                                    //金额不足提示框显示2s后消失
-                                    $("#lack_money").show();
-                                    setTimeout(() => {
-                                        $("#lack_money").hide();
-                                    }, 2000);
-                                }
+                case 5:
+                    for (let tower in this.towers) {
+                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+                            if (TowerType[5][4] <= this.player.money) {
+                                this.towers[tower].type = TowerType[5][0];
+                                this.player.money -= TowerType[5][4];
+                                this.tower_message[y-1][x-1] = type+1;
+                                drawTower(x,y)  
+                            }
+                            else {
+                                $("#moneyshow").css("border", "2px solid red");
+                                setTimeout(() => {
+                                    $("#moneyshow").css("border", " white");
+                                }, 500);
+                                //金额不足提示框显示2s后消失
+                                $("#lack_money").show();
+                                setTimeout(() => {
+                                    $("#lack_money").hide();
+                                }, 2000);
                             }
                         }
-                        break;
-                    case 6:
-                        break;                
+                    }
+                    break;
+                case 6:
+                    break;                
         }   
     }
 
@@ -845,9 +846,10 @@ class God {
     Tower_down(type,x,y) {
         for (let tower in this.towers) {
             if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                this.player.money += this.towers[tower].type.sale;
+                this.player.money += TowerType[type-1][5];
                 this.towers.splice(tower, 1);
                 this.tower_message[x,y] = 1;
+                drawTower(x,y)
             }
         }
     }    
