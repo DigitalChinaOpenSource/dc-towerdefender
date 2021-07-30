@@ -70,8 +70,8 @@ class God {
     
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
     showTime() {
-        var count=6;        
-        var time=setInterval(function () {
+        let count=6;        
+        let time=setInterval(function () {
             count -= 1;
             if(count==3){
                 $("#match_before").hide();
@@ -271,7 +271,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 0; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 180;//剩余时间,单位秒
+        this.leftTime = 60000;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
@@ -289,6 +289,7 @@ class God {
         this.otherEneNum = 1;
         this.last_option_x = undefined;
         this.last_option_y = undefined;
+        this.need_hide_option = 0;
         this.tower_message=[
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0],
@@ -441,13 +442,16 @@ class God {
         // 时刻获取游戏状态
         this.getGameState = setInterval(() => {
             this.gameState();
-        }, 300);
+        }, 40);
         this.chat();
 
         this.draw_enemy = setInterval(() => {
             this.drawEnemies();
         }, 40);
 
+        this.draw_bullet = setInterval(() =>{
+            this.drawBullet();
+        }, 40)
         this.createEnemyAAAA = setInterval(()=>{
             if(createEnemySign == 1){
                 for(var i = 0 ;i < killNum*2 ;i++){
@@ -500,6 +504,7 @@ class God {
         clearInterval(this.timeTime);
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
+        clearInterval(this.draw_bullet);
         clearInterval(this.drawEnemy)
     }
 
@@ -541,14 +546,12 @@ class God {
 
     // 传入参数，xy坐标（以格子为单位，横x竖y），防御塔类型（int）
     createTower(x,y,type){
-        console.log("in create tower: x:"+x+" y:"+y);
-        console.log(this.tower_message);
         if(this.player.money<TowerType[type-1][4]){
             this.money_not_enough();
         }else{
             let tower = new Tower(
-                x,
-                y,
+                (x-1)*CELL_WIDTH,
+                (y-1)*CELL_WIDTH,
                 type,
                 // 攻击范围，间隔，cost,sale
                 TowerType[type-1][1],
@@ -564,6 +567,7 @@ class God {
             tower.check_attack_interval = setInterval(() => {
                 this.tower_attack(tower);
             },30);
+            console.log("in create tower: x:"+tower.x+" y:"+tower.y);
         }
     }
 
@@ -587,6 +591,7 @@ class God {
                         this.tower_attack(tower);
                     },30)
                 }, tower.attack_interval);
+                break;
             }   
         } 
     }
@@ -708,15 +713,24 @@ class God {
                     // 触碰到敌人时 敌人血量减少
                     let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
                     let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
+                    console.log(distanceX);
+                    console.log(distanceY);
                     if ((distanceX*distanceX+distanceY*distanceY)<=
-                        ((this.bullets[bullet].size+30)*(this.bullets[bullet].size+30))) {
+                        ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
                         // 调用敌人扣血，传入子弹类型与子弹伤害：
                         // 子弹类型：this.bullets[bullet].type
                         // 子弹伤害：this.bullets[bullet].atk
+                        console.log('1打中敌人！');
+                        console.log(distanceX);
+                        console.log(distanceY);
+                        
+                        console.log(this.bullets.length);
                         this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
                         this.bullets[bullet].dead();
                         this.bullets[bullet] = null;
                         this.bullets.splice(bullet, 1);
+                        console.log('2子弹已清除');
+                        console.log(this.bullets.length);
                         // 生命为0的时候 敌人死去
                         if (this.enemies[ene].hp <= 0) {
                             this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
@@ -848,8 +862,8 @@ class God {
             if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
                 this.player.money += TowerType[type-1][5];
                 this.towers.splice(tower, 1);
-                this.tower_message[x,y] = 1;
-                drawTower(x,y)
+                this.tower_message[y-1][x-1] = 1;
+                drawTower(x,y);
             }
         }
     }    
@@ -859,38 +873,31 @@ class God {
         if (this.towersNumber <= 0) { //如果场上没有塔，则不生成子弹
             return false;
         }
-        for (var tower in this.towers) {
-            for (var ene in this.enemies) {
-                var distanceX = this.towers[tower].x - this.enemies[ene].x; //计算塔到敌人的X坐标距离
-                var distanceY = this.towers[tower].y - this.enemies[ene].y; //计算塔到敌人的Y坐标距离
+        for (let tower in this.towers) {
+            for (let ene in this.enemies) {
+                let distanceX = this.towers[tower].x - this.enemies[ene].x; //计算塔到敌人的X坐标距离
+                let distanceY = this.towers[tower].y - this.enemies[ene].y; //计算塔到敌人的Y坐标距离
                 if (Math.abs(distanceX) <= this.towers[tower].range * CELL_WIDTH && Math.abs(distanceY) <= this.towers[tower].range * CELL_WIDTH) { //判断怪物是否在塔的范围内
                         this.bullets.push(new Bullet(
                         this.towers[tower].x,
                         this.towers[tower].y,
                         this.enemies[ene].x,
                         this.enemies[ene].y,
-                        this.towers[tower].type.bullet_type.speed,    //创建塔的时候也确定了塔的子弹的属性
-                        this.towers[tower].type.bullet_type.color,
-                        this.towers[tower].type.bullet_type.size,
-                        this.towers[tower].type.bullet_type.attack,
-                        this.towers[tower].type.bullet_type.type,
-                        this.towers[tower].type.bullet_type.run,
-                        this.towers[tower].type.bullet_type.reduce,
-                        this.towers[tower].type.bullet_type.blood,
-                        this.towers[tower].type.bullet_type.second,
+                        this.towersNumber[tower].type,
+                        ene
                     )); 
-                    
+                    console.log('有子弹生成！');
                 }       
 
-                //如果当前怪的血量小于等于1，那它一定会死，进行死亡相关结算
-                if (this.enemies[ene].hp <= 1) {
-                    this.player.money += this.enemies[ene].money;
-                    this.enemies[ene].dead();
-                    this.enemyNumber--;  
-                    this.enemies[ene] = null;
-                    this.enemies.splice(ene, 1); //从数组中删除已死的怪物
-                    this.enemyExisted--;
-                } 
+                // //如果当前怪的血量小于等于1，那它一定会死，进行死亡相关结算
+                // if (this.enemies[ene].hp <= 1) {
+                //     this.player.money += this.enemies[ene].money;
+                //     this.enemies[ene].dead();
+                //     this.enemyNumber--;  
+                //     this.enemies[ene] = null;
+                //     this.enemies.splice(ene, 1); //从数组中删除已死的怪物
+                //     this.enemyExisted--;
+                // } 
             }   
         }            
 
@@ -933,36 +940,37 @@ class God {
         let img_tower = new Image()
         console.log('绘制塔:');
         console.log(this.tower_message);
+        ctx.clearRect((option_x-1)*CELL_WIDTH,(option_y-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
         img_tower.src = TowerType[this.tower_message[option_y-1][option_x-1]-1-1][3];
-        console.log(img_tower.src);
-        ctx.drawImage(img_tower, (option_x) * CELL_WIDTH, (option_y) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+        ctx.drawImage(img_tower, (option_x-1) * CELL_WIDTH, (option_y-1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
     }
+
+
 
     //绘制选项
     drawOptions(){
+        console.log("last: x:"+this.last_option_x+" y:"+this.last_option_y);
+        console.log("this: x:"+this.option_x+" y:"+this.option_y);
         let cv = document.querySelector('#canvasMap_option');
         let ctx = cv.getContext('2d');
         let img_xx = new Image();
         let img_up = new Image();
-        // 判断这次单机的位置是不是不在上次点击的位置的左上角和右上角
-        // 因为生成的选项在左上角右上角
-        // 如果不在，则把上次的位置的值置为这次的位置的值
-        if((this.option_x!=this.last_option_x-1||this.option_y!=this.last_option_y-1)
-            &&(this.option_x!=this.last_option_x+1||this.option_y!=this.last_option_y-1)){
-                console.log("点击不是选项的位置");
-                this.last_option_x = this.option_x;
-                this.last_option_y = this.option_y;
-                ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
-            }else{
-                console.log("in draw option before create tower: x:"+this.last_option_x+" y:"+this.last_option_y);
-                console.log(this.tower_message);
-                let num = this.tower_message[this.last_option_y-1][this.last_option_x-1];
-                console.log("num:"+num);
-                if (num==1){   //没有塔，开始建塔
-                    img_xx.src = "img/tower/tower2-1.png";
-                    img_up.src = "img/tower/tower1-1.png";
-                    ctx.drawImage(img_xx, (this.last_option_x + 1) * CELL_WIDTH, (this.lasgt_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                    ctx.drawImage(img_up, (this.last_option_x - 1) * CELL_WIDTH, (this.last_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+        let num = this.tower_message[this.option_y-1][this.option_x-1];
+        // 先判断这次单机的位置是不是能建塔的地方
+        // 如果是，先判断是不是上次生成选项的位置，如果是，执行选项，否则生成选项
+        // 如果不是建塔的地方，判断是不是上次生成选项的地方
+
+        // 在建塔的地方
+        if(num!=0){
+            console.log("on tower home");
+            // 判断这次在不在上次点击的选项上
+            if((this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1)
+            ||(this.option_x==this.last_option_x+1&&this.option_y==this.last_option_y-1)){
+                console.log("on last option");
+                // 建造的地方以上一次点击的位置为准
+                let last_num = this.tower_message[this.last_option_y-1][this.last_option_x-1];
+                // 在，切num=1，没有塔，建塔
+                if (last_num==1){
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
                         this.createTower(this.last_option_x,this.last_option_y,1);
                     }else{
@@ -972,90 +980,114 @@ class God {
                     console.log(this.tower_message);
                     this.drawTower(this.last_option_x,this.last_option_y);
                 }
-                else if(on_x==option_x-1 && on_y==option_y-1){    //左边 升级
-                    this.Tower_up(num-1,option_x,option_y);
+                // num>1,升级和铲除
+                else {
+                    if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
+                        this.Tower_up(num-1,this.last_option_x,this.last_option_y);
+                    }else{
+                        this.Tower_down(this.last_option_x,this.last_option_y);
                     }
-                
+                }
+                ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
+                console.log("clear optioin");
             }
-        
-        
+            // 不在上一次生成的选项上
+            else{
+                console.log("not on last option");
+                if(num==1){
+                    img_up.src = "img/tower/tower1-1.png";
+                    img_xx.src = "img/tower/tower2-1.png";
+                    ctx.drawImage(img_up,(this.option_x-1-1)*CELL_WIDTH,(this.option_y-1-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
+                    ctx.drawImage(img_xx,(this.option_x+1-1)*CELL_WIDTH,(this.option_y-1-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
+                }
+                else{
+                    img_up.src = "img/button/upgrade.png";
+                    img_xx.src = "img/button/sholve.png";
+                    ctx.drawImage(img_up,(this.option_x-1-1)*CELL_WIDTH,(this.option_y-1-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
+                    ctx.drawImage(img_xx,(this.option_x+1-1)*CELL_WIDTH,(this.option_y-1-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
+                }
+            }
+        }
+        // 不在建塔的地方
+        else{
+            console.log("not on tower home");
+            if((this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1)
+            ||(this.option_x==this.last_option_x+1&&this.option_y==this.last_option_y-1)){
+                console.log("on last option");
+                // 建造的地方以上一次点击的位置为准
+                let last_num = this.tower_message[this.last_option_y-1][this.last_option_x-1];
+                // 在，切num=1，没有塔，建塔
+                if (last_num==1){
+                    if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
+                        this.createTower(this.last_option_x,this.last_option_y,1);
+                    }else{
+                        this.createTower(this.last_option_x,this.last_option_y,2);
+                    }
+                    console.log("create tower done");
+                    console.log(this.tower_message);
+                    this.drawTower(this.last_option_x,this.last_option_y);
+                }
+                // num>1,升级和铲除
+                else {
+                    if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
+                        this.Tower_up(num-1,this.last_option_x,this.last_option_y);
+                    }else{
+                        this.Tower_down(this.last_option_x,this.last_option_y);
+                    }
+                }
+                ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
+                console.log("clear optioin");
+            }
+        }
+        this.last_option_x = this.option_x;
+        this.last_option_y = this.option_y;
     }
     
 
      //绘制敌人
      drawEnemies() { 
         //获取敌人对象
-            var cv = document.querySelector('#canvasMap_enemy');
-            //获取2d平面
-            var ctx = cv.getContext('2d');
-            // 清空敌人图片
-            ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-            var img = new Image;
-            // 遍历数据，绘制敌人
-            for (var ene in this.enemies) {
-                // console.log(this.enemies[ene])
-                // if(this.enemies[ene].hp<=0){
-
-                // }
-                img.src = this.enemies[ene].enemy_img;
-                ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
-                Ca.drawBlood(ctx, this.enemies[ene]);
-                // console.log(this.enemies[ene].x)
-                // console.log(this.enemies[ene].y)
-            }
-    
-        }
-    
-
-        // 绘制塔------------------------------------------------------------------------------------------------
-    drawTowers() {
-        var cv = document.querySelector('#canvasMap_tower');
-        var ctx = cv.getContext('2d');
-        
-        for (var tower in this.towers) {
-            var img = new Image;
-            for (var a = 0; a < this.towerAndBullets.length; a++) {
-                if (this.towers[tower].type.type == this.towerAndBullets[a].type) {
-                    // if(this.towerAndBullets[a].type==16){
-                    //     img.src = this.towerAndBullets[a].tower_img;
-                    // ctx.drawImage(img, this.towers[tower].x-300, this.towers[tower].y-300, 600, 600);
-                    // }
-                    img.src = this.towerAndBullets[a].tower_img;
-                    ctx.drawImage(img, this.towers[tower].x, this.towers[tower].y, CELL_WIDTH, CELL_WIDTH);
-                }
-                else if (num!==0 && num!==1){
-                    img_xx.src = "img/button/sholve.png";
-                    img_up.src = "img/button/upgrade.png";
-                    ctx.drawImage(img_xx, (this.last_option_x + 1) * CELL_WIDTH, (this.last_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                    ctx.drawImage(img_up, (this.last_option_x - 1) * CELL_WIDTH, (this.last_option_y - 1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-                }
-                this.last_option_x = this.option_x;
-                this.last_option_y = this.option_y;
-                ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
-           }
+        let cv = document.querySelector('#canvasMap_enemy');
+        //获取2d平面
+        let ctx = cv.getContext('2d');
+        // 清空敌人图片
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        let img = new Image;
+        // 遍历数据，绘制敌人
+        for (let ene in this.enemies) {
+            // console.log(this.enemies[ene])
+            // if(this.enemies[ene].hp<=0){
+            // }
+            img.src = this.enemies[ene].enemy_img;
+            ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
+            Ca.drawBlood(ctx, this.enemies[ene]);
+            // console.log(this.enemies[ene].x)
+            // console.log(this.enemies[ene].y)
         }
     }
 
         //绘制子弹
         drawBullet() {
             //获取子弹画布
-            var cv = document.querySelector('#canvasMap_bullet');
-            var ctx = cv.getContext('2d');
+            let cv = document.querySelector('#canvasMap_bullet');
+            let ctx = cv.getContext('2d');
             //清空原子弹画布
             ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-            for (var bullet in this.bullets) {
+            for (let bullet in this.bullets) {
                 //获取子弹图片
-                var img = new Image;
-                img.src = this.bullets[bullet].color;
+                let img = new Image;
+                img.src = "img/bullet/bullet1-1.png";
                 //获取子弹的坐标
-                var x=this.bullets[bullet].x;
-                var y=this.bullets[bullet].y;
+                let x=this.bullets[bullet].x;
+                let y=this.bullets[bullet].y;
                 //将画布原点（0,0）移动到绘制出子弹的坐标点
-                ctx.translate(x, y);
+                // ctx.translate(x, y);
                 //旋转画布，效果是子弹对着敌人的方向直线移动
-                ctx.rotate(this.bullets[bullet].direction[2]);//direction[2]是子弹类中的旋转角度
-                ctx.drawImage(img, -10,-10,20,20);//待修改，根据不同种类的塔发出的子弹类型规定放置子弹图像的位置及子弹图片大小
-    
+                // ctx.rotate(this.bullets[bullet].direction[2]);//direction[2]是子弹类中的旋转角度
+                ctx.drawImage(img, x,y,20,20);//待修改，根据不同种类的塔发出的子弹类型规定放置子弹图像的位置及子弹图片大小
+                // this.bullets[bullet].x++;
+                // this.bullets[bullet].y++;
+
             }
         }
 
@@ -1103,20 +1135,42 @@ class God {
                 // TalkWords.value="";
                 sendSign = 1
             }
-            setInterval(()=>{
-                if(sendSign == 1){
-                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                    //websocket发送信息
-                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
-                    Words.innerHTML = Words.innerHTML + str;
-                    TalkWords.value="";
-                    sendSign = 0
-                }
+            
+            document.onkeydown = function(event) {
+               
+                let e = event || window.event;
                 
-            },80)
+                if (e && e.keyCode == 13&&TalkWords.value!="") { 
+        
+                    let str = "";
+                    if(TalkWords.value=="show me the money"){
+                        player1.money += 10000;
+                        // console.log(player1)
+                        TalkWords.value="";
+                        return;
+                    }
+                    //判断是谁发出的
+                    if(Who== 0){
+                        str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                      
+                    }
+                    else{
+                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                    }
+                setInterval(()=>{
+                    if(sendSign == 1){
+                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                        //websocket发送信息
+                        this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                        Words.innerHTML = Words.innerHTML + str;
+                        TalkWords.value="";
+                        sendSign = 0
+                    }
+                    
+                },80)
             
-            
+            }
         }
-
+    }
     
 }
