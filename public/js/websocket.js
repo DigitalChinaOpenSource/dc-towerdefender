@@ -8,6 +8,13 @@ let createEnemySign = 0
 let killNum = 0
 let winSign = -1
 let historyWin
+
+
+let otherShaEnemy
+let otherHistoryWin
+let otherEneNum
+let otherSocre
+let otherName
 // function websocketLink(){
 //     ws = new WebSocket(ip)
 //     ws.onopen = function(){
