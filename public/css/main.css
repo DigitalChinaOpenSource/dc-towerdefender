@@ -57,6 +57,38 @@
     transform: translateY(4px);
 }
 
+
+.help1{
+    position: absolute;
+    left: 85%;
+    top: 77%;
+    width: 220px;
+    height:200px;
+    background:url(../img/items/rules.png) center no-repeat;
+
+}
+.help1:hover::after{
+    font-family:"楷体","楷体";
+    position: absolute;
+    content: '------------游戏说明---------------'
+    '本游戏采用同地图双人对战模式，开局赠送一定金币可建造第一个防御塔，'
+    '2秒后随机出现第一只怪。'
+    '防御塔攻击的优先级为血量少/离自己近，消灭怪物可获取金币，'
+    '用于建造防御塔和技能'
+    '当金币数达到“100”、“100”、“50”，可对应使用'
+    '“敌怪升级”、“降怪血量”、“敌增BOSS”等技能来增强敌方怪或减弱己方怪。'
+    '塔和小怪各有三个等级，可通过金币和技能对塔和怪进行升级'
+    '己方消灭一只怪，敌方随机出现两只怪，3分钟内敌方怪比己方多30只或到3分钟时己方怪少，则己方获胜，反之敌方获胜。';
+    font-size: 17px;
+    width: 300px;
+    height: 350px;
+    margin-top: -300px;
+    margin-left: -60px;
+    line-height: 23px;
+    background: cornflowerblue;
+    border-radius: 10px;
+    border: rgba(0, 0, 0, 0.01);
+}
 #log2 {
     display: none;
 }
@@ -251,6 +283,22 @@ ul.list-login-bottom li a:hover {
 #match_time{
     padding-top: 30px;
 }
+.online_num{
+    padding-top: 5%;
+    text-align: left;
+}
+.online_num span{
+    font-size: 33px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    /* color:rgb(0, 247, 255); */
+    padding-top: 5%;
+    
+    
+}
+#detail_num{
+    padding-left: 12px;
+}
 
 
 /* 匹配页面end */
@@ -338,119 +386,103 @@ ul.list-login-bottom li a:hover {
 /* 技能页面 */
 .block3{
     position: absolute;
-    float: left;
     justify-content: center;
     align-items: center;
     background:url(../img/items/skillbar.png) no-repeat;
     margin-top: 42px;
     width: 50%;
     height:50%;
-    float: left;
     margin-left: 110px;
     top:75%;
     z-index: 5;
+    padding-top: 15px;
 }
 
 .allcanvas{
     position: absolute;
 }
 
-.block .block3 .btn-item {
-    width: 200px;
-    height: 120px;
-    float: left;
-    /* background: tomato; */
-    align-content: center;
-    /* z-index: 5; */
-}
-.block .block3 .btn-item > div {
-    width: 200px;
-    height: 90px;
-}
-.block .block3 .btn-item > p {
-    width: 200px;
-    height: 30px;
-    font-size: 10px;
-    text-align: center;
-}
-
-/* 技能按钮 */
-#increase_enemy_level {
-    margin-left: 48px;
-    margin-top: 15px;
-    width: 200px;
+.skill_iel{
+    position: absolute;
+    left: 93px;
+    width: 110px;
     height: 110px;
+    background-size: cover;
     border: none;
-    position: relative;
     background: url(../img/items/special_icons_0034.png) no-repeat center center;
 }
-#increase_enemy_level:hover::after {
-    content: '对战玩家所有的小怪升级';
+.skill_iel:hover::after{
+    font-family:"楷体","楷体";
     position: absolute;
-    bottom: -50px;
-    left: 60px;
-    font-size: 10px;
-    width: 80px;
+    content: '对战玩家所有的小怪升级';
+    font-size: 18px;
+    text-align: center;
+    width: 110px;
     height: 40px;
+    margin-top: -35px;
+
     line-height: 20px;
     background: cornflowerblue;
     border-radius: 10px;
     border: rgba(0, 0, 0, 0.01);
 }
-#increase_enemy_level:active {
-    transform: scale(1.5);
+.skill_iel:active {
+    transform: scale(1.1);
 }
 
-#reduce_enemy_blood {
-    margin-top: 15px;
-    margin-left: -30px;
-    width: 200px;
+.skill_reb{
+    left: 214px;
+    width: 110px;
     height: 110px;
     border: none;
-    position: relative;
+    position: absolute;
     background: url(../img/items/special_icons_0024.png) no-repeat center center;
 }
-#reduce_enemy_blood:hover::after {
-    content: '减少小怪血量';
+.skill_reb:hover::after{
+    font-family:"楷体","楷体";
     position: absolute;
-    bottom: -50px;
-    left: 60px;
-    font-size: 10px;
-    width: 80px;
+    content: '减少敌方小怪血量';
+    font-size: 18px;
+    text-align: center;
+    width: 110px;
     height: 40px;
+    margin-top: -35px;
+
     line-height: 20px;
     background: cornflowerblue;
     border-radius: 10px;
     border: rgba(0, 0, 0, 0.01);
 }
-#reduce_enemy_blood:active {
-    transform: scale(1.5);
+.skill_reb:active {
+    transform: scale(1.1);
 }
-#add_boss {
-    width: 200px;
+.skill_ab{
+    left: 336px;
+    width: 110px;
     height: 110px;
     border: none;
-    margin-left: -108px;
-    margin-top: 15px;
-    position: relative;
+    position: absolute;
     background: url(../img/items/special_icons_0049.png) no-repeat center center;
 }
-#add_boss:hover::after {
-    content: '对战玩家新增大boss';
+.skill_ab:hover::after{
+    font-family:"楷体","楷体";
     position: absolute;
-    bottom: -50px;
-    left: 60px;
-    font-size: 10px;
-    width: 80px;
+    content: '对战玩家新增大boss';
+    font-size: 18px;
+    text-align: center;
+    width: 110px;
     height: 40px;
+    margin-top: -35px;
+
     line-height: 20px;
     background: cornflowerblue;
     border-radius: 10px;
     border: rgba(0, 0, 0, 0.01);
 }
-#add_boss:active {
-    transform: scale(1.5);
+.skill_ab:active {
+    transform: scale(1.1);
 }
+
 /* 信息展示界面 */
 .block2{
     position: absolute;
