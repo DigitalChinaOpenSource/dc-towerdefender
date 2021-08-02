@@ -25,6 +25,7 @@ class God {
         // }, 300);
         // console.log(a);
         $("#startgame_btn").on("click",() => {
+            $("#read_me").hide();
             $("#rule").hide();
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
@@ -34,7 +35,8 @@ class God {
             $("#block_left").show();
             $("#block_right").show();
             $("#skill-btns-container").show();
-
+            $("#rule_btn").hide();
+            $("#rule_close").hide();
              //隐藏游戏页面，显示匹配页面，修改start******************
             this.showTime();
             $(".block").hide();
@@ -58,7 +60,19 @@ class God {
         $("#logout_btn").on("click", () => {
             window.location.href = './log.html';
         });
-
+        $("#rule_close").on("click",() => {
+            $("#rule_btn").hide();
+            $("#rule_close").hide();
+        });
+        $("#rule").on("click",() => {
+            $("#rule_btn").show();
+            $("#rule_close").show();
+            $("#rule_close").on("click",() => {
+                $("#rule_btn").hide();
+                $("#rule_close").hide();
+            });
+        });
+        
 
         // // websocket连接
         // let ws
