@@ -24,6 +24,7 @@ class God {
         // }, 300);
         // console.log(a);
         $("#startgame_btn").on("click",() => {
+            $("#rule").hide();
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
             $("#home_visi").hide();
