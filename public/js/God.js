@@ -994,6 +994,7 @@ class God {
             // 不在上一次生成的选项上
             else{
                 console.log("not on last option");
+                ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
                 if(num==1){
                     img_up.src = "img/tower/tower1-1.png";
                     img_xx.src = "img/tower/tower2-1.png";
