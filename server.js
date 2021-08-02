@@ -178,7 +178,6 @@ app.post('/login', urlEncodedParser, function (req, res) {
                 console.log(infoResult+"test");
                 console.log('----------------------------------\n\n');
             })
-            writeGameInfo(user.name);
             res.redirect('/index');
         // })
     })
