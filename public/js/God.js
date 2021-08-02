@@ -42,8 +42,21 @@ class God {
             // 修改end******************
 
             // //绑定连接事件
+<<<<<<< HEAD
             // this.link();
             this.startGame();
+=======
+            this.websocketLink();
+            //监听开始游戏标识
+            this.startGameAAAA = setInterval(()=>{
+                if(startGameSign == 1){
+                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,
+                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+                    this.startGame()
+                }
+                startGameSign = 0
+            },100)
+>>>>>>> develop
         });
 
         $("#logout_btn").on("click", () => {
@@ -212,10 +225,13 @@ class God {
             console.log('success liked the server')
             let indexScore = document.getElementById('indexScore')
             let indexName = document.getElementById('indexName')
+            let indexHistoryWin = document.getElementById('indexHistoryWin')
             let indexScoreValue = indexScore.innerHTML.trim()
             let indexNameValue = indexName.innerHTML.trim()
+            historyWin = indexHistoryWin.innerHTML.trim()
             linkName = indexNameValue
-            ws.send(JSON.stringify({score:indexScoreValue,name:linkName}))
+            score = indexScoreValue
+            ws.send(JSON.stringify({score:score,name:linkName}))
         }
     
         ws.onmessage = function(evt){
@@ -235,17 +251,32 @@ class God {
                         //生成两个小兵
                         createEnemySign = 1
                         killNum = recv.killNum
-                        this.otherEneNum = recv.enemyNumber
+
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
+
+
+                        console.log('otherSha:'+otherShaEnemy)
+                        console.log('otherhistorywin:'+otherHistoryWin)
+                        console.log('otherEneNum:'+otherEneNum)
+                        console.log('otherScore:'+otherSocre)
+                        console.log('otherName:'+otherName)
 
                     }else if(recv.type == 2){
                         //小兵增强
                         if(recv.action == 0){
                             createEnemySign =3
-                            this.otherEneNum = recv.enemyNumber
                         }else if(recv.action == 1){
                             createEnemySign = 2
-                            this.otherEneNum = recv.enemyNumber
                         }
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
                     }else if(recv.type == 3){
                         //显示聊天msg
 
@@ -259,9 +290,14 @@ class God {
                         // wordsRecv.innerHTML = wordsRecv.innerHTML + str
                         // console.log(recv.msg)
                         console.log(m)
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
                     }else if(recv.type == 4){
                         //调用获胜方法赢了
-                        alert('you win')
+                        // alert('you win')
                         //调用断开连接方法
                         winSign = 1
                         ws.close()
@@ -269,13 +305,19 @@ class God {
                         //时间到，对比小兵enemy数量，判断输赢
                         ////调用断开连接方法
                         if(recv.enemy<enemyExisted){
-                            alert("you losed")
+                            // alert("you losed")
                             winSign =0
                         }else{
-                            alert('you win')
+                            // alert('you win')
                             winSign = 1
                         }
                         ws.close()
+                    }else if(recv.type == 6){
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
                     }
                 }
             }
@@ -318,6 +360,17 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
+<<<<<<< HEAD
+=======
+
+
+
+        this.shaEnemy = 0
+
+
+
+
+>>>>>>> develop
         this.last_option_x = undefined;
         this.last_option_y = undefined;
         this.need_hide_option = 0;
@@ -394,15 +447,25 @@ class God {
                             this.enemyExisted--;
                             kill_enemy_num_of_this_click++
                             this.enemyNumber--
+                            this.shaEnemy++
                             console.log('现在杀死一个还剩'+this.enemyNumber)
                             // this.createEnemy(0);
                             // this.createEnemy(0);
                         }
                     }
+<<<<<<< HEAD
                     for(let q=0;q<kill_enemy_num_of_this_click;q++){
                         this.createEnemy(0)
                         this.createEnemy(0)
                     }
+=======
+                    // for(var q=0;q<kill_enemy_num_of_this_click;q++){
+                    //     this.createEnemy(0)
+                    //     this.createEnemy(0)
+                    // }
+                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,
+                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+>>>>>>> develop
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
@@ -420,6 +483,7 @@ class God {
 
         //增强对方的小怪等级，点击按钮时调用
         $("#increase_enemy_level").on("click", () => {
+<<<<<<< HEAD
             this.createEnemy(0);
             // // console.log(this.enemies);
             // console.log("现有金币数量:" + this.player.money);
@@ -439,6 +503,28 @@ class God {
             // } else {
             //     alert("地图上没有小怪，无法升级");
             // }
+=======
+            // console.log(this.enemies);
+            console.log("现有金币数量:" + this.player.money);
+            console.log("技能需要金币数量:" + increase_enemy_level_money);
+            console.log("小怪的数量为" + this.enemies.length);
+            if (this.enemies.length > 0) {
+                if (increase_enemy_level_money <= this.player.money) {
+                    // this.enemy_level++;
+                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,
+                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+                    console.log("当前小怪等级：" + this.enemy_level);
+                    this.player.money = this.player.money - increase_enemy_level_money;
+                    console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+                } else {
+                    this.money_not_enough();
+                    // $("#moneylack").show(300).delay(1000).hide(200);
+                    // alert("给对方小怪升级金币数量不够");
+                }
+            } else {
+                alert("地图上没有小怪，无法升级");
+            }
+>>>>>>> develop
         });
 
         //给对方增加一个boss，点击按钮时调用
@@ -448,6 +534,12 @@ class God {
             if (add_boss_money <= this.player.money) {
                 this.createEnemy(1);
                 this.player.money = this.player.money - add_boss_money;
+<<<<<<< HEAD
+=======
+                // websocket发送增强信息
+                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,
+                    otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+>>>>>>> develop
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 this.money_not_enough();
@@ -461,7 +553,7 @@ class God {
         }, 300);
         //动态显示敌人数量
         this.timeEnemies = setInterval(() => {
-            $("#lifeshow").html(this.enemyExisted);
+            $("#lifeshow").html(this.enemyNumber - otherEneNum);
         }, 300);
         // 动态显示游戏时间
         this.timeTime = setInterval(() => {
@@ -508,6 +600,24 @@ class God {
         })
 
 
+        this.other = setInterval(() => {
+            $("#p2nameshow").html(otherName);
+            $("#p2pointshow").html(otherSocre);
+            $("#p2historywinshow").html(otherHistoryWin);
+            $("#p2killenemyshow").html(otherShaEnemy);
+            $("#p2leaveenemyshow").html(otherEneNum);
+
+            $("#p1killenemyshow").html(this.shaEnemy);
+            $("#p1leaveenemyshow").html(this.enemyNumber);
+        }, 60);
+
+
+        this.recvOtherMsg = setInterval(() => {
+            this.websocketSend({type:6,roomCount:roomCount,name:linkName,killNum:1,
+                otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+        }, 60);
+
+
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
         // // 初始小兵数量
         // //记录初始小兵数量
@@ -534,6 +644,7 @@ class God {
         clearInterval(this.logEnemyNumber);
         clearInterval(this.draw_bullet);
         clearInterval(this.drawEnemy)
+        clearInterval(this.other)
     }
 
     createFirstEnemy() {
@@ -633,7 +744,7 @@ class God {
         //监听怪的数量到了100只
         if (this.enemyExisted >= 100) {
             this.stopGame();
-            alert("lose");
+            // alert("lose");
             // 跳转到结算页面
             this.to_total_lose();
             // //websocket发送失败信息
@@ -645,9 +756,15 @@ class God {
         //监听时间小于100秒，并且怪的数量小于100只
         if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
+<<<<<<< HEAD
             // // 发送自己的小兵剩余信息给对方
             // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
             alert("win");
+=======
+            // 发送自己的小兵剩余信息给对方
+            this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
+            // alert("win");
+>>>>>>> develop
              // 跳转到结算页面
             this.to_total_win();
         }
@@ -769,7 +886,10 @@ class God {
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
-                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,enemyNumber:this.enemyNumber})
+                            this.enemyNumber--
+                            this.shaEnemy++
+                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,
+                                otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
                             // this.createEnemy(0);
                             // this.createEnemy(0);
                         }
@@ -1175,7 +1295,7 @@ class God {
                 //websocket发送信息
                 // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                 Words.innerHTML = Words.innerHTML + str;
-                TalkWords.value="";
+                // TalkWords.value="";
                 // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
                 
@@ -1235,7 +1355,8 @@ class God {
                 if(sendSign == 1){
                      str =  TalkWords.value ;
                     //websocket发送信息
-                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value,
+                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
                     // Words.innerHTML = Words.innerHTML + str;
                     TalkWords.value="";
                     sendSign = 0
