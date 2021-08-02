@@ -263,7 +263,7 @@ class God {
                         otherName = recv.name
                     }else if(recv.type == 4){
                         //调用获胜方法赢了
-                        alert('you win')
+                        // alert('you win')
                         //调用断开连接方法
                         winSign = 1
                         ws.close()
@@ -271,13 +271,19 @@ class God {
                         //时间到，对比小兵enemy数量，判断输赢
                         ////调用断开连接方法
                         if(recv.enemy<enemyExisted){
-                            alert("you losed")
+                            // alert("you losed")
                             winSign =0
                         }else{
-                            alert('you win')
+                            // alert('you win')
                             winSign = 1
                         }
                         ws.close()
+                    }else if(recv.type == 6){
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
                     }
                 }
             }
@@ -534,6 +540,12 @@ class God {
 
             $("#p1killenemyshow").html(this.shaEnemy);
             $("#p1leaveenemyshow").html(this.enemyNumber);
+        }, 60);
+
+
+        this.recvOtherMsg = setInterval(() => {
+            this.websocketSend({type:6,roomCount:roomCount,name:linkName,killNum:1,
+                otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
         }, 60);
 
 
@@ -1191,7 +1203,7 @@ class God {
                 //websocket发送信息
                 // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                 Words.innerHTML = Words.innerHTML + str;
-                TalkWords.value="";
+                // TalkWords.value="";
                 // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
                 
