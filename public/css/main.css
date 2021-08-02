@@ -57,6 +57,38 @@
     transform: translateY(4px);
 }
 
+
+.help1{
+    position: absolute;
+    left: 85%;
+    top: 77%;
+    width: 220px;
+    height:200px;
+    background:url(../img/items/rules.png) center no-repeat;
+
+}
+.help1:hover::after{
+    font-family:"楷体","楷体";
+    position: absolute;
+    content: '------------游戏说明---------------'
+    '本游戏采用同地图双人对战模式，开局赠送一定金币可建造第一个防御塔，'
+    '2秒后随机出现第一只怪。'
+    '防御塔攻击的优先级为血量少/离自己近，消灭怪物可获取金币，'
+    '用于建造防御塔和技能'
+    '当金币数达到“100”、“100”、“50”，可对应使用'
+    '“敌怪升级”、“降怪血量”、“敌增BOSS”等技能来增强敌方怪或减弱己方怪。'
+    '塔和小怪各有三个等级，可通过金币和技能对塔和怪进行升级'
+    '己方消灭一只怪，敌方随机出现两只怪，3分钟内敌方怪比己方多30只或到3分钟时己方怪少，则己方获胜，反之敌方获胜。';
+    font-size: 17px;
+    width: 300px;
+    height: 350px;
+    margin-top: -300px;
+    margin-left: -60px;
+    line-height: 23px;
+    background: cornflowerblue;
+    border-radius: 10px;
+    border: rgba(0, 0, 0, 0.01);
+}
 #log2 {
     display: none;
 }

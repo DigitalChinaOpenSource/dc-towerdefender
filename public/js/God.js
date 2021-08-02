@@ -2,6 +2,7 @@ class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
+
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
@@ -24,6 +25,7 @@ class God {
         // }, 300);
         // console.log(a);
         $("#startgame_btn").on("click",() => {
+            $("#rule").hide();
             $("#startgame_btn").hide();
             $("#logout_btn").hide();
             $("#home_visi").hide();
@@ -41,6 +43,10 @@ class God {
             // 修改end******************
 
             // //绑定连接事件
+<<<<<<< HEAD
+            // this.link();
+            this.startGame();
+=======
             this.websocketLink();
             //监听开始游戏标识
             this.startGameAAAA = setInterval(()=>{
@@ -51,6 +57,7 @@ class God {
                 }
                 startGameSign = 0
             },100)
+>>>>>>> develop
         });
 
         $("#logout_btn").on("click", () => {
@@ -183,6 +190,34 @@ class God {
     //             }
     //         }
 
+    //     }
+    // }
+
+    //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
+    // 通过roomCount判断发给哪个房间组
+    // 通过name确定是否为对方发送的信息
+    // 通过type确定为哪种信息
+    //type:0,msg:
+    //{type:0,score:}
+    // type:1,msg：
+    // {type:1,roomCount: ,name:''}
+    // type:2,msg：
+    // {type:2,roomCount: ,name:''}
+    // type:3,msg：
+    // {type:3,roomCount: ,name:','msg:''}
+    // type:4,msg：
+    // {type:4,roomCount: ,name:''}
+    //type:5,msg:
+    //{type:5,roomConut: ,name:'',enemy: }
+    // send(msg){
+    //     // 发送信息转为string发送
+    //     this.ws.send(JSON.stringify(msg))
+    // }
+    // //websocket 关闭连接，再玩需要重新建立连接
+    // close(){
+    //     this.ws.onclose()
+    //     this.link()
+    // }
 
     websocketLink(){
         console.log(ip)
@@ -326,6 +361,8 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
+<<<<<<< HEAD
+=======
 
 
 
@@ -334,6 +371,7 @@ class God {
 
 
 
+>>>>>>> develop
         this.last_option_x = undefined;
         this.last_option_y = undefined;
         this.need_hide_option = 0;
@@ -402,7 +440,7 @@ class God {
                             this.player.money += this.enemies[ene2].money; 
                             this.enemies[ene2].dead();
                             // console.log("kill");
-                            this.killed_enemies++;                            
+                            this.killed_enemies++;
                             this.nowenemys--;
                             this.enemies[ene2] = null;
                             // this.enemies.splice(e, 1);
@@ -416,12 +454,19 @@ class God {
                             // this.createEnemy(0);
                         }
                     }
+<<<<<<< HEAD
+                    for(let q=0;q<kill_enemy_num_of_this_click;q++){
+                        this.createEnemy(0)
+                        this.createEnemy(0)
+                    }
+=======
                     // for(var q=0;q<kill_enemy_num_of_this_click;q++){
                     //     this.createEnemy(0)
                     //     this.createEnemy(0)
                     // }
                     this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,
                         otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+>>>>>>> develop
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
@@ -439,6 +484,27 @@ class God {
 
         //增强对方的小怪等级，点击按钮时调用
         $("#increase_enemy_level").on("click", () => {
+<<<<<<< HEAD
+            this.createEnemy(0);
+            // // console.log(this.enemies);
+            // console.log("现有金币数量:" + this.player.money);
+            // console.log("技能需要金币数量:" + increase_enemy_level_money);
+            // console.log("小怪的数量为" + this.enemies.length);
+            // if (this.enemies.length > 0) {
+            //     if (increase_enemy_level_money <= this.player.money) {
+            //         this.enemy_level++;
+            //         console.log("当前小怪等级：" + this.enemy_level);
+            //         this.player.money = this.player.money - increase_enemy_level_money;
+            //         console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
+            //     } else {
+            //         this.money_not_enough();
+            //         // $("#moneylack").show(300).delay(1000).hide(200);
+            //         // alert("给对方小怪升级金币数量不够");
+            //     }
+            // } else {
+            //     alert("地图上没有小怪，无法升级");
+            // }
+=======
             // console.log(this.enemies);
             console.log("现有金币数量:" + this.player.money);
             console.log("技能需要金币数量:" + increase_enemy_level_money);
@@ -459,6 +525,7 @@ class God {
             } else {
                 alert("地图上没有小怪，无法升级");
             }
+>>>>>>> develop
         });
 
         //给对方增加一个boss，点击按钮时调用
@@ -466,11 +533,14 @@ class God {
             console.log("现有金币数量:" + this.player.money);
             console.log("技能需要金币数量:" + add_boss_money);
             if (add_boss_money <= this.player.money) {
-                // this.createEnemy(1);
+                this.createEnemy(1);
                 this.player.money = this.player.money - add_boss_money;
+<<<<<<< HEAD
+=======
                 // websocket发送增强信息
                 this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,
                     otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+>>>>>>> develop
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 this.money_not_enough();
@@ -605,7 +675,7 @@ class God {
         enemy.check_levelup();
         enemy.check_boss();
         this.enemies.push(enemy);
-        console.log(this.enemies);
+        // console.log(this.enemies);
         this.enemyNumber++;
         // if (this.enemyNumber <= length) {
         //     let enemy = new Enemy();
@@ -673,23 +743,29 @@ class God {
 
     judge_game() {
         //监听怪的数量到了100只
-        if (this.enemyNumber >= 100) {
+        if (this.enemyExisted >= 100) {
             this.stopGame();
             // alert("lose");
             // 跳转到结算页面
             this.to_total_lose();
-            //websocket发送失败信息
-            this.websocketSend({type:4,roomCount:roomCount,name:linkName})
+            // //websocket发送失败信息
+            // this.send({type:4,roomCount:this.roomCount,name:this.name})
             // // 关闭websocket连接
             // this.close()
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
-        if (this.enemyNumber < 100 && this.leftTime <= 0) {
+        if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
+<<<<<<< HEAD
+            // // 发送自己的小兵剩余信息给对方
+            // this.send({type:5,roomCount:this.roomCount,name:this.name,enemy:this.enemyExisted})
+            alert("win");
+=======
             // 发送自己的小兵剩余信息给对方
             this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
             // alert("win");
+>>>>>>> develop
              // 跳转到结算页面
             this.to_total_win();
         }
@@ -1182,7 +1258,7 @@ class God {
             let str = "";
             TalkSub.onclick = function(){
                 //定义空字符串
-                 
+                let str = "";
                 if(TalkWords.value == ""){
                     // 消息为空时弹窗
                     alert("消息不能为空");
@@ -1195,6 +1271,23 @@ class God {
                     TalkWords.value="";
                     return;
                 }
+
+                //判断是谁发出的
+                if(Who== 0){
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                  
+                // }
+                // else{
+                //     str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // }
+                // console.log('=========================================================')
+                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // //websocket发送信息
+                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                // Words.innerHTML = Words.innerHTML + str;
+                // TalkWords.value="";
+                sendSign = 1
+
                     str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
                   
               
@@ -1207,6 +1300,7 @@ class God {
                 // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
                 
+
             }
             document.onkeydown = function(event) {
                
@@ -1222,6 +1316,27 @@ class God {
                         return;
                     }
 
+                    //判断是谁发出的
+                    if(Who== 0){
+                        str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                      
+                    }
+                    else{
+                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                    }
+                setInterval(()=>{
+                    if(sendSign == 1){
+                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                        //websocket发送信息
+                        this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                        Words.innerHTML = Words.innerHTML + str;
+                        TalkWords.value="";
+                        sendSign = 0
+                    }
+                    
+                },80)
+
+
                 str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
 
                 console.log('=========================================================')
@@ -1234,6 +1349,7 @@ class God {
                 // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
             
+
             }
         }
             setInterval(()=>{
@@ -1248,9 +1364,6 @@ class God {
                 }
                 
             },80)
-            
-
+        }
     }
-    
-
 }
