@@ -974,7 +974,7 @@ class God {
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
                         this.createTower(this.last_option_x,this.last_option_y,1);
                     }else{
-                        this.createTower(this.last_option_x,this.last_option_y,2);
+                        this.createTower(this.last_option_x,this.last_option_y,4);
                     }
                     console.log("create tower done");
                     console.log(this.tower_message);
@@ -1021,7 +1021,7 @@ class God {
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
                         this.createTower(this.last_option_x,this.last_option_y,1);
                     }else{
-                        this.createTower(this.last_option_x,this.last_option_y,2);
+                        this.createTower(this.last_option_x,this.last_option_y,4);
                     }
                     console.log("create tower done");
                     console.log(this.tower_message);
