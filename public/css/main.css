@@ -283,6 +283,22 @@ ul.list-login-bottom li a:hover {
 #match_time{
     padding-top: 30px;
 }
+.online_num{
+    padding-top: 5%;
+    text-align: left;
+}
+.online_num span{
+    font-size: 33px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    /* color:rgb(0, 247, 255); */
+    padding-top: 5%;
+    
+    
+}
+#detail_num{
+    padding-left: 12px;
+}
 
 
 /* 匹配页面end */
