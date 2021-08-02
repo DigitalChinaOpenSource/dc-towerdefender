@@ -133,7 +133,8 @@ class God {
             $("#home_visi").show();
             this.clearCanvas()
             this.clean()
-            this._init()
+            // this._init()
+            // new God()
             // this.to_match();
         });
     }
@@ -156,7 +157,8 @@ class God {
             $("#home_visi").show();
             this.clearCanvas()
             this.clean()
-            this._init()
+            // this._init()
+            // new God()
             // this.to_match();
         });
         
@@ -772,7 +774,7 @@ class God {
             // 跳转到结算页面
             this.to_total_lose();
             // //websocket发送失败信息
-            // this.send({type:4,roomCount:this.roomCount,name:this.name})
+            this.websocketSend({type:4,roomCount:roomCount,name:linkName})
             // // 关闭websocket连接
             // this.close()
 
@@ -830,10 +832,15 @@ class God {
         document.getElementById("add_boss").disabled=true;
 
 
-        this.towers.splice(0, this.towers.length);
-        this.bullets.splice(0, this.bullets.length);
-        this.enemies.splice(0, this.enemies.length);
-        this.options.splice(0, this.options.length);
+        this.towers = null
+        this.bullets = null
+        this.enemies = null
+        this.options = null
+
+        this.towers = []
+        this.bullets = []
+        this.enemies = []
+        this.options = []
 
 
         console.log('================================='+this.towers)
@@ -1396,12 +1403,12 @@ class God {
     }
 
     clearCanvas(){
-        // let cv = document.querySelector('#canvasMap_tower');
-        // let ctx = cv.getContext('2d');
-        // ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        // let cv1 = document.querySelector('#canvasMap_tower');
-        // let ctx1 = cv1.getContext('2d');
-        // ctx1.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        let cv = document.querySelector('#canvasMap_tower');
+        let ctx = cv.getContext('2d');
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        let cv1 = document.querySelector('#canvasMap_bullet');
+        let ctx1 = cv1.getContext('2d');
+        ctx1.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
     }
     
 
