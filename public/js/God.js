@@ -484,7 +484,7 @@ class God {
         }, 300);
         //动态显示敌人数量
         this.timeEnemies = setInterval(() => {
-            $("#lifeshow").html(this.enemyExisted);
+            $("#lifeshow").html(this.enemyNumber - otherEneNum);
         }, 300);
         // 动态显示游戏时间
         this.timeTime = setInterval(() => {
@@ -675,7 +675,7 @@ class God {
         //监听怪的数量到了100只
         if (this.enemyNumber >= 100) {
             this.stopGame();
-            alert("lose");
+            // alert("lose");
             // 跳转到结算页面
             this.to_total_lose();
             //websocket发送失败信息
