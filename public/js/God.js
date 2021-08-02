@@ -827,120 +827,41 @@ class God {
 
     //升级塔
     Tower_up(type,x,y){
-        
-        switch (type) {
-            case 1:
-                for (let tower in this.towers) {
-                    if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                        if (TowerType[1][4] <= this.player.money) {
-                            // this.towers[tower].tower_img = "img/tower/tower1-2.png";
-                            this.towers[tower].type = TowerType[1][0];
-                            this.player.money -= TowerType[1][4];
-                            this.tower_message[y-1][x-1] = type+1;
-                            drawTower(x,y)
-                        }
-                        else {
-                            $("#moneyshow").css("border", "2px solid red");
-                            setTimeout(() => {
-                                $("#moneyshow").css("border", " white");
-                            }, 500);
-                            //金额不足提示框显示2s后消失
-                            $("#lack_money").show();
-                            setTimeout(() => {
-                                $("#lack_money").hide();
-                            }, 2000);
-                        }
+        if(type%3!=0){
+            for (let tower in this.towers) {
+                // console.log("tower的位置：x:"+(this.towers[tower].x/CELL_WIDTH)+"y:"+(this.towers[tower].y/CELL_WIDTH));
+                // console.log("点击位置：x:"+(x-1)+"y:"+(y-1));
+                if (this.towers[tower].x == (x-1)*CELL_WIDTH && this.towers[tower].y == (y-1)*CELL_WIDTH) {
+                    if (TowerType[type][4] <= this.player.money) {                         
+                        this.towers[tower].type = TowerType[type][0];
+                        this.player.money -= TowerType[type][4];
+                        this.tower_message[y-1][x-1] = type+2;
+                        this.drawTower(x,y)
+                    }
+                    else {
+                        this.money_not_enough();
                     }
                 }
-                break;
-                case 2:
-                    for (let tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType[2][4] <= this.player.money) {
-                                this.towers[tower].type = TowerType[2][0];
-                                this.player.money -= TowerType[2][4];
-                                this.tower_message[y-1][x-1] = type+1;
-                                drawTower(x,y)    
-                            }
-                            else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-                            }
-                        }
-                    }
-                    break;
-                case 3:
-                    break;               
-                case 4:
-                    for (let tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType[4][4] <= this.player.money) {
-                                this.towers[tower].type = TowerType[4][0];
-                                this.player.money -= TowerType[4][4];
-                                this.tower_message[y-1][x-1] = type+1;
-                                drawTower(x,y)     
-                            }
-                            else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-                            }
-                        }
-                    }
-                    break;
-                case 5:
-                    for (let tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType[5][4] <= this.player.money) {
-                                this.towers[tower].type = TowerType[5][0];
-                                this.player.money -= TowerType[5][4];
-                                this.tower_message[y-1][x-1] = type+1;
-                                drawTower(x,y)  
-                            }
-                            else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-                            }
-                        }
-                    }
-                    break;
-                case 6:
-                    break;                
-        }   
+            }
+        }
+   
     }
 
 
     //拆除塔
     Tower_down(type,x,y) {
+
         for (let tower in this.towers) {
-            if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+            if (this.towers[tower].x == (x-1)*CELL_WIDTH && this.towers[tower].y == (y-1)*CELL_WIDTH) {
                 this.player.money += TowerType[type-1][5];
                 this.towers.splice(tower, 1);
                 this.tower_message[y-1][x-1] = 1;
-                drawTower(x,y);
+                let cv = document.querySelector('#canvasMap_tower');
+                let ctx = cv.getContext('2d');
+                ctx.clearRect((x-1)*CELL_WIDTH,(y-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
             }
         }
-    }    
+    }  
 
     ////检查塔的状态并生成子弹
     checkAndCreateBullets() {
@@ -1009,6 +930,7 @@ class God {
 
     //绘制塔
     drawTower(option_x,option_y) {
+        console.log("x:"+option_x+" y:"+option_y)
         let cv = document.querySelector('#canvasMap_tower');
         let ctx = cv.getContext('2d');
         let img_tower = new Image()
@@ -1016,7 +938,9 @@ class God {
         console.log(this.tower_message);
         ctx.clearRect((option_x-1)*CELL_WIDTH,(option_y-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
         img_tower.src = TowerType[this.tower_message[option_y-1][option_x-1]-1-1][3];
+        console.log(img_tower.src)
         ctx.drawImage(img_tower, (option_x-1) * CELL_WIDTH, (option_y-1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+
     }
 
 
@@ -1038,12 +962,18 @@ class God {
         if(num!=0){
             console.log("on tower home");
             // 判断这次在不在上次点击的选项上
+            // console.log("last_num:"+this.tower_message[this.last_option_y-1][this.last_option_x-1]);
+            // console.log("option_x:"+this.option_x+" option_y:"+this.option_y);
+            // console.log("last_option_x:"+this.last_option_x+" last_option_y:"+this.last_option_y);
             if((this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1)
             ||(this.option_x==this.last_option_x+1&&this.option_y==this.last_option_y-1)){
-                console.log("on last option");
+                console.log("on aaaa last option");
                 // 建造的地方以上一次点击的位置为准
                 let last_num = this.tower_message[this.last_option_y-1][this.last_option_x-1];
+                console.log("last_num:"+this.tower_message[this.last_option_y-1][this.last_option_x-1]);
                 // 在，切num=1，没有塔，建塔
+                // console.log("last_num:"+last_num);
+
                 if (last_num==1){
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
                         this.createTower(this.last_option_x,this.last_option_y,1);
@@ -1056,10 +986,14 @@ class God {
                 }
                 // num>1,升级和铲除
                 else {
+                    console.log("else");
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
-                        this.Tower_up(num-1,this.last_option_x,this.last_option_y);
+                        this.Tower_up(last_num-1,this.last_option_x,this.last_option_y);
+                        console.log("towerup done");
                     }else{
-                        this.Tower_down(this.last_option_x,this.last_option_y);
+                        this.Tower_down(last_num-1,this.last_option_x,this.last_option_y);
+                        console.log("铲除这里的x:"+this.last_option_x+" y:"+this.last_option_y);
+                        console.log("tower_down done");
                     }
                 }
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
@@ -1105,9 +1039,10 @@ class God {
                 // num>1,升级和铲除
                 else {
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
-                        this.Tower_up(num-1,this.last_option_x,this.last_option_y);
+                        this.Tower_up(last_num-1,this.last_option_x,this.last_option_y);
                     }else{
-                        this.Tower_down(this.last_option_x,this.last_option_y);
+                        this.Tower_down(last_num-1,this.last_option_x,this.last_option_y);
+                        console.log("铲除这里的x:"+this.last_option_x+" y:"+this.last_option_y);
                     }
                 }
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
