@@ -196,7 +196,7 @@ class God {
             let indexNameValue = indexName.innerHTML.trim()
             historyWin = indexHistoryWin.innerHTML.trim()
             linkName = indexNameValue
-            score = inde
+            score = indexScoreValue
             ws.send(JSON.stringify({score:score,name:linkName}))
         }
     
@@ -223,6 +223,13 @@ class God {
                         otherEneNum = recv.otherEneNum
                         otherSocre = recv.otherSocre
                         otherName = recv.name
+
+
+                        console.log('otherSha:'+otherShaEnemy)
+                        console.log('otherhistorywin:'+otherHistoryWin)
+                        console.log('otherEneNum:'+otherEneNum)
+                        console.log('otherScore:'+otherSocre)
+                        console.log('otherName:'+otherName)
 
                     }else if(recv.type == 2){
                         //小兵增强
@@ -556,6 +563,7 @@ class God {
         clearInterval(this.logEnemyNumber);
         clearInterval(this.draw_bullet);
         clearInterval(this.drawEnemy)
+        clearInterval(this.other)
     }
 
     createFirstEnemy() {
@@ -791,6 +799,7 @@ class God {
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
+                            this.enemyNumber--
                             this.shaEnemy++
                             this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,
                                 otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
