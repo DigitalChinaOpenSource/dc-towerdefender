@@ -205,6 +205,95 @@ class God {
     //     this.link()
     // }
 
+    websocketLink(){
+        console.log(ip)
+        ws = new WebSocket(ip)
+        ws.onopen = function(){
+            console.log('success liked the server')
+            let indexScore = document.getElementById('indexScore')
+            let indexName = document.getElementById('indexName')
+            let indexScoreValue = indexScore.innerHTML.trim()
+            let indexNameValue = indexName.innerHTML.trim()
+            linkName = indexNameValue
+            ws.send(JSON.stringify({score:indexScoreValue,name:linkName}))
+        }
+    
+        ws.onmessage = function(evt){
+            // 消息转为json类型
+            var recv = JSON.parse(evt.data)
+            //设定房间号
+            if(recv.type==0){
+                roomCount = recv.roomCount
+                console.log('roomCount========>'+roomCount)
+                startGameSign = 1
+            }
+            // 判断信息是否是发给自己的房间的
+            if(recv.roomCount == roomCount){
+                // 判断是否为自己发的信息
+                if(recv.name != linkName){
+                    if(recv.type == 1){
+                        //生成两个小兵
+                        createEnemySign = 1
+                        killNum = recv.killNum
+                        this.otherEneNum = recv.enemyNumber
+
+                    }else if(recv.type == 2){
+                        //小兵增强
+                        if(recv.action == 0){
+                            createEnemySign =3
+                            this.otherEneNum = recv.enemyNumber
+                        }else if(recv.action == 1){
+                            createEnemySign = 2
+                            this.otherEneNum = recv.enemyNumber
+                        }
+                    }else if(recv.type == 3){
+                        //显示聊天msg
+
+                         var Words = document.getElementById('words')
+                        var m=recv.msg;
+                        // alert(m);
+                        // alert(Words);
+                        var str = '<div class="atalk"><span>' + m +'</span></div>';
+                        Words.innerHTML = Words.innerHTML + str;
+                        // alert(str);
+                        // wordsRecv.innerHTML = wordsRecv.innerHTML + str
+                        // console.log(recv.msg)
+                        console.log(m)
+                    }else if(recv.type == 4){
+                        //调用获胜方法赢了
+                        alert('you win')
+                        //调用断开连接方法
+                        winSign = 1
+                        ws.close()
+                    }else if(recv.type == 5){
+                        //时间到，对比小兵enemy数量，判断输赢
+                        ////调用断开连接方法
+                        if(recv.enemy<enemyExisted){
+                            alert("you losed")
+                            winSign =0
+                        }else{
+                            alert('you win')
+                            winSign = 1
+                        }
+                        ws.close()
+                    }
+                }
+            }
+        }
+        
+    }
+
+    websocketSend(msg){
+        ws.send(JSON.stringify(msg))
+    }
+
+    websocketClose(){
+        ws.close()
+        console.log('success close websocket link')
+        // this.websocketLink()
+    }
+
+    
 
 
     _init() {
@@ -388,8 +477,6 @@ class God {
             this.drawEnemies();
         }, 40);
 
-<<<<<<< HEAD
-=======
         this.draw_bullet = setInterval(() =>{
             this.drawBullet();
         }, 40)
@@ -420,7 +507,6 @@ class God {
 
         })
 
->>>>>>> develop
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
         // // 初始小兵数量
@@ -446,11 +532,8 @@ class God {
         clearInterval(this.timeTime);
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
-<<<<<<< HEAD
-=======
         clearInterval(this.draw_bullet);
         clearInterval(this.drawEnemy)
->>>>>>> develop
     }
 
     createFirstEnemy() {
@@ -686,8 +769,9 @@ class God {
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
-                            this.createEnemy(0);
-                            this.createEnemy(0);
+                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,enemyNumber:this.enemyNumber})
+                            // this.createEnemy(0);
+                            // this.createEnemy(0);
                         }
                         break;
                     }
@@ -1003,6 +1087,9 @@ class God {
             // console.log(this.enemies[ene])
             // if(this.enemies[ene].hp<=0){
             // }
+            if(this.enemies[ene] == null){
+                continue
+            }
             img.src = this.enemies[ene].enemy_img;
             ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
             Ca.drawBlood(ctx, this.enemies[ene]);
@@ -1042,11 +1129,12 @@ class God {
     //聊天
     chat(){
             // console.log(this.player)
-            let player1 = this.player;
-            let Words = document.getElementById("words");
-            let Who = 0;
-            let TalkWords = document.getElementById("talkwords");
-            let TalkSub = document.getElementById("talksub");
+            var player1 = this.player;
+            var Words = document.getElementById("words");
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
+            let sendSign = 0
+            let str = "";
             TalkSub.onclick = function(){
                 //定义空字符串
                 let str = "";
@@ -1062,18 +1150,11 @@ class God {
                     TalkWords.value="";
                     return;
                 }
+
                 //判断是谁发出的
                 if(Who== 0){
                     str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
                   
-<<<<<<< HEAD
-                }
-                else{
-                    str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                }
-                Words.innerHTML = Words.innerHTML + str;
-                TalkWords.value="";
-=======
                 // }
                 // else{
                 //     str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
@@ -1085,30 +1166,35 @@ class God {
                 // Words.innerHTML = Words.innerHTML + str;
                 // TalkWords.value="";
                 sendSign = 1
->>>>>>> develop
+
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                  
+              
+                console.log('=========================================================')
+                
+                //websocket发送信息
+                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                Words.innerHTML = Words.innerHTML + str;
+                TalkWords.value="";
+                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                 sendSign = 1
+                
+
             }
-            
             document.onkeydown = function(event) {
                
-<<<<<<< HEAD
-                var e = event || window.event;
-                
-                if (e && e.keyCode == 13&&TalkWords.value!="") { 
-        
-                    var str = "";
-=======
                 let e = event || window.event;
                 
                 if (e && e.keyCode == 13&&TalkWords.value!="") { 
         
                     let str = "";
->>>>>>> develop
                     if(TalkWords.value=="show me the money"){
                         player1.money += 10000;
                         // console.log(player1)
                         TalkWords.value="";
                         return;
                     }
+
                     //判断是谁发出的
                     if(Who== 0){
                         str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
@@ -1117,12 +1203,6 @@ class God {
                     else{
                         str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                     }
-<<<<<<< HEAD
-                    Words.innerHTML = Words.innerHTML + str;
-                    TalkWords.value="";
-      
-                }
-=======
                 setInterval(()=>{
                     if(sendSign == 1){
                         str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
@@ -1134,10 +1214,34 @@ class God {
                     }
                     
                 },80)
+
+
+                str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+
+                console.log('=========================================================')
+               
+                //websocket发送信息
+                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                Words.innerHTML = Words.innerHTML + str;
+                // str=TalkWords.value;
+                // TalkWords.value="";
+                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                 sendSign = 1
             
->>>>>>> develop
+
             }
         }
+            setInterval(()=>{
+                if(sendSign == 1){
+                     str =  TalkWords.value ;
+                    //websocket发送信息
+                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                    // Words.innerHTML = Words.innerHTML + str;
+                    TalkWords.value="";
+                    sendSign = 0
+                }
+                
+            },80)
+        }
     }
-    
 }

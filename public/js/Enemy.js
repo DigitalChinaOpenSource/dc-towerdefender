@@ -294,7 +294,8 @@ class Enemy {
 
     // 技能：怪物扣血
     check_bloodloss(){
-        this.reduce_hp(this.originHp*(1+0.1*this.enemy_level)*0.5)
+        // this.reduce_hp(this.originHp*(1+0.1*this.enemy_level)*0.5)
+        this.reduce_hp(200)
     }
 
     // 怪物死亡
