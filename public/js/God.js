@@ -992,7 +992,6 @@ class God {
                         console.log("towerup done");
                     }else{
                         this.Tower_down(last_num-1,this.last_option_x,this.last_option_y);
-                        console.log("铲除这里的x:"+this.last_option_x+" y:"+this.last_option_y);
                         console.log("tower_down done");
                     }
                 }
@@ -1042,7 +1041,6 @@ class God {
                         this.Tower_up(last_num-1,this.last_option_x,this.last_option_y);
                     }else{
                         this.Tower_down(last_num-1,this.last_option_x,this.last_option_y);
-                        console.log("铲除这里的x:"+this.last_option_x+" y:"+this.last_option_y);
                     }
                 }
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
