@@ -1,14 +1,16 @@
-//部署时须引入四个必备依赖
+//部署时须引入五个必备依赖
 //npm install express
 //npm install mysql
 //npm install express-session
 //npm install ejs
+//npm install alert
 //引入必备依赖
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var path = require('path');
 var session=require('express-session');
+var alert=require("alert")
 //var cookieParser=require('cookie-parser') 
 
 //项目根目录
@@ -92,10 +94,12 @@ app.post('/regist', urlEncodedParser, function (req, res) {
     connection.query(searchSql, userName, function (error, sameName) {
         if (error) {
             console.log('ERROR--' + error.message);
-            
         }
         if(sameName.length!=0){
-            return res.json({msg:"用户名已存在！"});
+            alert("用户名已被注册，请重新输入用户名！")
+            //return res.json({msg:"用户名已存在！"});
+            //return res.redirect('/login');
+            return;
         }else{
             var sql = 'insert into users(name,password,score) values(?,?,0)';
             connection.query(sql, params, function (error, result) {
@@ -128,7 +132,10 @@ app.post('/login', urlEncodedParser, function (req, res) {
         if (result.length == 0) {
             console.log("用户名或者密码错误！");
             // res.sendFile(staticPath + '/login_fail.html');
-            return res.json({msg:"用户名或密码错误，请重新登录！"});
+            //return res.json({msg:"用户名或密码错误，请重新登录！"});
+            alert("用户名或密码错误，请重新登录！")
+            //return res.redirect('/login');
+            return;
         }
         
         //登录成功，取出返回值
