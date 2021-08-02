@@ -184,7 +184,7 @@ app.post('/login', urlEncodedParser, function (req, res) {
     })
 })
 
-//记录对局结果
+//记录对局结果,name为赢家的姓名
 function writeGameInfo(name) {
     var winnerName = name;
     var querySql = 'select score,total_win from users where name=?';
