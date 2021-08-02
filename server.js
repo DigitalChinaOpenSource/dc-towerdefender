@@ -101,7 +101,7 @@ app.post('/regist', urlEncodedParser, function (req, res) {
             //return res.redirect('/login');
             return;
         }else{
-            var sql = 'insert into users(name,password,score) values(?,?,0)';
+            var sql = 'insert into users(name,password,score,total_win) values(?,?,300,0)';
             connection.query(sql, params, function (error, result) {
                 if (error) {
                 console.log(sql);
@@ -122,7 +122,7 @@ app.post('/login', urlEncodedParser, function (req, res) {
     var userName = req.body.username;
     var password = req.body.password;
     var params = [userName, password];
-    var sql = 'select id,name,nickname,score from users where name=? and password=?';
+    var sql = 'select id,name,nickname,score,total_win from users where name=? and password=?';
     connection.query(sql, params, function (error, result) {
         if (error) {
             console.log('ERROR--' + error.message);
@@ -140,20 +140,20 @@ app.post('/login', urlEncodedParser, function (req, res) {
         
         //登录成功，取出返回值
         var data=result[0];
-        var id=data.id;
-        var countSql='select id from game_info_pvp where winner=?';
-        connection.query(countSql, id, function (error, counts) {
-            if (error) {
-                console.log('ERROR--' + error.message);
-                return;
-            }
-            var count=counts.length;
-            console.log(count);
+        // var id=data.id;
+        // var countSql='select id from game_info_pvp where winner=?';
+        // connection.query(countSql, id, function (error, counts) {
+        //     if (error) {
+        //         console.log('ERROR--' + error.message);
+        //         return;
+        //     }
+        //     var count=counts.length;
+        //     console.log(count);
             var user={
                 'name':data.name,
                 'nickName':data.nickname,
                 'score':data.score,
-                'count':count
+                'count':data.total_win
             }
             console.log("static:"+staticPath);
             console.log(user);
@@ -178,10 +178,39 @@ app.post('/login', urlEncodedParser, function (req, res) {
                 console.log(infoResult+"test");
                 console.log('----------------------------------\n\n');
             })
+            writeGameInfo(user.name);
             res.redirect('/index');
-        })
+        // })
     })
 })
+
+//记录对局结果
+function writeGameInfo(name){
+    var winnerName=name;
+    var querySql='select score,total_win from users where name=?'
+    connection.query(querySql, winnerName, function (error, queryResult) {
+        if(error){
+            console.log('ERROR--' + error.message);
+            return;
+        }
+        var queryData=queryResult[0];
+        var queryScore=queryData.score+100;
+        var queryTotalCount=queryData.total_win+1;
+        var queryParam=[queryScore,queryTotalCount,winnerName];
+        var updateSql="update users set score=?,total_win=? where name=?";
+        connection.query(updateSql,queryParam,function(err,updateResule){
+            if(err){
+                console.log('ERROR--' + error.message);
+                return;
+            }
+            console.log('--------------------------UPDATE SUCCESS----------------------------');
+            console.log('UPDATE affectedRows',updateResule.affectedRows);
+            console.log('--------------------------------------------------------------------\n\n');
+        })
+    })
+}
+
+
 
 //注销登录
 app.get('/logout', function (req, res) {
