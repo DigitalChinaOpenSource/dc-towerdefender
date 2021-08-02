@@ -17,7 +17,7 @@
         <a href="../logout"><button class="btn_logout hide_it" id="logout_btn"></button></a>
     </div>
     <!-- 匹配页面start -->
-    <div class="match" >
+    <div class="match hide_it" >
         <h1 id="match_header">正在匹配，请稍等......</h1>
         <div class="our_part" >
             <label id="indexScore" style="display: none;"><%=score%></label>
@@ -41,7 +41,7 @@
     </div>
     <!-- 匹配页面end -->
     <!-- 结算页面start -->
-    <div class="total">
+    <div class="total hide_it">
         <div id="total_logo">
             <img src="img/items/win.png" id="total_win">
             <img src="img/items/lose.png" id="total_lose">
@@ -89,15 +89,16 @@
         </div>
         <div class="lackmoney hide_it" id="moneylack">
         </div>
+        <!-- 技能栏模块 -->
         <div class="block3 hide_it" id="skill-btns-container">
-            <div class='btn-item'>
-                <div id="increase_enemy_level"></div>
+            <div class='skill_iel'id="increase_enemy_level">
+                <!-- <div id="increase_enemy_level"></div> -->
             </div>
-            <div class='btn-item'>
-                <div id="reduce_enemy_blood"></div>
+            <div class='skill_reb' id="reduce_enemy_blood">
+                <!-- <div id="reduce_enemy_blood"></div> -->
             </div>
-            <div class='btn-item'>
-                <div id="add_boss"></div>
+            <div class='skill_ab'id="add_boss">
+                <!-- <div id="add_boss"></div> -->
             </div>
         </div>
         <div class="block2 hide_it" id="block_right">
