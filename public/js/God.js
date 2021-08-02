@@ -43,14 +43,14 @@ class God {
             // //绑定连接事件
             this.websocketLink();
             //监听开始游戏标识
-            this.startGameAAAA = setInterval(()=>{
-                if(startGameSign == 1){
-                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,
-                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
-                    this.startGame()
-                }
-                startGameSign = 0
-            },100)
+            // this.startGameAAAA = setInterval(()=>{
+            //     if(startGameSign == 1){
+            //         this.websocketSend({type:1,roomCount:roomCount,name:linkName,
+            //             otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+            //         this.startGame()
+            //     }
+            //     startGameSign = 0
+            // },100)
         });
 
         $("#logout_btn").on("click", () => {
@@ -73,20 +73,44 @@ class God {
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
     showTime() {
         let count=6;        
-        let time=setInterval(function () {
+        let time=setInterval(()=>{
+
+            console.log(linkName)
+            $('#waitName').html(linkName)
+            $('#waitScore').html(score)
+
+
             count -= 1;
-            if(count==3){
+            // if(count==3){
+            //     $("#match_before").hide();
+            //     $("#match_after").show();
+            // }
+            // // if (count == 0) {
+            // //     clearInterval(time);    
+            // //     $(".match").hide();
+            // //     $(".block").show();
+            // }
+            if(startGameSign == 1){
                 $("#match_before").hide();
-                $("#match_after").show();
-            }
-            if (count == 0) {
                 clearInterval(time);    
-                $(".match").hide();
+                 $(".match").hide();
                 $(".block").show();
-            }else{    
-                // console.log("*****"+count);
-                document.getElementById('match_time').innerHTML = count;
-            } 
+                this.websocketSend({type:1,roomCount:roomCount,name:linkName,
+                    otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+                this.startGame()
+            }
+            startGameSign = 0
+            // else{    
+            //     // console.log("*****"+count);
+            //     document.getElementById('match_time').innerHTML = count;
+            // } 
+
+
+            
+
+
+
+
             
         }, 1000);
     }
@@ -97,9 +121,18 @@ class God {
         $(".block").hide();
         $(".match").hide();
         $(".total").show();
-        document.getElementById('total_name').innerHTML = "bk";
+        document.getElementById('total_name').innerHTML = linkName;
+        document.getElementById('total_score').innerHTML = '+10';
+        document.getElementById('total_num').innerHTML = this.shaEnemy;
         $("#total_continue").on("click", () => {
-            this.to_match();
+            $(".total").hide();
+            $("#startgame_btn").show();
+            $("#logout_btn").show();
+            $("#home_visi").show();
+            this.clearCanvas()
+            this.clean()
+            this._init()
+            // this.to_match();
         });
     }
 
@@ -110,8 +143,19 @@ class God {
         $(".block").hide();
         $(".match").hide();
         $(".total").show();
+        document.getElementById('total_name').innerHTML = linkName;
+        document.getElementById('total_score').innerHTML = '-10';
+        document.getElementById('total_num').innerHTML = this.shaEnemy;
         $("#total_continue").on("click", () => {
-            this.to_match();
+            $("#total_lose").hide();
+            $(".total").hide();
+            $("#startgame_btn").show();
+            $("#logout_btn").show();
+            $("#home_visi").show();
+            this.clearCanvas()
+            this.clean()
+            this._init()
+            // this.to_match();
         });
         
     }
@@ -217,6 +261,7 @@ class God {
                         //生成两个小兵
                         createEnemySign = 1
                         killNum = recv.killNum
+                        console.log('========================'+killNum)
 
                         otherShaEnemy = recv.otherShaEnemy
                         otherHistoryWin = recv.otherHistoryWin
@@ -299,6 +344,22 @@ class God {
         ws.close()
         console.log('success close websocket link')
         // this.websocketLink()
+    }
+
+
+    clean(){
+        startGameSign = 0
+        createEnemySign = 0
+        killNum = 0
+        winSign = -1
+
+
+
+        otherShaEnemy = 0
+        otherHistoryWin = 0
+        otherEneNum = 0
+        otherSocre = 0
+        otherName = null
     }
 
     
@@ -524,6 +585,7 @@ class God {
                 winSign = -1
             }
             if(winSign == 1){
+                this.stopGame()
                 this.to_total_win()
                 winSign = -1
             }
@@ -576,6 +638,7 @@ class God {
         clearInterval(this.draw_bullet);
         clearInterval(this.drawEnemy)
         clearInterval(this.other)
+        clearInterval(this.recvOtherMsg)
     }
 
     createFirstEnemy() {
@@ -673,7 +736,7 @@ class God {
 
     judge_game() {
         //监听怪的数量到了100只
-        if (this.enemyNumber >= 100) {
+        if (this.enemyNumber >= 10) {
             this.stopGame();
             // alert("lose");
             // 跳转到结算页面
@@ -735,6 +798,16 @@ class God {
         document.getElementById("increase_enemy_level").disabled=true;
         document.getElementById("reduce_enemy_blood").disabled=true;
         document.getElementById("add_boss").disabled=true;
+
+
+        this.towers.splice(0, this.towers.length);
+        this.bullets.splice(0, this.bullets.length);
+        this.enemies.splice(0, this.enemies.length);
+        this.options.splice(0, this.options.length);
+
+
+        console.log('================================='+this.towers)
+
     }
     //停止产生子弹和敌人
     stopProduce() {
@@ -1151,6 +1224,7 @@ class God {
             //清空原子弹画布
             ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
             for (let bullet in this.bullets) {
+                console.log(this.towers)
                 //获取子弹图片
                 let img = new Image;
                 img.src = "img/bullet/bullet1-1.png";
@@ -1250,6 +1324,15 @@ class God {
             },80)
             
 
+    }
+
+    clearCanvas(){
+        // let cv = document.querySelector('#canvasMap_tower');
+        // let ctx = cv.getContext('2d');
+        // ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        // let cv1 = document.querySelector('#canvasMap_tower');
+        // let ctx1 = cv1.getContext('2d');
+        // ctx1.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
     }
     
 
