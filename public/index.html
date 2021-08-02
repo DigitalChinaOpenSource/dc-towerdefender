@@ -14,12 +14,20 @@
     <!--游戏首页-->
     <div class="home" >
         <div class="home_back" id="home_visi"></div>
+        <div class="help1" id="rule"></div>
         <button class="btn_startgame hide_it" id="startgame_btn"></button>
         <a href="../logout"><button class="btn_logout hide_it" id="logout_btn"></button></a>
+        
+
     </div>
     <!-- 匹配页面start -->
     <div class="match hide_it" >
-        <h1 id="match_header">正在匹配，请稍等......</h1>
+        <div class="online_num">
+            <span >在线人数：</span>
+            <span id="detail_num">***</span>
+        </div>
+        
+        <h1 id="match_header" >正在匹配，请稍等......</h1>
         <div class="our_part" >
             <label id="indexScore" style="display: none;"><%=score%></label>
             <label id="indexName" style="display: none;"><%=userName%></label>
@@ -167,7 +175,7 @@
             </div>
         </div>
 
-    <script type="text/javascript" src="js/websocket.js"></script>    
+    <script type="text/javascript" src="js/websocket.js"></script>
     <script type="text/javascript" src="js/Bullet.js"></script>
     <script type="text/javascript" src="js/BulletData.js"></script>
     <script type="text/javascript" src="js/BulletFactory.js"></script>
