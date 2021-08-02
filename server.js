@@ -1,14 +1,16 @@
-//部署时须引入四个必备依赖
+//部署时须引入五个必备依赖
 //npm install express
 //npm install mysql
 //npm install express-session
 //npm install ejs
+//npm install alert
 //引入必备依赖
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var path = require('path');
-var session=require('express-session');
+var session = require('express-session');
+var alert = require("alert")
 //var cookieParser=require('cookie-parser') 
 
 //项目根目录
@@ -29,9 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(cookieParser('TowerDefence'));
 //设置session
 app.use(session({
-    secret:'TowerDefence',//本地存储的cookie key值
-    resave:true,//客户端多请求时的请求覆盖
-    saveUninitialized:true,//初始化session
+    secret: 'TowerDefence',//本地存储的cookie key值
+    resave: true,//客户端多请求时的请求覆盖
+    saveUninitialized: true,//初始化session
 }))
 
 // var rootPath=path.join(__dirname,'../');
@@ -52,22 +54,23 @@ var urlEncodedParser = bodyParser.urlencoded({ extended: false })
 app.get('/index', function (req, res) {
     console.log("进入了首页......")
     //判断Session是否有效
-    if(req.session.loginUser){
-        var name= req.session.loginUser.name;
-        var nickName=req.session.loginUser.nickName;
-        var score=req.session.loginUser.score;
-        var count=req.session.loginUser.count;
-        console.log(name);   
-        console.log(nickName); 
+    if (req.session.loginUser) {
+        var name = req.session.loginUser.name;
+        var nickName = req.session.loginUser.nickName;
+        var score = req.session.loginUser.score;
+        var count = req.session.loginUser.count;
+        console.log(name);
+        console.log(nickName);
         console.log(score);
         console.log(count);
-        return res.render('index',{
-            userName : name,
-            nickName:nickName,
-            score:score,
-            count:count
+        loginCount();
+        return res.render('index', {
+            userName: name,
+            nickName: nickName,
+            score: score,
+            count: count
         });
-    }else{
+    } else {
         return res.redirect('login');
     }
 })
@@ -87,26 +90,28 @@ app.post('/regist', urlEncodedParser, function (req, res) {
     var userName = req.body.userName;
     var password = req.body.password;
     var params = [userName, password];
-    var searchSql="select * from users where name=?";
+    var searchSql = "select * from users where name=?";
     console.log(userName);
     connection.query(searchSql, userName, function (error, sameName) {
         if (error) {
             console.log('ERROR--' + error.message);
-            
         }
-        if(sameName.length!=0){
-            return res.json({msg:"用户名已存在！"});
-        }else{
-            var sql = 'insert into users(name,password,score) values(?,?,0)';
+        if (sameName.length != 0) {
+            alert("用户名已被注册，请重新输入用户名！")
+            //return res.json({msg:"用户名已存在！"});
+            //return res.redirect('/login');
+            return;
+        } else {
+            var sql = 'insert into users(name,password,score,total_win) values(?,?,300,0)';
             connection.query(sql, params, function (error, result) {
                 if (error) {
-                console.log(sql);
-                console.log(params);
-                console.log('ERROR--' + error.message);
-            }
-            console.log('----------SELECT RESULT----------');
-            console.log(result);
-            console.log('----------------------------------\n\n');
+                    console.log(sql);
+                    console.log(params);
+                    console.log('ERROR--' + error.message);
+                }
+                console.log('----------SELECT RESULT----------');
+                console.log(result);
+                console.log('----------------------------------\n\n');
             })
             return res.redirect('/index');
         }
@@ -118,7 +123,7 @@ app.post('/login', urlEncodedParser, function (req, res) {
     var userName = req.body.username;
     var password = req.body.password;
     var params = [userName, password];
-    var sql = 'select id,name,nickname,score from users where name=? and password=?';
+    var sql = 'select id,name,nickname,score,total_win from users where name=? and password=?';
     connection.query(sql, params, function (error, result) {
         if (error) {
             console.log('ERROR--' + error.message);
@@ -128,62 +133,117 @@ app.post('/login', urlEncodedParser, function (req, res) {
         if (result.length == 0) {
             console.log("用户名或者密码错误！");
             // res.sendFile(staticPath + '/login_fail.html');
-            return res.json({msg:"用户名或密码错误，请重新登录！"});
+            //return res.json({msg:"用户名或密码错误，请重新登录！"});
+            alert("用户名或密码错误，请重新登录！")
+            //return res.redirect('/login');
+            return;
         }
-        
+
         //登录成功，取出返回值
-        var data=result[0];
-        var id=data.id;
-        var countSql='select id from game_info_pvp where winner=?';
-        connection.query(countSql, id, function (error, counts) {
+        var data = result[0];
+        // var id=data.id;
+        // var countSql='select id from game_info_pvp where winner=?';
+        // connection.query(countSql, id, function (error, counts) {
+        //     if (error) {
+        //         console.log('ERROR--' + error.message);
+        //         return;
+        //     }
+        //     var count=counts.length;
+        //     console.log(count);
+        var user = {
+            'name': data.name,
+            'nickName': data.nickname,
+            'score': data.score,
+            'count': data.total_win
+        }
+        console.log("static:" + staticPath);
+        console.log(user);
+        //登录信息存入Session内，定位至首页
+        var sess = req.session;
+        sess.loginUser = user;
+        console.log("session:" + sess.loginUser);
+        //获取的IP有前缀，需用正则表达式处理
+        var ips = req.ip.match(/\d+\.\d+\.\d+\.\d+/)
+        console.log(ips);
+        console.log(ips[0]);
+        var ip = ips[0];
+        //存储登录信息
+        var loginInfoSql = 'insert into login_info(login_ip) values(?)';
+        connection.query(loginInfoSql, ip, function (error, infoResult) {
             if (error) {
                 console.log('ERROR--' + error.message);
                 return;
             }
-            var count=counts.length;
-            console.log(count);
-            var user={
-                'name':data.name,
-                'nickName':data.nickname,
-                'score':data.score,
-                'count':count
-            }
-            console.log("static:"+staticPath);
-            console.log(user);
-            //登录信息存入Session内，定位至首页
-            var sess=req.session;
-            sess.loginUser=user;
-            console.log("session:"+sess.loginUser);
-            //获取的IP有前缀，需用正则表达式处理
-            var ips=req.ip.match(/\d+\.\d+\.\d+\.\d+/)
-            console.log(ips);
-            console.log(ips[0]);
-            var ip=ips[0];
-            //存储登录信息
-            var loginInfoSql='insert into login_info(login_ip) values(?)';
-            connection.query(loginInfoSql, ip, function (error, infoResult) {
-                if (error) {
-                    console.log('ERROR--' + error.message);
-                    return;
-                }
-                console.log('----------SELECT RESULT----------');
-                console.log(infoResult);
-                console.log(infoResult+"test");
-                console.log('----------------------------------\n\n');
-            })
-            res.redirect('/index');
+            console.log('----------SELECT RESULT----------');
+            console.log(infoResult);
+            console.log(infoResult + "test");
+            console.log('----------------------------------\n\n');
         })
+        res.redirect('/index');
+        // })
     })
 })
+
+//记录对局结果
+function writeGameInfo(name) {
+    var winnerName = name;
+    var querySql = 'select score,total_win from users where name=?';
+    connection.query(querySql, winnerName, function (error, queryResult) {
+        if (error) {
+            console.log('ERROR--' + error.message);
+            return;
+        }
+        var queryData = queryResult[0];
+        var queryScore = queryData.score + 100;
+        var queryTotalCount = queryData.total_win + 1;
+        var queryParam = [queryScore, queryTotalCount, winnerName];
+        var updateSql = "update users set score=?,total_win=? where name=?";
+        connection.query(updateSql, queryParam, function (err, updateResule) {
+            if (err) {
+                console.log('ERROR--' + error.message);
+                return;
+            }
+            console.log('--------------------------UPDATE SUCCESS----------------------------');
+            console.log('UPDATE affectedRows', updateResule.affectedRows);
+            console.log('--------------------------------------------------------------------\n\n');
+        })
+    })
+}
+
+//登录统计
+function loginCount() {
+    var querySql = 'select count from online_count where id=1';
+    connection.query(querySql, function (error, queryResult) {
+        if (error) {
+            console.log('ERROR--' + error.message);
+            return;
+        }
+        var queryData = queryResult[0];
+        var queryCount = queryData.count + 1;
+        var updateSql = "update online_count set count=? where id=1";
+        connection.query(updateSql, queryCount, function (err, updateResule) {
+            if (err) {
+                console.log('ERROR--' + error.message);
+                return;
+            }
+            console.log('--------------------------UPDATE SUCCESS----------------------------');
+            console.log('UPDATE affectedRows', updateResule.affectedRows);
+            console.log('--------------------------------------------------------------------\n\n');
+        })
+    })
+}
+
+
 
 //注销登录
 app.get('/logout', function (req, res) {
     console.log("调用了注销方法");
     console.log(req.session.loginUser);
     // 删除session
-    req.session.loginUser = null; 
+    req.session.loginUser = null;
     res.redirect('login');
 });
+
 
 
 //监听

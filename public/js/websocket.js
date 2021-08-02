@@ -2,11 +2,19 @@ let ws
 let roomCount
 let linkName
 let score
-let ip='ws://localhost:8888'
+let ip='ws://10.3.73.103:8888'
 let startGameSign = 0
 let createEnemySign = 0
 let killNum = 0
 let winSign = -1
+let historyWin
+
+
+let otherShaEnemy
+let otherHistoryWin
+let otherEneNum
+let otherSocre
+let otherName
 // function websocketLink(){
 //     ws = new WebSocket(ip)
 //     ws.onopen = function(){

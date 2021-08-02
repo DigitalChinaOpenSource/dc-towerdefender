@@ -2,6 +2,7 @@ class God {
     constructor() {
         //建立一个可见性改变事件
         //离开当前页面时，会弹窗 并阻塞当前游戏
+
         this._init();//测试
         $("#startgame_btn").show();
         $("#logout_btn").show();
@@ -46,12 +47,14 @@ class God {
             // //绑定连接事件
             this.websocketLink();
             //监听开始游戏标识
-            this.startGameAAAA = setInterval(()=>{
-                if(startGameSign == 1){
-                    this.startGame()
-                }
-                startGameSign = 0
-            },100)
+            // this.startGameAAAA = setInterval(()=>{
+            //     if(startGameSign == 1){
+            //         this.websocketSend({type:1,roomCount:roomCount,name:linkName,
+            //             otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+            //         this.startGame()
+            //     }
+            //     startGameSign = 0
+            // },100)
         });
 
         $("#logout_btn").on("click", () => {
@@ -86,20 +89,44 @@ class God {
     // 匹配倒计时，共6秒，3秒时切换敌方图片，0秒时进入游戏界面start
     showTime() {
         let count=6;        
-        let time=setInterval(function () {
+        let time=setInterval(()=>{
+
+            console.log(linkName)
+            $('#waitName').html(linkName)
+            $('#waitScore').html(score)
+
+
             count -= 1;
-            if(count==3){
+            // if(count==3){
+            //     $("#match_before").hide();
+            //     $("#match_after").show();
+            // }
+            // // if (count == 0) {
+            // //     clearInterval(time);    
+            // //     $(".match").hide();
+            // //     $(".block").show();
+            // }
+            if(startGameSign == 1){
                 $("#match_before").hide();
-                $("#match_after").show();
-            }
-            if (count == 0) {
                 clearInterval(time);    
-                $(".match").hide();
+                 $(".match").hide();
                 $(".block").show();
-            }else{    
-                // console.log("*****"+count);
-                document.getElementById('match_time').innerHTML = count;
-            } 
+                this.websocketSend({type:1,roomCount:roomCount,name:linkName,
+                    otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+                this.startGame()
+            }
+            startGameSign = 0
+            // else{    
+            //     // console.log("*****"+count);
+            //     document.getElementById('match_time').innerHTML = count;
+            // } 
+
+
+            
+
+
+
+
             
         }, 1000);
     }
@@ -110,9 +137,19 @@ class God {
         $(".block").hide();
         $(".match").hide();
         $(".total").show();
-        document.getElementById('total_name').innerHTML = "bk";
+        document.getElementById('total_name').innerHTML = linkName;
+        document.getElementById('total_score').innerHTML = '+10';
+        document.getElementById('total_num').innerHTML = this.shaEnemy;
         $("#total_continue").on("click", () => {
-            this.to_match();
+            $(".total").hide();
+            $("#startgame_btn").show();
+            $("#logout_btn").show();
+            $("#home_visi").show();
+            this.clearCanvas()
+            this.clean()
+            // this._init()
+            // new God()
+            // this.to_match();
         });
     }
 
@@ -123,8 +160,20 @@ class God {
         $(".block").hide();
         $(".match").hide();
         $(".total").show();
+        document.getElementById('total_name').innerHTML = linkName;
+        document.getElementById('total_score').innerHTML = '-10';
+        document.getElementById('total_num').innerHTML = this.shaEnemy;
         $("#total_continue").on("click", () => {
-            this.to_match();
+            $("#total_lose").hide();
+            $(".total").hide();
+            $("#startgame_btn").show();
+            $("#logout_btn").show();
+            $("#home_visi").show();
+            this.clearCanvas()
+            this.clean()
+            // this._init()
+            // new God()
+            // this.to_match();
         });
         
     }
@@ -196,6 +245,34 @@ class God {
     //             }
     //         }
 
+    //     }
+    // }
+
+    //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
+    // 通过roomCount判断发给哪个房间组
+    // 通过name确定是否为对方发送的信息
+    // 通过type确定为哪种信息
+    //type:0,msg:
+    //{type:0,score:}
+    // type:1,msg：
+    // {type:1,roomCount: ,name:''}
+    // type:2,msg：
+    // {type:2,roomCount: ,name:''}
+    // type:3,msg：
+    // {type:3,roomCount: ,name:','msg:''}
+    // type:4,msg：
+    // {type:4,roomCount: ,name:''}
+    //type:5,msg:
+    //{type:5,roomConut: ,name:'',enemy: }
+    // send(msg){
+    //     // 发送信息转为string发送
+    //     this.ws.send(JSON.stringify(msg))
+    // }
+    // //websocket 关闭连接，再玩需要重新建立连接
+    // close(){
+    //     this.ws.onclose()
+    //     this.link()
+    // }
 
     websocketLink(){
         console.log(ip)
@@ -204,10 +281,13 @@ class God {
             console.log('success liked the server')
             let indexScore = document.getElementById('indexScore')
             let indexName = document.getElementById('indexName')
+            let indexHistoryWin = document.getElementById('indexHistoryWin')
             let indexScoreValue = indexScore.innerHTML.trim()
             let indexNameValue = indexName.innerHTML.trim()
+            historyWin = indexHistoryWin.innerHTML.trim()
             linkName = indexNameValue
-            ws.send(JSON.stringify({score:indexScoreValue,name:linkName}))
+            score = indexScoreValue
+            ws.send(JSON.stringify({score:score,name:linkName}))
         }
     
         ws.onmessage = function(evt){
@@ -227,17 +307,33 @@ class God {
                         //生成两个小兵
                         createEnemySign = 1
                         killNum = recv.killNum
-                        this.otherEneNum = recv.enemyNumber
+                        console.log('========================'+killNum)
+
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
+
+
+                        console.log('otherSha:'+otherShaEnemy)
+                        console.log('otherhistorywin:'+otherHistoryWin)
+                        console.log('otherEneNum:'+otherEneNum)
+                        console.log('otherScore:'+otherSocre)
+                        console.log('otherName:'+otherName)
 
                     }else if(recv.type == 2){
                         //小兵增强
                         if(recv.action == 0){
                             createEnemySign =3
-                            this.otherEneNum = recv.enemyNumber
                         }else if(recv.action == 1){
                             createEnemySign = 2
-                            this.otherEneNum = recv.enemyNumber
                         }
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
                     }else if(recv.type == 3){
                         //显示聊天msg
 
@@ -251,9 +347,14 @@ class God {
                         // wordsRecv.innerHTML = wordsRecv.innerHTML + str
                         // console.log(recv.msg)
                         console.log(m)
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
                     }else if(recv.type == 4){
                         //调用获胜方法赢了
-                        alert('you win')
+                        // alert('you win')
                         //调用断开连接方法
                         winSign = 1
                         ws.close()
@@ -261,13 +362,19 @@ class God {
                         //时间到，对比小兵enemy数量，判断输赢
                         ////调用断开连接方法
                         if(recv.enemy<enemyExisted){
-                            alert("you losed")
+                            // alert("you losed")
                             winSign =0
                         }else{
-                            alert('you win')
+                            // alert('you win')
                             winSign = 1
                         }
                         ws.close()
+                    }else if(recv.type == 6){
+                        otherShaEnemy = recv.otherShaEnemy
+                        otherHistoryWin = recv.otherHistoryWin
+                        otherEneNum = recv.otherEneNum
+                        otherSocre = recv.otherSocre
+                        otherName = recv.name
                     }
                 }
             }
@@ -283,6 +390,22 @@ class God {
         ws.close()
         console.log('success close websocket link')
         // this.websocketLink()
+    }
+
+
+    clean(){
+        startGameSign = 0
+        createEnemySign = 0
+        killNum = 0
+        winSign = -1
+
+
+
+        otherShaEnemy = 0
+        otherHistoryWin = 0
+        otherEneNum = 0
+        otherSocre = 0
+        otherName = null
     }
 
     
@@ -310,7 +433,14 @@ class God {
         this.bullets = [];//定义子弹的空数组
         this.enemies = [];//定义小怪的空数组
         this.options = []; //塔的选项数组------------------------------------------------------------
-        this.otherEneNum = 1;
+
+
+
+        this.shaEnemy = 0
+
+
+
+
         this.last_option_x = undefined;
         this.last_option_y = undefined;
         this.need_hide_option = 0;
@@ -379,7 +509,7 @@ class God {
                             this.player.money += this.enemies[ene2].money; 
                             this.enemies[ene2].dead();
                             // console.log("kill");
-                            this.killed_enemies++;                            
+                            this.killed_enemies++;
                             this.nowenemys--;
                             this.enemies[ene2] = null;
                             // this.enemies.splice(e, 1);
@@ -387,6 +517,7 @@ class God {
                             this.enemyExisted--;
                             kill_enemy_num_of_this_click++
                             this.enemyNumber--
+                            this.shaEnemy++
                             console.log('现在杀死一个还剩'+this.enemyNumber)
                             // this.createEnemy(0);
                             // this.createEnemy(0);
@@ -396,7 +527,8 @@ class God {
                     //     this.createEnemy(0)
                     //     this.createEnemy(0)
                     // }
-                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,enemyNumber:this.enemyNumber})
+                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:kill_enemy_num_of_this_click,
+                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
                     //金币数量减少
                     this.player.money = this.player.money - reduce_enemy_blood_money;
                     console.log("使用给自己小怪减血技能后，金币还剩:" + this.player.money);
@@ -421,7 +553,8 @@ class God {
             if (this.enemies.length > 0) {
                 if (increase_enemy_level_money <= this.player.money) {
                     // this.enemy_level++;
-                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,enemyNumber:this.enemyNumber})
+                    this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,
+                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
                     console.log("当前小怪等级：" + this.enemy_level);
                     this.player.money = this.player.money - increase_enemy_level_money;
                     console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
@@ -440,10 +573,11 @@ class God {
             console.log("现有金币数量:" + this.player.money);
             console.log("技能需要金币数量:" + add_boss_money);
             if (add_boss_money <= this.player.money) {
-                // this.createEnemy(1);
+                this.createEnemy(1);
                 this.player.money = this.player.money - add_boss_money;
                 // websocket发送增强信息
-                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,enemyNumber:this.enemyNumber})
+                this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,
+                    otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 this.money_not_enough();
@@ -457,7 +591,7 @@ class God {
         }, 300);
         //动态显示敌人数量
         this.timeEnemies = setInterval(() => {
-            $("#lifeshow").html(this.enemyExisted);
+            $("#lifeshow").html(this.enemyNumber - otherEneNum);
         }, 300);
         // 动态显示游戏时间
         this.timeTime = setInterval(() => {
@@ -497,11 +631,30 @@ class God {
                 winSign = -1
             }
             if(winSign == 1){
+                this.stopGame()
                 this.to_total_win()
                 winSign = -1
             }
 
         })
+
+
+        this.other = setInterval(() => {
+            $("#p2nameshow").html(otherName);
+            $("#p2pointshow").html(otherSocre);
+            $("#p2historywinshow").html(otherHistoryWin);
+            $("#p2killenemyshow").html(otherShaEnemy);
+            $("#p2leaveenemyshow").html(otherEneNum);
+
+            $("#p1killenemyshow").html(this.shaEnemy);
+            $("#p1leaveenemyshow").html(this.enemyNumber);
+        }, 60);
+
+
+        this.recvOtherMsg = setInterval(() => {
+            this.websocketSend({type:6,roomCount:roomCount,name:linkName,killNum:1,
+                otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
+        }, 60);
 
 
         // //websocket 判断小兵是否减少，如果减少，向对方发送信息
@@ -530,6 +683,8 @@ class God {
         clearInterval(this.logEnemyNumber);
         clearInterval(this.draw_bullet);
         clearInterval(this.drawEnemy)
+        clearInterval(this.other)
+        clearInterval(this.recvOtherMsg)
     }
 
     createFirstEnemy() {
@@ -559,7 +714,7 @@ class God {
         enemy.check_levelup();
         enemy.check_boss();
         this.enemies.push(enemy);
-        console.log(this.enemies);
+        // console.log(this.enemies);
         this.enemyNumber++;
         // if (this.enemyNumber <= length) {
         //     let enemy = new Enemy();
@@ -627,22 +782,22 @@ class God {
 
     judge_game() {
         //监听怪的数量到了100只
-        if (this.enemyNumber >= 100) {
+        if (this.enemyNumber >= 10) {
             this.stopGame();
-            alert("lose");
+            // alert("lose");
             // 跳转到结算页面
             this.to_total_lose();
-            //websocket发送失败信息
+            // //websocket发送失败信息
             this.websocketSend({type:4,roomCount:roomCount,name:linkName})
             // // 关闭websocket连接
             // this.close()
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
-        if (this.enemyNumber < 100 && this.leftTime <= 0) {
+        if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
             // 发送自己的小兵剩余信息给对方
-            this.websocketSend({type:5,roomCount:roomCount,name:linkName,enemyNumber:this.enemyNumber})
+            this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
             // alert("win");
              // 跳转到结算页面
             this.to_total_win();
@@ -689,6 +844,21 @@ class God {
         document.getElementById("increase_enemy_level").disabled=true;
         document.getElementById("reduce_enemy_blood").disabled=true;
         document.getElementById("add_boss").disabled=true;
+
+
+        this.towers = null
+        this.bullets = null
+        this.enemies = null
+        this.options = null
+
+        this.towers = []
+        this.bullets = []
+        this.enemies = []
+        this.options = []
+
+
+        console.log('================================='+this.towers)
+
     }
     //停止产生子弹和敌人
     stopProduce() {
@@ -765,7 +935,10 @@ class God {
                             this.enemies[ene] = null;
                             this.enemies.splice(ene, 1);
                             this.enemyExisted--;
-                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,enemyNumber:this.enemyNumber})
+                            this.enemyNumber--
+                            this.shaEnemy++
+                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,
+                                otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
                             // this.createEnemy(0);
                             // this.createEnemy(0);
                         }
@@ -778,120 +951,41 @@ class God {
 
     //升级塔
     Tower_up(type,x,y){
-        
-        switch (type) {
-            case 1:
-                for (let tower in this.towers) {
-                    if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                        if (TowerType[1][4] <= this.player.money) {
-                            // this.towers[tower].tower_img = "img/tower/tower1-2.png";
-                            this.towers[tower].type = TowerType[1][0];
-                            this.player.money -= TowerType[1][4];
-                            this.tower_message[y-1][x-1] = type+1;
-                            drawTower(x,y)
-                        }
-                        else {
-                            $("#moneyshow").css("border", "2px solid red");
-                            setTimeout(() => {
-                                $("#moneyshow").css("border", " white");
-                            }, 500);
-                            //金额不足提示框显示2s后消失
-                            $("#lack_money").show();
-                            setTimeout(() => {
-                                $("#lack_money").hide();
-                            }, 2000);
-                        }
+        if(type%3!=0){
+            for (let tower in this.towers) {
+                // console.log("tower的位置：x:"+(this.towers[tower].x/CELL_WIDTH)+"y:"+(this.towers[tower].y/CELL_WIDTH));
+                // console.log("点击位置：x:"+(x-1)+"y:"+(y-1));
+                if (this.towers[tower].x == (x-1)*CELL_WIDTH && this.towers[tower].y == (y-1)*CELL_WIDTH) {
+                    if (TowerType[type][4] <= this.player.money) {                         
+                        this.towers[tower].type = TowerType[type][0];
+                        this.player.money -= TowerType[type][4];
+                        this.tower_message[y-1][x-1] = type+2;
+                        this.drawTower(x,y)
+                    }
+                    else {
+                        this.money_not_enough();
                     }
                 }
-                break;
-                case 2:
-                    for (let tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType[2][4] <= this.player.money) {
-                                this.towers[tower].type = TowerType[2][0];
-                                this.player.money -= TowerType[2][4];
-                                this.tower_message[y-1][x-1] = type+1;
-                                drawTower(x,y)    
-                            }
-                            else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-                            }
-                        }
-                    }
-                    break;
-                case 3:
-                    break;               
-                case 4:
-                    for (let tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType[4][4] <= this.player.money) {
-                                this.towers[tower].type = TowerType[4][0];
-                                this.player.money -= TowerType[4][4];
-                                this.tower_message[y-1][x-1] = type+1;
-                                drawTower(x,y)     
-                            }
-                            else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-                            }
-                        }
-                    }
-                    break;
-                case 5:
-                    for (let tower in this.towers) {
-                        if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
-                            if (TowerType[5][4] <= this.player.money) {
-                                this.towers[tower].type = TowerType[5][0];
-                                this.player.money -= TowerType[5][4];
-                                this.tower_message[y-1][x-1] = type+1;
-                                drawTower(x,y)  
-                            }
-                            else {
-                                $("#moneyshow").css("border", "2px solid red");
-                                setTimeout(() => {
-                                    $("#moneyshow").css("border", " white");
-                                }, 500);
-                                //金额不足提示框显示2s后消失
-                                $("#lack_money").show();
-                                setTimeout(() => {
-                                    $("#lack_money").hide();
-                                }, 2000);
-                            }
-                        }
-                    }
-                    break;
-                case 6:
-                    break;                
-        }   
+            }
+        }
+   
     }
 
 
     //拆除塔
     Tower_down(type,x,y) {
+
         for (let tower in this.towers) {
-            if (this.towers[tower].x == this.x && this.towers[tower].y == this.y) {
+            if (this.towers[tower].x == (x-1)*CELL_WIDTH && this.towers[tower].y == (y-1)*CELL_WIDTH) {
                 this.player.money += TowerType[type-1][5];
                 this.towers.splice(tower, 1);
                 this.tower_message[y-1][x-1] = 1;
-                drawTower(x,y);
+                let cv = document.querySelector('#canvasMap_tower');
+                let ctx = cv.getContext('2d');
+                ctx.clearRect((x-1)*CELL_WIDTH,(y-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
             }
         }
-    }    
+    }  
 
     ////检查塔的状态并生成子弹
     checkAndCreateBullets() {
@@ -960,6 +1054,7 @@ class God {
 
     //绘制塔
     drawTower(option_x,option_y) {
+        console.log("x:"+option_x+" y:"+option_y)
         let cv = document.querySelector('#canvasMap_tower');
         let ctx = cv.getContext('2d');
         let img_tower = new Image()
@@ -967,7 +1062,9 @@ class God {
         console.log(this.tower_message);
         ctx.clearRect((option_x-1)*CELL_WIDTH,(option_y-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
         img_tower.src = TowerType[this.tower_message[option_y-1][option_x-1]-1-1][3];
+        console.log(img_tower.src)
         ctx.drawImage(img_tower, (option_x-1) * CELL_WIDTH, (option_y-1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+
     }
 
 
@@ -989,17 +1086,23 @@ class God {
         if(num!=0){
             console.log("on tower home");
             // 判断这次在不在上次点击的选项上
+            // console.log("last_num:"+this.tower_message[this.last_option_y-1][this.last_option_x-1]);
+            // console.log("option_x:"+this.option_x+" option_y:"+this.option_y);
+            // console.log("last_option_x:"+this.last_option_x+" last_option_y:"+this.last_option_y);
             if((this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1)
             ||(this.option_x==this.last_option_x+1&&this.option_y==this.last_option_y-1)){
-                console.log("on last option");
+                console.log("on aaaa last option");
                 // 建造的地方以上一次点击的位置为准
                 let last_num = this.tower_message[this.last_option_y-1][this.last_option_x-1];
+                console.log("last_num:"+this.tower_message[this.last_option_y-1][this.last_option_x-1]);
                 // 在，切num=1，没有塔，建塔
+                // console.log("last_num:"+last_num);
+
                 if (last_num==1){
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
                         this.createTower(this.last_option_x,this.last_option_y,1);
                     }else{
-                        this.createTower(this.last_option_x,this.last_option_y,2);
+                        this.createTower(this.last_option_x,this.last_option_y,4);
                     }
                     console.log("create tower done");
                     console.log(this.tower_message);
@@ -1007,10 +1110,13 @@ class God {
                 }
                 // num>1,升级和铲除
                 else {
+                    console.log("else");
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
-                        this.Tower_up(num-1,this.last_option_x,this.last_option_y);
+                        this.Tower_up(last_num-1,this.last_option_x,this.last_option_y);
+                        console.log("towerup done");
                     }else{
-                        this.Tower_down(this.last_option_x,this.last_option_y);
+                        this.Tower_down(last_num-1,this.last_option_x,this.last_option_y);
+                        console.log("tower_down done");
                     }
                 }
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
@@ -1019,6 +1125,7 @@ class God {
             // 不在上一次生成的选项上
             else{
                 console.log("not on last option");
+                ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
                 if(num==1){
                     img_up.src = "img/tower/tower1-1.png";
                     img_xx.src = "img/tower/tower2-1.png";
@@ -1046,7 +1153,7 @@ class God {
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
                         this.createTower(this.last_option_x,this.last_option_y,1);
                     }else{
-                        this.createTower(this.last_option_x,this.last_option_y,2);
+                        this.createTower(this.last_option_x,this.last_option_y,4);
                     }
                     console.log("create tower done");
                     console.log(this.tower_message);
@@ -1055,9 +1162,9 @@ class God {
                 // num>1,升级和铲除
                 else {
                     if(this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1){
-                        this.Tower_up(num-1,this.last_option_x,this.last_option_y);
+                        this.Tower_up(last_num-1,this.last_option_x,this.last_option_y);
                     }else{
-                        this.Tower_down(this.last_option_x,this.last_option_y);
+                        this.Tower_down(last_num-1,this.last_option_x,this.last_option_y);
                     }
                 }
                 ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
@@ -1102,6 +1209,7 @@ class God {
             //清空原子弹画布
             ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
             for (let bullet in this.bullets) {
+                console.log(this.towers)
                 //获取子弹图片
                 let img = new Image;
                 img.src = "img/bullet/bullet1-1.png";
@@ -1133,7 +1241,7 @@ class God {
             let str = "";
             TalkSub.onclick = function(){
                 //定义空字符串
-                 
+                let str = "";
                 if(TalkWords.value == ""){
                     // 消息为空时弹窗
                     alert("消息不能为空");
@@ -1146,6 +1254,23 @@ class God {
                     TalkWords.value="";
                     return;
                 }
+
+                //判断是谁发出的
+                if(Who== 0){
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                  
+                // }
+                // else{
+                //     str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // }
+                // console.log('=========================================================')
+                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                // //websocket发送信息
+                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                // Words.innerHTML = Words.innerHTML + str;
+                // TalkWords.value="";
+                sendSign = 1
+
                     str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
                   
               
@@ -1154,10 +1279,11 @@ class God {
                 //websocket发送信息
                 // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                 Words.innerHTML = Words.innerHTML + str;
-                TalkWords.value="";
+                // TalkWords.value="";
                 // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
                 
+
             }
             document.onkeydown = function(event) {
                
@@ -1173,6 +1299,27 @@ class God {
                         return;
                     }
 
+                    //判断是谁发出的
+                    if(Who== 0){
+                        str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                      
+                    }
+                    else{
+                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                    }
+                setInterval(()=>{
+                    if(sendSign == 1){
+                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                        //websocket发送信息
+                        this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                        Words.innerHTML = Words.innerHTML + str;
+                        TalkWords.value="";
+                        sendSign = 0
+                    }
+                    
+                },80)
+
+
                 str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
 
                 console.log('=========================================================')
@@ -1185,21 +1332,31 @@ class God {
                 // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
             
+
             }
         }
             setInterval(()=>{
                 if(sendSign == 1){
                      str =  TalkWords.value ;
                     //websocket发送信息
-                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
+                    this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value,
+                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score})
                     // Words.innerHTML = Words.innerHTML + str;
                     TalkWords.value="";
                     sendSign = 0
                 }
                 
             },80)
-            
+        }
+    }
 
+    clearCanvas(){
+        let cv = document.querySelector('#canvasMap_tower');
+        let ctx = cv.getContext('2d');
+        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        let cv1 = document.querySelector('#canvasMap_bullet');
+        let ctx1 = cv1.getContext('2d');
+        ctx1.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
     }
     
 

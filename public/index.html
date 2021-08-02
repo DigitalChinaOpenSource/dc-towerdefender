@@ -35,12 +35,18 @@
     </div>
     <!-- 匹配页面start -->
     <div class="match hide_it" >
-        <h1 id="match_header">正在匹配，请稍等......</h1>
+        <div class="online_num">
+            <span >在线人数：</span>
+            <span id="detail_num">***</span>
+        </div>
+        
+        <h1 id="match_header" >正在匹配，请稍等......</h1>
         <div class="our_part" >
             <label id="indexScore" style="display: none;"><%=score%></label>
             <label id="indexName" style="display: none;"><%=userName%></label>
-            <h2 class="part">我方</h2>
-            <h2 class="sorce">积分：***</h2>
+            <label id="indexHistoryWin" style="display: none;"><%=count%></label>
+            <h2 class="part" id='waitName'>我方</h2>
+            <h2 class="sorce" id='waitScore'>积分：***</h2>
             <img src="img/match/people.jpg" >
         </div>
         <div class="vs" >
@@ -182,7 +188,7 @@
             </div>
         </div>
 
-    <script type="text/javascript" src="js/websocket.js"></script>    
+    <script type="text/javascript" src="js/websocket.js"></script>
     <script type="text/javascript" src="js/Bullet.js"></script>
     <script type="text/javascript" src="js/BulletData.js"></script>
     <script type="text/javascript" src="js/BulletFactory.js"></script>
