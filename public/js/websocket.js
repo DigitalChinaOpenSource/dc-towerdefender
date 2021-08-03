@@ -9,7 +9,7 @@ let killNum = 0
 let winSign = -1
 let historyWin
 let onlineNum
-
+let getUserInfo = 0
 
 let otherShaEnemy
 let otherHistoryWin

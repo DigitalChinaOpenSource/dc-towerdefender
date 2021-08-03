@@ -46,6 +46,11 @@ class God {
 
             // //绑定连接事件
             this.websocketLink();
+            setTimeout(()=>{
+                console.log(linkName)
+                console.log(getUserInfo)
+            },3000)
+
             //监听开始游戏标识
             // this.startGameAAAA = setInterval(()=>{
             //     if(startGameSign == 1){
@@ -91,11 +96,11 @@ class God {
         let count=6;        
         let time=setInterval(()=>{
 
-            console.log(linkName)
+            // console.log(linkName)
             $('#waitName').html(linkName)
             $('#waitScore').html(score)
             $('#detail_num').html(onlineNum)
-            console.log(onlineNum)
+            // console.log(onlineNum)
 
 
             count -= 1;
@@ -195,100 +200,24 @@ class God {
     }
 
 
-    // // websocket建立连接
-    // link(){
-    //     //建立连接
-    //     this.ws = new WebSocket(this.IP)
-    //     //连接成立触发
-    //     this.ws.onopen = function(){
-    //         console.log('success connected')
-    //         // 发送自己的积分
-    //         // 积分暂时无法获取！！！！！！！！！！！！！！
-    //         let score = document.getElementById("score")
-    //         ws.send({type:0,score:score.value})
-    //     }
-    //     //收到消息触发
-    //     ws.onmessage = function(evt){
-    //         // 消息转为json类型
-    //         let recv = JSON.parse(evt.data)
-    //         //设定房间号
-    //         if(recv.type==0){
-    //             let roomCount = document.getElementById("roomCount")
-    //             roomCount.value= recv.roomCount
-    //             this.roomCount = recv.roomCount
-    //         }
-    //         // 判断信息是否是发给自己的房间的
-    //         if(recv.roomCount == roomCount){
-    //             // 判断是否为自己发的信息
-    //             if(recv.name != name){
-    //                 if(recv.type == 1){
-    //                     //生成两个小兵
-    //                     this.createEnemy()
-    //                     this.createEnemy()
-    //                 }else if(recv.type == 2){
-    //                     //小兵增强
-    //                 }else if(recv.type == 3){
-    //                     //显示聊天msg
-    //                 }else if(recv.type == 4){
-    //                     //调用获胜方法赢了
-    //                     alert('you win')
-    //                     //调用断开连接方法
-    //                     this.close()
-    //                 }else if(recv.type == 5){
-    //                     //时间到，对比小兵enemy数量，判断输赢
-    //                     ////调用断开连接方法
-    //                     if(recv.enemy<this.enemyExisted){
-    //                         alert("you losed")
-    //                     }else{
-    //                         alert('you win')
-    //                     }
-    //                     this.close()
-    //                 }
-    //             }
-    //         }
 
-    //     }
-    // }
-
-    //websocket小兵死亡type：1，被增强小兵type：2，发送聊天信息type：3，胜负提示type：4，时间结束对比双方小兵数type:5
-    // 通过roomCount判断发给哪个房间组
-    // 通过name确定是否为对方发送的信息
-    // 通过type确定为哪种信息
-    //type:0,msg:
-    //{type:0,score:}
-    // type:1,msg：
-    // {type:1,roomCount: ,name:''}
-    // type:2,msg：
-    // {type:2,roomCount: ,name:''}
-    // type:3,msg：
-    // {type:3,roomCount: ,name:','msg:''}
-    // type:4,msg：
-    // {type:4,roomCount: ,name:''}
-    //type:5,msg:
-    //{type:5,roomConut: ,name:'',enemy: }
-    // send(msg){
-    //     // 发送信息转为string发送
-    //     this.ws.send(JSON.stringify(msg))
-    // }
-    // //websocket 关闭连接，再玩需要重新建立连接
-    // close(){
-    //     this.ws.onclose()
-    //     this.link()
-    // }
 
     websocketLink(){
         console.log(ip)
         ws = new WebSocket(ip)
         ws.onopen = function(){
             console.log('success liked the server')
-            let indexScore = document.getElementById('indexScore')
-            let indexName = document.getElementById('indexName')
-            let indexHistoryWin = document.getElementById('indexHistoryWin')
-            let indexScoreValue = indexScore.innerHTML.trim()
-            let indexNameValue = indexName.innerHTML.trim()
-            historyWin = indexHistoryWin.innerHTML.trim()
-            linkName = indexNameValue
-            score = indexScoreValue
+            if(getUserInfo == 0){
+                let indexScore = document.getElementById('indexScore')
+                let indexName = document.getElementById('indexName')
+                let indexHistoryWin = document.getElementById('indexHistoryWin')
+                let indexScoreValue = indexScore.innerHTML.trim()
+                let indexNameValue = indexName.innerHTML.trim()
+                historyWin = indexHistoryWin.innerHTML.trim()
+                linkName = indexNameValue
+                score = indexScoreValue
+                getUserInfo = 1
+            }
             ws.send(JSON.stringify({score:score,name:linkName}))
         }
     
@@ -771,12 +700,12 @@ class God {
                     tower.type,
                     ene
                 ));
-                clearInterval(tower.check_attack_interval);
-                setTimeout(() => {
-                    tower.check_attack_interval = setInterval(() => {
-                        this.tower_attack(tower);
-                    },30)
-                }, tower.attack_interval);
+                // clearInterval(tower.check_attack_interval);
+                // setTimeout(() => {
+                //     tower.check_attack_interval = setInterval(() => {
+                //         this.tower_attack(tower);
+                //     },30)
+                // }, tower.attack_interval);
                 break;
             }   
         } 
