@@ -25,8 +25,7 @@
             <div class="content" id="login-regist">
                 <div class="content-header">
                     <span  id="login-exp">登录</span>
-                    <span>  |  </span>
-                    <span id="regist-exp">注册</span>
+                    
                 </div>
                 <div class="content-bottom" id="log1">
                     <form action="/login" method="post">
@@ -51,31 +50,6 @@
                             </li>
                             
                         </ul>
-                    </form>
-                </div>
-
-                <div class="content-bottom" id="log2">
-                    <form action="/regist" method="post">
-                        <div class="field-group">
-                            <div class="input-field">
-                                <input name="userName" id="userName" type="text" value="" placeholder="请输入账号" required>
-                            
-                            </div>
-                        </div>
-                        <div class="field-group">
-                            <div class="input-field">
-                                <input name="password" id="password" type="Password" placeholder="请输入密码" required>
-                            </div>
-                        </div>
-                        <div class="field-group">
-                            <div class="input-field">
-                                <input name="repassword" id="repassword" type="Password" placeholder="请输入确认密码" required>
-                            </div>
-                        </div>
-                        <div class="input-field">
-                            <button type="submit" class="btn">Regist</button>
-                        </div>
-                    
                     </form>
                 </div>
             </div>
@@ -124,16 +98,7 @@
 <script type="text/javascript" src="js/jquery-ui.js"></script>
 <script type="text/javascript" src="js/login.js"></script>
 <script>
-    $("#regist-exp").on("click", () => {
-            $("#log2").show();   
-            $("#log1").hide();
-            
-            }),
-    $("#login-exp").on("click", () => {
-            $("#log1").show();   
-            $("#log2").hide();
-            
-            }),
+    
     $("#forget-password").on("click", () => {
         $("#upadte-password").show();   
         $("#login-regist").hide();
