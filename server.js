@@ -167,9 +167,10 @@ app.post('/login', urlEncodedParser, function (req, res) {
         console.log(ips);
         console.log(ips[0]);
         var ip = ips[0];
+        var loginInfoParams=[userName,ip];
         //存储登录信息
-        var loginInfoSql = 'insert into login_info(login_ip) values(?)';
-        connection.query(loginInfoSql, ip, function (error, infoResult) {
+        var loginInfoSql = 'insert into login_info(name,login_ip) values(?,?)';
+        connection.query(loginInfoSql, loginInfoParams, function (error, infoResult) {
             if (error) {
                 console.log('ERROR--' + error.message);
                 return;
@@ -198,6 +199,31 @@ function writeGameInfo(name) {
         var queryTotalCount = queryData.total_win + 1;
         var queryParam = [queryScore, queryTotalCount, winnerName];
         var updateSql = "update users set score=?,total_win=? where name=?";
+        connection.query(updateSql, queryParam, function (err, updateResule) {
+            if (err) {
+                console.log('ERROR--' + error.message);
+                return;
+            }
+            console.log('--------------------------UPDATE SUCCESS----------------------------');
+            console.log('UPDATE affectedRows', updateResule.affectedRows);
+            console.log('--------------------------------------------------------------------\n\n');
+        })
+    })
+}
+
+//记录玩家对战总局数,name为赢家的姓名
+function writeGameTotalInfo(name) {
+    var winnerName = name;
+    var querySql = 'select total_count from users where name=?';
+    connection.query(querySql, winnerName, function (error, queryResult) {
+        if (error) {
+            console.log('ERROR--' + error.message);
+            return;
+        }
+        var queryData = queryResult[0];
+        var queryTotalCount = queryData.total_count + 1;
+        var queryParam = [ queryTotalCount, winnerName];
+        var updateSql = "update users set total_count=? where name=?";
         connection.query(updateSql, queryParam, function (err, updateResule) {
             if (err) {
                 console.log('ERROR--' + error.message);
