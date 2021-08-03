@@ -517,7 +517,7 @@ class God {
             console.log("现有金币数量:" + this.player.money);
             console.log("技能需要金币数量:" + add_boss_money);
             if (add_boss_money <= this.player.money) {
-                this.createEnemy(1);
+                // this.createEnemy(1);
                 this.player.money = this.player.money - add_boss_money;
                 // websocket发送增强信息
                 this.websocketSend({type:2,roomCount:roomCount,name:linkName, action:1,
