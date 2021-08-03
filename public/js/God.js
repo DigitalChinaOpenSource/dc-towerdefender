@@ -571,12 +571,14 @@ class God {
         this.winSignAAAA = setInterval(()=>{
             if(winSign == 0){
                 this.to_total_lose()
+                this.writeGameTotalInfo(linkName)
                 this.websocketClose()
                 winSign = -1
             }
             if(winSign == 1){
                 this.stopGame()
-                // writeGameInfo(linkName)
+                console.log('winner is'+linkName)
+                this.writeGameInfo(linkName)
                 this.to_total_win()
                 this.websocketClose()
                 winSign = -1
@@ -731,7 +733,7 @@ class God {
 
     judge_game() {
         //监听怪的数量到了100只
-        if (this.enemyNumber >= 100) {
+        if (this.enemyNumber >= 3) {
             this.towers.splice(0,this.towers.length)
             this.stopGame();
             // alert("lose");
@@ -1231,5 +1233,64 @@ class God {
         ctx1.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
     }
     
+    writeGameInfo(name) {
+        console.log('进入了writeGameInfo的form表单方法！')
+        var form1 = document.createElement("form");
+        form1.id = "form1";
+        form1.name = "form1";
+    
+        // 添加到 body 中
+        document.body.appendChild(form1);
+    
+        // 创建一个输入
+        var input = document.createElement("input");
+        // 设置相应参数
+        input.type = "text";
+        input.name = "userName";
+        input.value = name;
+    
+        // 将该输入框插入到 form 中
+        form1.appendChild(input);
+    
+        // form 的提交方式
+        form1.method = "POST";
+        // form 提交路径
+        form1.action = "/writeGameInfo";
+        // 对该 form 执行提交
+        form1.submit();
+        console.log('表单提交了')
+        // 删除该 form
+        document.body.removeChild(form1);
+    }
 
+    writeGameTotalInfo(name) {
+        console.log('进入了writeGameInfo的form表单方法！')
+        var form1 = document.createElement("form");
+        form1.id = "form1";
+        form1.name = "form1";
+    
+        // 添加到 body 中
+        document.body.appendChild(form1);
+    
+        // 创建一个输入
+        var input = document.createElement("input");
+        // 设置相应参数
+        input.type = "text";
+        input.name = "userName";
+        input.value = name;
+    
+        // 将该输入框插入到 form 中
+        form1.appendChild(input);
+    
+        // form 的提交方式
+        form1.method = "POST";
+        // form 提交路径
+        form1.action = "/writeGameTotalInfo";
+        // 对该 form 执行提交
+        form1.submit();
+        console.log('表单提交了')
+        // 删除该 form
+        document.body.removeChild(form1);
+    }
 }
+//export default God
