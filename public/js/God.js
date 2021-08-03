@@ -1073,9 +1073,9 @@ class God {
                         this.Tower_down(last_num-1,this.last_option_x,this.last_option_y);
                     }
                 }
-                ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
-                console.log("clear optioin");
             }
+            ctx.clearRect(0,0,MAP_WIDTH,MAP_HEIGHT);
+            console.log("clear optioin");
         }
         this.last_option_x = this.option_x;
         this.last_option_y = this.option_y;
