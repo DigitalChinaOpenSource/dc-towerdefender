@@ -971,6 +971,7 @@ class God {
                 this.player.money += TowerType[type-1][5];
                 this.towers.splice(tower, 1);
                 this.tower_message[y-1][x-1] = 1;
+                clearInterval(this.towers[tower].check_attack_interval);
                 let cv = document.querySelector('#canvasMap_tower');
                 let ctx = cv.getContext('2d');
                 ctx.clearRect((x-1)*CELL_WIDTH,(y-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
