@@ -700,12 +700,12 @@ class God {
                     tower.type,
                     ene
                 ));
-                // clearInterval(tower.check_attack_interval);
-                // setTimeout(() => {
-                //     tower.check_attack_interval = setInterval(() => {
-                //         this.tower_attack(tower);
-                //     },30)
-                // }, tower.attack_interval);
+                clearInterval(tower.check_attack_interval);
+                setTimeout(() => {
+                    tower.check_attack_interval = setInterval(() => {
+                        this.tower_attack(tower);
+                    },30)
+                }, tower.attack_interval);
                 break;
             }   
         } 
