@@ -366,7 +366,7 @@ class God {
                         // alert('you win')
                         //调用断开连接方法
                         winSign = 1
-                        ws.close()
+                        // ws.close()
                     }else if(recv.type == 5){
                         //时间到，对比小兵enemy数量，判断输赢
                         ////调用断开连接方法
@@ -377,7 +377,7 @@ class God {
                             // alert('you win')
                             winSign = 1
                         }
-                        ws.close()
+                        // ws.close()
                     }else if(recv.type == 6){
                         otherShaEnemy = recv.otherShaEnemy
                         otherHistoryWin = recv.otherHistoryWin
@@ -560,22 +560,14 @@ class God {
             console.log("现有金币数量:" + this.player.money);
             console.log("技能需要金币数量:" + increase_enemy_level_money);
             console.log("小怪的数量为" + this.enemies.length);
-            if (this.enemies.length > 0) {
                 if (increase_enemy_level_money <= this.player.money) {
-                    // this.enemy_level++;
                     this.websocketSend({type:2,roomCount:roomCount,name:linkName,action:0,
                         otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score,onlineNum:0})
-                    console.log("当前小怪等级：" + this.enemy_level);
                     this.player.money = this.player.money - increase_enemy_level_money;
                     console.log("使用增强对方的小怪等级技能后，金币还剩:" + this.player.money);
                 } else {
                     this.money_not_enough();
-                    // $("#moneylack").show(300).delay(1000).hide(200);
-                    // alert("给对方小怪升级金币数量不够");
                 }
-            } else {
-                alert("地图上没有小怪，无法升级");
-            }
         });
 
         //给对方增加一个boss，点击按钮时调用
@@ -591,7 +583,6 @@ class God {
                 console.log("使用对方增加一个boss技能后，金币还剩:" + this.player.money);
             } else {
                 this.money_not_enough();
-                // alert("给对方增加一个boss金币数量不够");
             }
         });
 
@@ -615,7 +606,7 @@ class God {
 
         this.draw_enemy = setInterval(() => {
             this.drawEnemies();
-        }, 40);
+        }, 30);
 
         this.draw_bullet = setInterval(() =>{
             this.drawBullet();
@@ -638,11 +629,14 @@ class God {
         this.winSignAAAA = setInterval(()=>{
             if(winSign == 0){
                 this.to_total_lose()
+                this.websocketClose()
                 winSign = -1
             }
             if(winSign == 1){
                 this.stopGame()
+                // writeGameInfo(linkName)
                 this.to_total_win()
+                this.websocketClose()
                 winSign = -1
             }
 
@@ -805,6 +799,7 @@ class God {
             this.websocketSend({type:4,roomCount:roomCount,name:linkName})
             // // 关闭websocket连接
             // this.close()
+            this.websocketClose()
 
         }
         //监听时间小于100秒，并且怪的数量小于100只
@@ -815,6 +810,7 @@ class God {
             // alert("win");
              // 跳转到结算页面
             this.to_total_win();
+            this.websocketClose()
         }
     }
 
@@ -1182,30 +1178,7 @@ class God {
     }
     
 
-     //绘制敌人
-     drawEnemies() { 
-        //获取敌人对象
-        let cv = document.querySelector('#canvasMap_enemy');
-        //获取2d平面
-        let ctx = cv.getContext('2d');
-        // 清空敌人图片
-        ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        let img = new Image;
-        // 遍历数据，绘制敌人
-        for (let ene in this.enemies) {
-            // console.log(this.enemies[ene])
-            // if(this.enemies[ene].hp<=0){
-            // }
-            if(this.enemies[ene] == null){
-                continue
-            }
-            img.src = this.enemies[ene].enemy_img;
-            ctx.drawImage(img,this.enemies[ene].x,this.enemies[ene].y, 60, 60);
-            Ca.drawBlood(ctx, this.enemies[ene]);
-            // console.log(this.enemies[ene].x)
-            // console.log(this.enemies[ene].y)
-        }
-    }
+
 
         //绘制子弹
         drawBullet() {
