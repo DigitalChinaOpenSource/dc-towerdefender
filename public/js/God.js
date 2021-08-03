@@ -1166,7 +1166,7 @@ class God {
                 let str = "";
                 if(TalkWords.value == ""){
                     // 消息为空时弹窗
-                    alert("消息不能为空");
+                    // alert("消息不能为空");
                     return;
                 }
                 //作弊
@@ -1176,43 +1176,13 @@ class God {
                     TalkWords.value="";
                     return;
                 }
-
-                //判断是谁发出的
-                if(Who== 0){
-                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
-                  
-                // }
-                // else{
-                //     str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                // }
-                // console.log('=========================================================')
-                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                // //websocket发送信息
-                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
-                // Words.innerHTML = Words.innerHTML + str;
-                // TalkWords.value="";
+                str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
                 sendSign = 1
-
-                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
-                  
-              
-                console.log('=========================================================')
-                
-                //websocket发送信息
-                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                 Words.innerHTML = Words.innerHTML + str;
-                // TalkWords.value="";
-                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                 sendSign = 1
-                
-
             }
             document.onkeydown = function(event) {
-               
                 let e = event || window.event;
-                
                 if (e && e.keyCode == 13&&TalkWords.value!="") { 
-        
                     let str = "";
                     if(TalkWords.value=="show me the money"){
                         player1.money += 10000;
@@ -1220,41 +1190,23 @@ class God {
                         TalkWords.value="";
                         return;
                     }
-
-                    //判断是谁发出的
-                    if(Who== 0){
-                        str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
-                      
-                    }
-                    else{
-                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                    }
-                setInterval(()=>{
-                    if(sendSign == 1){
-                        str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
-                        //websocket发送信息
-                        this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value,onlineNum:0})
-                        Words.innerHTML = Words.innerHTML + str;
-                        TalkWords.value="";
-                        sendSign = 0
-                    }
+                    str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
+                    setInterval(()=>{
+                        if(sendSign == 1){
+                            str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
+                            //websocket发送信息
+                            this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value,onlineNum:0})
+                            Words.innerHTML = Words.innerHTML + str;
+                            TalkWords.value="";
+                            sendSign = 0
+                        }
                     
                 },80)
-
-
                 str = '<div class="btalk"><span>' + TalkWords.value +'</span></div>' ;
-
                 console.log('=========================================================')
-               
                 //websocket发送信息
-                // this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value})
                 Words.innerHTML = Words.innerHTML + str;
-                // str=TalkWords.value;
-                // TalkWords.value="";
-                // str = '<div class="atalk"><span>' + TalkWords.value +'</span></div>';
                  sendSign = 1
-            
-
             }
         }
             setInterval(()=>{
@@ -1263,14 +1215,12 @@ class God {
                     //websocket发送信息
                     this.websocketSend({type:3,roomCount:roomCount,name:linkName,msg:TalkWords.value,
                         otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score,onlineNum:0})
-                    // Words.innerHTML = Words.innerHTML + str;
                     TalkWords.value="";
                     sendSign = 0
                 }
                 
             },80)
         }
-    }
 
     clearCanvas(){
         let cv = document.querySelector('#canvasMap_tower');
