@@ -8,6 +8,7 @@ let createEnemySign = 0
 let killNum = 0
 let winSign = -1
 let historyWin
+let onlineNum
 
 
 let otherShaEnemy
