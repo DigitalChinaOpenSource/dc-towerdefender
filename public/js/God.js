@@ -96,7 +96,10 @@ class God {
             // console.log(linkName)
             $('#waitName').html(linkName)
             $('#waitScore').html(score)
-            $('#detail_num').html(onlineNum)
+            this.onlineNumShow = setInterval(() => {
+                $('#detail_num').html(onlineNum)
+            }, 500);
+           
             // console.log(onlineNum)
 
 
@@ -534,7 +537,7 @@ class God {
         }, 300);
         //动态显示敌人数量
         this.timeEnemies = setInterval(() => {
-            $("#lifeshow").html(this.enemyNumber - otherEneNum);
+            $("#lifeshow").html(otherEneNum - this.enemyNumber);
         }, 300);
         // 动态显示游戏时间
         this.timeTime = setInterval(() => {
@@ -633,9 +636,11 @@ class God {
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
         clearInterval(this.draw_bullet);
-        clearInterval(this.drawEnemy)
+        clearInterval(this.draw_enemy)
         clearInterval(this.other)
         clearInterval(this.recvOtherMsg)
+        clearInterval(this.createEnemyAAAA)
+        clearInterval(this.winSignAAAA)
     }
 
     createFirstEnemy() {
