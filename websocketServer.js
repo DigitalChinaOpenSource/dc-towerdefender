@@ -8,19 +8,26 @@ let count = 1
 const PORT = 8888
 // 接受的信息
 let recv
+//广播接收信息转json
+let recvData
+//广播json信息转string
+let toMsg
 // 当前连接
 let nowConnect
 // 匹配对手的积分差值
-var differ = 100
+var differ = 1
 // 开启服务器
 const server = ws.createServer(connect =>{
 	console.log("have user connected!")
 	nowConnect = connect
 	// 设置当前连接房间号-1，代表还没有连接，等待对手匹配
 	connect.roomCount = -1
+	let onlineSign = JSON.stringify({type:7,onlineNum:count})
+	broadcast(onlineSign)
+	console.log(count)
 	// 有消息发送到服务端时触发
 	connect.on('text',data=>{
-		console.log(data)
+		// console.log(data)
 		// 如果当前连接的房间号为负，进入匹配函数
 		if(connect.roomCount<0){
 			// 获取接受的信息
@@ -44,6 +51,7 @@ const server = ws.createServer(connect =>{
 	// 有链接断开时触发
 	connect.on('close',()=>{
 		console.log('have user close link')
+		count--
 		
 	})
 	// 断开连接会抛出异常，捕获异常不会终止服务器
@@ -88,9 +96,12 @@ function matching(){
 
 //广播消息
 function broadcast(msg){
+	recvData = JSON.parse(msg)
+	recvData.onlineNum = count
+	toMsg = JSON.stringify(recvData)
 	// 遍历连接数组，发送数据
 	server.connections.forEach(item=>{
-		item.send(msg)
+		item.send(toMsg)
 	})
 }
 
