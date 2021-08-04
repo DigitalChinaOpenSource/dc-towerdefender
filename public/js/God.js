@@ -530,6 +530,10 @@ class God {
             this.drawEnemies();
         }, 40);
 
+        this.draw_towers = setInterval(() => {
+            this.drawTowers();
+        },1000);
+
         this.draw_bullet = setInterval(() =>{
             this.drawBullet();
         }, 40)
@@ -604,8 +608,9 @@ class God {
         clearInterval(this.getGameState);
         clearInterval(this.logEnemyNumber);
         clearInterval(this.draw_bullet);
-        clearInterval(this.drawEnemy)
-        clearInterval(this.other)
+        clearInterval(this.drawEnemy);
+        clearInterval(this.other);
+        clearInterval(this.draw_towers);
     }
 
     createFirstEnemy() {
@@ -1019,7 +1024,6 @@ class God {
 
     // canvas部分*******************************************************
 
-
      //绘制敌人
     drawEnemies() { 
         //获取敌人对象
@@ -1047,6 +1051,16 @@ class God {
     
     }
 
+    drawTowers(){
+        for(y in this.tower_message){
+            for(x in this.tower_message[0]){
+                if(this.tower_message[y][x] > 1){
+                    this.drawTower();
+                }
+            }
+        }
+    }
+
     //绘制塔
     drawTower(option_x,option_y) {
         console.log("x:"+option_x+" y:"+option_y)
@@ -1059,7 +1073,6 @@ class God {
         img_tower.src = TowerType[this.tower_message[option_y-1][option_x-1]-1-1][3];
         console.log(img_tower.src)
         ctx.drawImage(img_tower, (option_x-1) * CELL_WIDTH, (option_y-1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
-
     }
 
 
