@@ -14,7 +14,20 @@
     <!--游戏首页-->
     <div class="home" >
         <div class="home_back" id="home_visi"></div>
-        <div class="help1" id="rule"></div>
+        <button class="help1" id="rule"></button>
+        <!-- <div class="readme" id="read_me"></div> -->
+        <div class="game_rules" id="rule_btn">
+            <h2>游戏说明</h4>
+            <div><strong>游戏机制：</strong>己方消灭一个怪，敌方增加两个怪。</div>
+            <div><strong>胜负条件：</strong>场上怪先到达100只的判负 </div>
+            <div><strong>技能1：</strong>让敌方场上的怪升一级 </div>
+            <div><strong>技能2：</strong>扣除己方场上所有怪的部分血量</div>
+            <div><strong>技能3：</strong>敌方场上添加一个boss</div>
+            <button style="position: absolute;top: 90%;right: 46%;width: 100px;height: 50px;border-radius: 8px;
+            " id="rule_close">关&nbsp;&nbsp;&nbsp;闭</button>
+        </div>
+        
+        
         <button class="btn_startgame hide_it" id="startgame_btn"></button>
         <a href="../logout"><button class="btn_logout hide_it" id="logout_btn"></button></a>
         
@@ -32,21 +45,21 @@
             <label id="indexScore" style="display: none;"><%=score%></label>
             <label id="indexName" style="display: none;"><%=userName%></label>
             <label id="indexHistoryWin" style="display: none;"><%=count%></label>
-            <h2 class="part">我方</h2>
-            <h2 class="sorce">积分：***</h2>
+            <h2 class="part" id='waitName'>我方</h2>
+            <h2 class="sorce" id='waitScore'>积分：***</h2>
             <img src="img/match/people.jpg" >
         </div>
         <div class="vs" >
             <img src="img/match/vs1.jpg">
         </div>
         <div class="enemy_part" >
-            <h2 class="part">敌方</h2>
-            <h2 class="sorce">积分：***</h2>
+            <h2 class="part" id='otherReadyName'>敌方</h2>
+            <h2 class="sorce" id="otherReadyScore">积分：***</h2>
             <img id="match_before" src="img/match/wenhao.jpg" >
             <img id="match_after" src="img/match/people.jpg" style="display: none;">
         </div>
         <h1 id="match_ready" >马上进入游戏，请做好准备！</h1>
-        <h1 id="match_time" >倒计时</h1>
+        <!-- <h1 id="match_time" >倒计时</h1> -->
         
     </div>
     <!-- 匹配页面end -->
@@ -71,7 +84,7 @@
             </div>
             <div id="total_btn">
                 <p id="total_continue">
-                    <img src="img/total/total_continue.png" >
+                    <a href="/index"><img src="img/total/total_continue.png" ></a>
                 </p>
                 
             </div>

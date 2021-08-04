@@ -102,7 +102,7 @@ app.post('/regist', urlEncodedParser, function (req, res) {
             //return res.redirect('/login');
             return;
         } else {
-            var sql = 'insert into users(name,password,score,total_win) values(?,?,300,0)';
+            var sql = 'insert into users(name,password,score,total_win,total_count) values(?,?,300,0,0)';
             connection.query(sql, params, function (error, result) {
                 if (error) {
                     console.log(sql);
@@ -167,9 +167,10 @@ app.post('/login', urlEncodedParser, function (req, res) {
         console.log(ips);
         console.log(ips[0]);
         var ip = ips[0];
+        var loginInfoParams=[userName,ip];
         //存储登录信息
-        var loginInfoSql = 'insert into login_info(login_ip) values(?)';
-        connection.query(loginInfoSql, ip, function (error, infoResult) {
+        var loginInfoSql = 'insert into login_info(name,login_ip) values(?,?)';
+        connection.query(loginInfoSql, loginInfoParams, function (error, infoResult) {
             if (error) {
                 console.log('ERROR--' + error.message);
                 return;
@@ -184,10 +185,11 @@ app.post('/login', urlEncodedParser, function (req, res) {
     })
 })
 
-//记录对局结果
-function writeGameInfo(name) {
-    var winnerName = name;
-    var querySql = 'select score,total_win from users where name=?';
+//记录对局结果,name为赢家的姓名
+app.post('/writeGameInfo',urlEncodedParser,function(req,res){
+    var winnerName = req.body.userName;
+    console.log("赢家姓名："+winnerName)
+    var querySql = 'select score,total_win,total_count from users where name=?';
     connection.query(querySql, winnerName, function (error, queryResult) {
         if (error) {
             console.log('ERROR--' + error.message);
@@ -195,9 +197,37 @@ function writeGameInfo(name) {
         }
         var queryData = queryResult[0];
         var queryScore = queryData.score + 100;
-        var queryTotalCount = queryData.total_win + 1;
-        var queryParam = [queryScore, queryTotalCount, winnerName];
-        var updateSql = "update users set score=?,total_win=? where name=?";
+        var queryTotalWin = queryData.total_win + 1;
+        var queryTotalCount=queryData.total_count+1;
+        var queryParam = [queryScore, queryTotalWin,queryTotalCount, winnerName];
+        var updateSql = "update users set score=?,total_win=?,total_count=? where name=?";
+        console.log("-------------进入了更新----------------------")
+        connection.query(updateSql, queryParam, function (err, updateResule) {
+            if (err) {
+                console.log('ERROR--' + error.message);
+                return;
+            }
+            console.log('--------------------------UPDATE SUCCESS----------------------------');
+            console.log('UPDATE affectedRows', updateResule.affectedRows);
+            return;
+            console.log('--------------------------------------------------------------------\n\n');
+        })
+    })
+})
+
+//记录玩家对战总局数,name为赢家的姓名
+app.post('/writeGameTotalInfo',urlEncodedParser,function(req,res){
+    var winnerName = req.body.userName;
+    var querySql = 'select total_count from users where name=?';
+    connection.query(querySql, winnerName, function (error, queryResult) {
+        if (error) {
+            console.log('ERROR--' + error.message);
+            return;
+        }
+        var queryData = queryResult[0];
+        var queryTotalCount = queryData.total_count + 1;
+        var queryParam = [ queryTotalCount, winnerName];
+        var updateSql = "update users set total_count=? where name=?";
         connection.query(updateSql, queryParam, function (err, updateResule) {
             if (err) {
                 console.log('ERROR--' + error.message);
@@ -208,7 +238,7 @@ function writeGameInfo(name) {
             console.log('--------------------------------------------------------------------\n\n');
         })
     })
-}
+})
 
 //登录统计
 function loginCount() {

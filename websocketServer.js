@@ -11,7 +11,7 @@ let recv
 // 当前连接
 let nowConnect
 // 匹配对手的积分差值
-var differ = 100
+var differ = 1000
 // 开启服务器
 const server = ws.createServer(connect =>{
 	console.log("have user connected!")

@@ -138,7 +138,7 @@ class Enemy {
 
 
 
-            }, 10000 / spd); // 控制enemy移动速度
+            }, 30); // 控制enemy移动速度
         }
     }
 
@@ -295,7 +295,7 @@ class Enemy {
     // 技能：怪物扣血
     check_bloodloss(){
         // this.reduce_hp(this.originHp*(1+0.1*this.enemy_level)*0.5)
-        this.reduce_hp(this.hp = this.hp*0.5)
+        this.reduce_hp(this.hp*0.5)
     }
 
     // 怪物死亡
