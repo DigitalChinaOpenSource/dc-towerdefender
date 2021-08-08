@@ -714,10 +714,10 @@ class God {
     tower_attack(tower){
         // 先判断是哪种塔
         // 判断是type为123，即左边的塔
-        if((tower.type-1)/3==0){
+        if(parseInt((parseInt(tower.type)-1)/3)==0){
             // 判断这个塔有没有目标，这里是没有目标
             if(tower.targe_index == null){
-                let min_distance2 = 1000000;
+                let min_distance2 = 2000000;
                 let nearest_enemy = undefined;
                 // 遍历，拿到整个怪数组里在攻击范围内，离自己最近的
                 for (let ene in this.enemies) {
@@ -732,7 +732,7 @@ class God {
                                 nearest_enemy = ene;
                             }
                         }   
-                    }
+                    }    
                 }
                 // 如果有离自己最近且在攻击范围内的怪，发射子弹
                 if(nearest_enemy!=null){
@@ -774,7 +774,7 @@ class God {
                             tower.type,
                             tower.targe_index
                         ));
-                        // 发射子弹了，清除定时器，攻击间隔之后重新启动定时器
+                       // 发射子弹了，清除定时器，攻击间隔之后重新启动定时器
                         clearInterval(tower.check_attack_interval);
                         setTimeout(() => {
                             tower.check_attack_interval = setInterval(() => {
@@ -784,26 +784,26 @@ class God {
                     }
                     // 目标没死，不在攻击范围里，目标置为null，再次调用attack
                     else{
-                        tower.targe_index = null;
-                        this.tower_attack(tower);
+                        tower.targe_index = undefined;
+                        // this.tower_attack(tower);
                     }
                 }
                 // 目标已经死了，目标置为null，再次调用attack
-                else{
-                    tower.targe_index = null;
-                    this.tower_attack(tower);
+                else if(this.enemies[tower.targe_index]==null){
+                    tower.targe_index = undefined;
+                    // this.tower_attack(tower);
                 }
             }
         }
         // type=456 即右边的塔
-        else if((tower.type-1)/3==1){
+        else if(parseInt((parseInt(tower.type)-1)/3)==1){
+            let least_hp_enemy = undefined;
             // 遍历数组，得到攻击范围里血最少的怪
             for (let ene in this.enemies) {
-                if(this.enemies.ene!=null){
+                if(this.enemies[ene]!=null){
                     let distanceX = tower.x - this.enemies[ene].x;
                     let distanceY = tower.y - this.enemies[ene].y;
                     let distanceXY2 = distanceX*distanceX + distanceY*distanceY;
-                    let least_hp_enemy = undefined;
                     let least_hp = 10000;
                     // 判断怪在不在攻击范围里
                     if (distanceXY2 <= (tower.range*CELL_WIDTH * tower.range*CELL_WIDTH)) {
@@ -837,6 +837,7 @@ class God {
         else{}
     }
 
+
     money_not_enough(){
         $("#moneylack").show(300).delay(1000).hide(200);
         // alert("money is not enough");
@@ -844,8 +845,8 @@ class God {
 
     judge_game() {
         //监听怪的数量到了100只
-        if (this.enemyNumber >= 3) {
-            this.towers.splice(0,this.towers.length)
+        if (this.enemyNumber >= 100) {
+            
             this.stopGame();
             // alert("lose");
             // 跳转到结算页面
@@ -899,6 +900,7 @@ class God {
 
     // 暂停游戏
     stopGame() {
+        this.towers.splice(0,this.towers.length)
         this.stopCountTime();
         this.stopProduce();
         this.stopEnemies();
@@ -960,45 +962,47 @@ class God {
                 this.bullets.splice(bullet, 1);
             }else{
                 for (let ene in this.enemies) {
-                    // 触碰到敌人时 敌人血量减少
-                    let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
-                    let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
-                    // console.log(distanceX);
-                    // console.log(distanceY);
-                    if ((distanceX*distanceX+distanceY*distanceY)<=
-                        ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
-                        // 调用敌人扣血，传入子弹类型与子弹伤害：
-                        // 子弹类型：this.bullets[bullet].type
-                        // 子弹伤害：this.bullets[bullet].atk
-                        // console.log('1打中敌人！');
+                    if(this.enemies[ene]!=null){
+                        // 触碰到敌人时 敌人血量减少
+                        let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
+                        let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
                         // console.log(distanceX);
                         // console.log(distanceY);
-                        
-                        // console.log(this.bullets.length);
-                        this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
-                        this.bullets[bullet].dead();
-                        this.bullets[bullet] = null;
-                        this.bullets.splice(bullet, 1);
-                        // console.log('2子弹已清除');
-                        // console.log(this.bullets.length);
-                        // 生命为0的时候 敌人死去
-                        if (this.enemies[ene].hp <= 0) {
-                            this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
-                            this.enemies[ene].dead();
-                            // console.log("kill");
-                            this.killed_enemies++;
-                            this.nowenemys--;
-                            // this.enemies[ene] = null;
-                            this.enemies.splice(ene, 1, null);
-                            this.enemyExisted--;
-                            this.enemyNumber--
-                            this.shaEnemy++
-                            this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,
-                                otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score,onlineNum:0})
-                            // this.createEnemy(0);
-                            // this.createEnemy(0);
+                        if ((distanceX*distanceX+distanceY*distanceY)<=
+                            ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
+                            // 调用敌人扣血，传入子弹类型与子弹伤害：
+                            // 子弹类型：this.bullets[bullet].type
+                            // 子弹伤害：this.bullets[bullet].atk
+                            // console.log('1打中敌人！');
+                            // console.log(distanceX);
+                            // console.log(distanceY);
+                            
+                            // console.log(this.bullets.length);
+                            this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                            this.bullets[bullet].dead();
+                            this.bullets[bullet] = null;
+                            this.bullets.splice(bullet, 1);
+                            // console.log('2子弹已清除');
+                            // console.log(this.bullets.length);
+                            // 生命为0的时候 敌人死去
+                            if (this.enemies[ene].hp <= 0) {
+                                this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
+                                this.enemies[ene].dead();
+                                // console.log("kill");
+                                this.killed_enemies++;
+                                this.nowenemys--;
+                                // this.enemies[ene] = null;
+                                this.enemies.splice(ene, 1, null);
+                                this.enemyExisted--;
+                                this.enemyNumber--
+                                this.shaEnemy++
+                                this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,
+                                    otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score,onlineNum:0})
+                                // this.createEnemy(0);
+                                // this.createEnemy(0);
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
@@ -1015,7 +1019,10 @@ class God {
                     if (TowerType[type][4] <= this.player.money) {                         
                         this.towers[tower].type +=1;
                         this.player.money -= TowerType[type][4];
-                        this.tower_message[y-1][x-1] = type+2;
+                        this.tower_message[y-1][x-1] +=1;
+                        this.towers[tower].range = TowerType[type-1][1];
+                        this.towers[tower].cost = TowerType[type-1][4];
+                        this.towers[tower].sale = TowerType[type-1][5];
                         this.drawTower(x,y)
                     }
                     else {
@@ -1109,10 +1116,12 @@ class God {
     }
 
     drawTowers(){
-        for(y in this.tower_message){
-            for(x in this.tower_message[0]){
-                if(this.tower_message[y][x] > 1){
-                    this.drawTower();
+        for(let x in this.tower_message){
+            for(let y in this.tower_message[x]){
+                console.log('x:'+x+',y:'+y)
+                if(this.tower_message[x][y] > 1){
+                    // 传入坐标原点为1，1
+                    this.drawTower(parseInt(y)+1,parseInt(x)+1);
                 }
             }
         }
@@ -1127,6 +1136,8 @@ class God {
         console.log('绘制塔:');
         console.log(this.tower_message);
         ctx.clearRect((option_x-1)*CELL_WIDTH,(option_y-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH);
+        console.log('========================================='+option_x)
+        console.log('========================================='+option_y)
         img_tower.src = TowerType[this.tower_message[option_y-1][option_x-1]-1-1][3];
         console.log(img_tower.src)
         ctx.drawImage(img_tower, (option_x-1) * CELL_WIDTH, (option_y-1) * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
