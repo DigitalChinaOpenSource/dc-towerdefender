@@ -622,6 +622,36 @@ class God {
 
     createFirstEnemy() {
         this.createEnemy(0);
+        // setTimeout(() => {
+        //     this.createEnemy(0);
+        //     setTimeout(() => {
+        //         this.createEnemy(0);
+        //         setTimeout(() => {
+        //             this.createEnemy(0);
+        //             setTimeout(() => {
+        //                 this.createEnemy(0);
+        //                 setTimeout(() => {
+        //                     this.createEnemy(0);
+        //                     setTimeout(() => {
+        //                         this.createEnemy(0);
+        //                         setTimeout(() => {
+        //                             this.createEnemy(0);
+        //                             setTimeout(() => {
+        //                                 this.createEnemy(0);
+        //                                 setTimeout(() => {
+        //                                     this.createEnemy(0);
+        //                                     setTimeout(() => {
+        //                                         this.createEnemy(0);
+        //                                     }, 1500);
+        //                                 }, 1500);
+        //                             }, 1500);
+        //                         }, 1500);
+        //                     }, 1500);
+        //                 }, 1500);
+        //             }, 1500);
+        //         }, 1500);
+        //     }, 1500);
+        // }, 1500);
         console.log("create firstenemy");
     }
 

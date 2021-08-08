@@ -40,7 +40,7 @@ const BULLET_UP_SPEED = 0.2; //升一级 子弹速度加快
 const MAP_ARR = new Array();
 
 //人物设置
-const PlAYER_BASE_MONEY = 200; //玩家的初始金币
+const PlAYER_BASE_MONEY = 500; //玩家的初始金币
 const END_HP = 100; //基地血量
 //控制小兵出生间隔速度
 var TIMEOUT = 10;
@@ -48,5 +48,5 @@ var all_ghost_num;
 
 //技能所需金币设置
 const increase_enemy_level_money=50;
-const reduce_enemy_blood_money=150;
+const reduce_enemy_blood_money=250;
 const add_boss_money=50;
