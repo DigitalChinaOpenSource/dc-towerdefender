@@ -6,10 +6,10 @@ class Bullet {
         this.target_x = target_x;
         this.target_y = target_y;
         this.type = type;
-        this.damage = BulletType[type][1];
-        this.speed = BulletType[type][0];;
-        this.color = BulletType[type][2];
-        this.size = BulletType[type][3];
+        this.damage = BulletType[type-1][1];
+        this.speed = BulletType[type-1][0];;
+        this.color = BulletType[type-1][2];
+        this.size = BulletType[type-1][3];
         this.flag = 0;
 
        // this.bian=0;
