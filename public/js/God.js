@@ -355,7 +355,7 @@ class God {
         this.needStop = 1; //生成子弹和敌人标签，1表示停止生成
         this.enemy_level = 0; // 怪物等级
         this.boss = 0; // 是否是boss：0=小怪，1=boss
-        this.leftTime = 60000;//剩余时间,单位秒
+        this.leftTime = GAME_TIME;//剩余时间,单位秒
         this.leftTimeMin = parseInt(this.leftTime / 60);//设置结束的时间也为0
         this.leftTimeSecond = this.leftTime % 60;
         this.map_a = new map();
