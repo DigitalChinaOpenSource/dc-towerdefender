@@ -814,13 +814,12 @@ class God {
             }
             // 如果攻击范围里存在血最少的怪
             if(least_hp_enemy != null){
-                console.log("attack")
+                console.log("bullet target in attack:"+least_hp_enemy);
                 this.bullets.push(new Bullet(
                     tower.x,
                     tower.y,
                     this.enemies[least_hp_enemy].x,
                     this.enemies[least_hp_enemy].y,
-                    // type,enemy_index
                     tower.type,
                     least_hp_enemy
                 ));
@@ -954,50 +953,82 @@ class God {
                 this.bullets[bullet] = null;
                 this.bullets.splice(bullet, 1);
             }else{
-                for (let ene in this.enemies) {
-                    if(this.enemies[ene]!=null){
-                        // 触碰到敌人时 敌人血量减少
-                        let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
-                        let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
-                        // console.log(distanceX);
-                        // console.log(distanceY);
-                        if ((distanceX*distanceX+distanceY*distanceY)<=
-                            ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
-                            // 调用敌人扣血，传入子弹类型与子弹伤害：
-                            // 子弹类型：this.bullets[bullet].type
-                            // 子弹伤害：this.bullets[bullet].atk
-                            // console.log('1打中敌人！');
+                if(parseInt(parseInt(this.bullets[bullet].type-1)/3)==0){
+                    for (let ene in this.enemies) {
+                        if(this.enemies[ene]!=null){
+                            // 触碰到敌人时 敌人血量减少
+                            let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
+                            let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
                             // console.log(distanceX);
                             // console.log(distanceY);
-                            
-                            // console.log(this.bullets.length);
-                            this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                            if ((distanceX*distanceX+distanceY*distanceY)<=
+                                ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
+                                // 调用敌人扣血，传入子弹类型与子弹伤害：
+                                // 子弹类型：this.bullets[bullet].type
+                                // 子弹伤害：this.bullets[bullet].atk
+                                // console.log('1打中敌人！');
+                                // console.log(distanceX);
+                                // console.log(distanceY);
+                                
+                                // console.log(this.bullets.length);
+                                this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
+                                this.bullets[bullet].dead();
+                                this.bullets[bullet] = null;
+                                this.bullets.splice(bullet, 1);
+                                // console.log('2子弹已清除');
+                                // console.log(this.bullets.length);
+                                // 生命为0的时候 敌人死去
+                                if (this.enemies[ene].hp <= 0) {
+                                    this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
+                                    this.enemies[ene].dead();
+                                    // console.log("kill");
+                                    this.killed_enemies++;
+                                    this.nowenemys--;
+                                    // this.enemies[ene] = null;
+                                    this.enemies.splice(ene, 1, null);
+                                    this.enemyExisted--;
+                                    this.enemyNumber--
+                                    this.shaEnemy++
+                                    this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,
+                                        otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score,onlineNum:0})
+                                    // this.createEnemy(0);
+                                    // this.createEnemy(0);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if(parseInt(parseInt(this.bullets[bullet].type-1)/3)==1){
+                    console.log("bullet.x:"+this.bullets[bullet].target_inde);
+                    let target_ene= this.bullets[bullet].target_index;
+                    console.log("bullet target in touch:"+target_ene);
+                    if(this.enemies[target_ene]!=null){
+                        // 触碰到敌人时 敌人血量减少
+                        let distanceX = this.bullets[bullet].x - this.enemies[target_ene].x;
+                        let distanceY = this.bullets[bullet].y - this.enemies[target_ene].y;
+                        if ((distanceX*distanceX+distanceY*distanceY)<=
+                            ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
+                            this.enemies[target_ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
                             this.bullets[bullet].dead();
                             this.bullets[bullet] = null;
                             this.bullets.splice(bullet, 1);
-                            // console.log('2子弹已清除');
-                            // console.log(this.bullets.length);
-                            // 生命为0的时候 敌人死去
-                            if (this.enemies[ene].hp <= 0) {
-                                this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
-                                this.enemies[ene].dead();
-                                // console.log("kill");
+                            if (this.enemies[target_ene].hp <= 0) {
+                                this.player.money += this.enemies[target_ene].money; //-----------------------------------------------------------------戴
+                                this.enemies[target_ene].dead();
                                 this.killed_enemies++;
                                 this.nowenemys--;
-                                // this.enemies[ene] = null;
-                                this.enemies.splice(ene, 1, null);
+                                this.enemies.splice(target_ene, 1, null);
                                 this.enemyExisted--;
                                 this.enemyNumber--
                                 this.shaEnemy++
                                 this.websocketSend({type:1,roomCount:roomCount,name:linkName,killNum:1,
                                     otherHistoryWin:historyWin,otherShaEnemy:this.shaEnemy,otherEneNum:this.enemyNumber,otherSocre:score,onlineNum:0})
-                                // this.createEnemy(0);
-                                // this.createEnemy(0);
                             }
-                            break;
                         }
                     }
                 }
+                else{}
             }
         }
     }

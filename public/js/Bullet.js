@@ -14,7 +14,7 @@ class Bullet {
 
        // this.bian=0;
         this.target_index = target_index;
-         this._init();
+        this._init();
     }
     _init() {
         this.create();
