@@ -123,72 +123,114 @@ app.post('/login', urlEncodedParser, function (req, res) {
     var userName = req.body.username;
     var password = req.body.password;
     var params = [userName, password];
-    var sql = 'select id,name,nickname,score,total_win from users where name=? and password=?';
-    connection.query(sql, params, function (error, result) {
+    var isLoginUsersql = 'select id,name,nickname,score,total_win from users where name=?';
+    //判断用户是否是第一次登录
+    connection.query(isLoginUsersql, userName, function (error, result) {
         if (error) {
             console.log('ERROR--' + error.message);
             return;
         }
-        //登录失败，输出相关提示
+        //如果是空，即用户第一次登录，直接把用户名和密码注册为新用户
         if (result.length == 0) {
-            console.log("用户名或者密码错误！");
-            // res.sendFile(staticPath + '/login_fail.html');
-            //return res.json({msg:"用户名或密码错误，请重新登录！"});
-            alert("用户名或密码错误，请重新登录！")
-            //return res.redirect('/login');
-            return;
-        }
-
-        //登录成功，取出返回值
-        var data = result[0];
-        // var id=data.id;
-        // var countSql='select id from game_info_pvp where winner=?';
-        // connection.query(countSql, id, function (error, counts) {
-        //     if (error) {
-        //         console.log('ERROR--' + error.message);
-        //         return;
-        //     }
-        //     var count=counts.length;
-        //     console.log(count);
-        var user = {
-            'name': data.name,
-            'nickName': data.nickname,
-            'score': data.score,
-            'count': data.total_win
-        }
-        console.log("static:" + staticPath);
-        console.log(user);
-        //登录信息存入Session内，定位至首页
-        var sess = req.session;
-        sess.loginUser = user;
-        console.log("session:" + sess.loginUser);
-        //获取的IP有前缀，需用正则表达式处理
-        var ips = req.ip.match(/\d+\.\d+\.\d+\.\d+/)
-        console.log(ips);
-        console.log(ips[0]);
-        var ip = ips[0];
-        var loginInfoParams=[userName,ip];
-        //存储登录信息
-        var loginInfoSql = 'insert into login_info(name,login_ip) values(?,?)';
-        connection.query(loginInfoSql, loginInfoParams, function (error, infoResult) {
-            if (error) {
-                console.log('ERROR--' + error.message);
-                return;
+            var registSql = 'insert into users(name,password,score,total_win,total_count) values(?,?,300,0,0)';
+            connection.query(registSql, params, function (error, result) {
+                if (error) {
+                    console.log(sql);
+                    console.log(params);
+                    console.log('ERROR--' + error.message);
+                }
+            })
+            var user = {
+                'name': userName,
+                'nickName': password,
+                'score': 300,
+                'count': 0
             }
-            console.log('----------SELECT RESULT----------');
-            console.log(infoResult);
-            console.log(infoResult + "test");
-            console.log('----------------------------------\n\n');
-        })
-        res.redirect('/index');
-        // })
+            console.log(user);
+            //登录信息存入Session内，定位至首页
+            var sess = req.session;
+            sess.loginUser = user;
+            console.log("session:" + sess.loginUser);
+            //获取的IP有前缀，需用正则表达式处理
+            var ips = req.ip.match(/\d+\.\d+\.\d+\.\d+/)
+            console.log(ips);
+            console.log(ips[0]);
+            var ip = ips[0];
+            var loginInfoParams = [userName, ip];
+            //存储登录信息
+            var loginInfoSql = 'insert into login_info(name,login_ip) values(?,?)';
+            connection.query(loginInfoSql, loginInfoParams, function (error, infoResult) {
+                if (error) {
+                    console.log('ERROR--' + error.message);
+                    return;
+                }
+                console.log('----------SELECT RESULT----------');
+                console.log(infoResult);
+                console.log(infoResult + "test");
+                console.log('----------------------------------\n\n');
+            })
+            res.redirect('/index');
+        //不是空，则说明用户不是第一次登录
+        } else {
+            var sql = 'select id,name,nickname,score,total_win from users where name=? and password=?';
+            //判断用户名和密码是否匹配
+            connection.query(sql, params, function (error, result) {
+                if (error) {
+                    console.log('ERROR--' + error.message);
+                    return;
+                }
+                //用户名和密码不匹配，登录失败，输出相关提示
+                if (result.length == 0) {
+                    console.log("用户名或者密码错误！");
+                    // res.sendFile(staticPath + '/login_fail.html');
+                    //return res.json({msg:"用户名或密码错误，请重新登录！"});
+                    alert("用户名或密码错误，请重新登录！")
+                    //return res.redirect('/login');
+                    return;
+                }
+                //用户名和密码匹配，登录成功，取出返回值
+                var data = result[0];
+                var user = {
+                    'name': data.name,
+                    'nickName': data.nickname,
+                    'score': data.score,
+                    'count': data.total_win
+                }
+                console.log("static:" + staticPath);
+                console.log(user);
+                //登录信息存入Session内，定位至首页
+                var sess = req.session;
+                sess.loginUser = user;
+                console.log("session:" + sess.loginUser);
+                //获取的IP有前缀，需用正则表达式处理
+                var ips = req.ip.match(/\d+\.\d+\.\d+\.\d+/)
+                console.log(ips);
+                console.log(ips[0]);
+                var ip = ips[0];
+                var loginInfoParams = [userName, ip];
+                console.log(ip);
+                //存储登录信息
+                var loginInfoSql = 'insert into login_info(name,login_ip) values(?,?)';
+                connection.query(loginInfoSql, loginInfoParams, function (error, infoResult) {
+                    if (error) {
+                        console.log('ERROR--' + error.message);
+                        return;
+                    }
+                    console.log('----------SELECT RESULT----------');
+                    console.log(infoResult);
+                    console.log(infoResult + "test");
+                    console.log('----------------------------------\n\n');
+                })
+                res.redirect('/index');
+            })
+        }
     })
 })
 
 //记录对局结果,name为赢家的姓名
-app.post('/writeGameInfo',urlEncodedParser,function(req,res){
+app.post('/writeGameInfo', urlEncodedParser, function (req, res) {
     var winnerName = req.body.userName;
-    console.log("赢家姓名："+winnerName)
+    console.log("赢家姓名：" + winnerName)
     var querySql = 'select score,total_win,total_count from users where name=?';
     connection.query(querySql, winnerName, function (error, queryResult) {
         if (error) {
@@ -198,8 +240,8 @@ app.post('/writeGameInfo',urlEncodedParser,function(req,res){
         var queryData = queryResult[0];
         var queryScore = queryData.score + 100;
         var queryTotalWin = queryData.total_win + 1;
-        var queryTotalCount=queryData.total_count+1;
-        var queryParam = [queryScore, queryTotalWin,queryTotalCount, winnerName];
+        var queryTotalCount = queryData.total_count + 1;
+        var queryParam = [queryScore, queryTotalWin, queryTotalCount, winnerName];
         var updateSql = "update users set score=?,total_win=?,total_count=? where name=?";
         console.log("-------------进入了更新----------------------")
         connection.query(updateSql, queryParam, function (err, updateResule) {
@@ -216,7 +258,7 @@ app.post('/writeGameInfo',urlEncodedParser,function(req,res){
 })
 
 //记录玩家对战总局数,name为赢家的姓名
-app.post('/writeGameTotalInfo',urlEncodedParser,function(req,res){
+app.post('/writeGameTotalInfo', urlEncodedParser, function (req, res) {
     var winnerName = req.body.userName;
     var querySql = 'select total_count from users where name=?';
     connection.query(querySql, winnerName, function (error, queryResult) {
@@ -226,7 +268,7 @@ app.post('/writeGameTotalInfo',urlEncodedParser,function(req,res){
         }
         var queryData = queryResult[0];
         var queryTotalCount = queryData.total_count + 1;
-        var queryParam = [ queryTotalCount, winnerName];
+        var queryParam = [queryTotalCount, winnerName];
         var updateSql = "update users set total_count=? where name=?";
         connection.query(updateSql, queryParam, function (err, updateResule) {
             if (err) {
