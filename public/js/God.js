@@ -714,25 +714,27 @@ class God {
     tower_attack(tower){
         // 先判断是哪种塔
         // 判断是type为123，即左边的塔
-        if((tower.type-1)%3==0){
+        if((tower.type-1)/3==0){
             // 判断这个塔有没有目标，这里是没有目标
             if(tower.targe_index == null){
-                let min_distance2 = 20000;
+                let min_distance2 = 1000000;
                 let nearest_enemy = undefined;
-                // 遍历，拿到整个怪数组里离自己最近的
+                // 遍历，拿到整个怪数组里在攻击范围内，离自己最近的
                 for (let ene in this.enemies) {
-                    let distanceX = tower.x - this.enemies[ene].x;
-                    let distanceY = tower.y - this.enemies[ene].y;
-                    let distanceXY2 = distanceX*distanceX + distanceY*distanceY;
-                    // 判断这个怪在不在攻击范围内，如果在，判断是不是离自己最近的，是就复制
-                    if (distanceXY2 <= (tower.range*CELL_WIDTH * tower.range*CELL_WIDTH)) {
-                        if(distanceXY2 < min_distance2){
-                            min_distance2 = distanceXY2;
-                            nearest_enemy = ene;
-                        }
-                    }   
+                    if(this.enemies[ene]!=null){
+                        let distanceX = tower.x - this.enemies[ene].x;
+                        let distanceY = tower.y - this.enemies[ene].y;
+                        let distanceXY2 = distanceX*distanceX + distanceY*distanceY;
+                        // 判断这个怪在不在攻击范围内，如果在，判断是不是离自己最近的，是就复制
+                        if (distanceXY2 <= (tower.range*CELL_WIDTH * tower.range*CELL_WIDTH)) {
+                            if(distanceXY2 < min_distance2){
+                                min_distance2 = distanceXY2;
+                                nearest_enemy = ene;
+                            }
+                        }   
+                    }
                 }
-                // 如果有里自己最近且在攻击范围内的怪，发射子弹
+                // 如果有离自己最近且在攻击范围内的怪，发射子弹
                 if(nearest_enemy!=null){
                     this.bullets.push(new Bullet(
                         tower.x,
@@ -743,8 +745,15 @@ class God {
                         tower.type,
                         nearest_enemy
                     ));
-                    // 把塔怪赋给塔的目标
+                    // 把怪赋给塔的目标
                     tower.targe_index = nearest_enemy;
+                    // 发射子弹了，清除定时器，攻击间隔之后重新启动定时器
+                    clearInterval(tower.check_attack_interval);
+                    setTimeout(() => {
+                        tower.check_attack_interval = setInterval(() => {
+                            this.tower_attack(tower);
+                        },30)
+                    }, tower.attack_interval); 
                 }  
             }
             // 有目标
@@ -759,11 +768,11 @@ class God {
                         this.bullets.push(new Bullet(
                             tower.x,
                             tower.y,
-                            this.enemies[nearest_enemy].x,
-                            this.enemies[nearest_enemy].y,
+                            this.enemies[tower.targe_index].x,
+                            this.enemies[tower.targe_index].y,
                             // type,enemy_index
                             tower.type,
-                            nearest_enemy
+                            tower.targe_index
                         ));
                         // 发射子弹了，清除定时器，攻击间隔之后重新启动定时器
                         clearInterval(tower.check_attack_interval);
@@ -787,42 +796,45 @@ class God {
             }
         }
         // type=456 即右边的塔
-        else if((tower.type-1)%3==1){
+        else if((tower.type-1)/3==1){
             // 遍历数组，得到攻击范围里血最少的怪
             for (let ene in this.enemies) {
-                let distanceX = tower.x - this.enemies[ene].x;
-                let distanceY = tower.y - this.enemies[ene].y;
-                let distanceXY2 = distanceX*distanceX + distanceY*distanceY;
-                let least_hp_enemy = undefined;
-                let least_hp = 10000;
-                // 判断怪在不在攻击范围里
-                if (distanceXY2 <= (tower.range*CELL_WIDTH * tower.range*CELL_WIDTH)) {
-                    if(this.enemies[ene].hp < least_hp){
-                        least_hp = this.enemies[ene].hp;
-                        least_hp_enemy = ene;
-                    }
-                }  
-                // 如果攻击范围里存在血最少的怪
-                if(least_hp_enemy != null){
-                    this.bullets.push(new Bullet(
-                        tower.x,
-                        tower.y,
-                        this.enemies[least_hp_enemy].x,
-                        this.enemies[least_hp_enemy].y,
-                        // type,enemy_index
-                        tower.type,
-                        least_hp_enemy
-                    ));
-                    // 发射子弹了，清除定时器，攻击间隔之后重新启动定时器
-                    clearInterval(tower.check_attack_interval);
-                    setTimeout(() => {
-                        tower.check_attack_interval = setInterval(() => {
-                            this.tower_attack(tower);
-                        },30)
-                    }, tower.attack_interval); 
-                } 
+                if(this.enemies.ene!=null){
+                    let distanceX = tower.x - this.enemies[ene].x;
+                    let distanceY = tower.y - this.enemies[ene].y;
+                    let distanceXY2 = distanceX*distanceX + distanceY*distanceY;
+                    let least_hp_enemy = undefined;
+                    let least_hp = 10000;
+                    // 判断怪在不在攻击范围里
+                    if (distanceXY2 <= (tower.range*CELL_WIDTH * tower.range*CELL_WIDTH)) {
+                        if(this.enemies[ene].hp < least_hp){
+                            least_hp = this.enemies[ene].hp;
+                            least_hp_enemy = ene;
+                        }
+                    }  
+                    // 如果攻击范围里存在血最少的怪
+                    if(least_hp_enemy != null){
+                        this.bullets.push(new Bullet(
+                            tower.x,
+                            tower.y,
+                            this.enemies[least_hp_enemy].x,
+                            this.enemies[least_hp_enemy].y,
+                            // type,enemy_index
+                            tower.type,
+                            least_hp_enemy
+                        ));
+                        // 发射子弹了，清除定时器，攻击间隔之后重新启动定时器
+                        clearInterval(tower.check_attack_interval);
+                        setTimeout(() => {
+                            tower.check_attack_interval = setInterval(() => {
+                                this.tower_attack(tower);
+                            },30)
+                        }, tower.attack_interval); 
+                    } 
+                }
             }
         }
+        else{}
     }
 
     money_not_enough(){
