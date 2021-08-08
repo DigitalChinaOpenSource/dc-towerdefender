@@ -92,15 +92,11 @@ class God {
     showTime() {
         let count=6;        
         let time=setInterval(()=>{
-
-            // console.log(linkName)
             $('#waitName').html(linkName)
             $('#waitScore').html(score)
             this.onlineNumShow = setInterval(() => {
                 $('#detail_num').html(onlineNum)
             }, 500);
-           
-            // console.log(onlineNum)
 
 
             count -= 1;
@@ -253,22 +249,12 @@ class God {
                         //生成两个小兵
                         createEnemySign = 1
                         killNum = recv.killNum
-                        // console.log('========================'+killNum)
-
                         otherShaEnemy = recv.otherShaEnemy
                         otherHistoryWin = recv.otherHistoryWin
                         otherEneNum = recv.otherEneNum
                         otherSocre = recv.otherSocre
                         otherName = recv.name
                         onlineNum = recv.onlineNum
-
-
-                        // console.log('otherSha:'+otherShaEnemy)
-                        // console.log('otherhistorywin:'+otherHistoryWin)
-                        // console.log('otherEneNum:'+otherEneNum)
-                        // console.log('otherScore:'+otherSocre)
-                        // console.log('otherName:'+otherName)
-
                     }else if(recv.type == 2){
                         //小兵增强
                         if(recv.action == 0){
@@ -291,10 +277,6 @@ class God {
                         // alert(Words);
                         var str = '<div class="atalk"><span>' + m +'</span></div>';
                         Words.innerHTML = Words.innerHTML + str;
-                        // alert(str);
-                        // wordsRecv.innerHTML = wordsRecv.innerHTML + str
-                        // console.log(recv.msg)
-                        // console.log(m)
                         otherShaEnemy = recv.otherShaEnemy
                         otherHistoryWin = recv.otherHistoryWin
                         otherEneNum = recv.otherEneNum
@@ -418,7 +400,6 @@ class God {
             //在建塔的图层上
             this.option_x = parseInt(e.offsetX / CELL_WIDTH+1); //鼠标监听，然后得到一个坐标。
             this.option_y = parseInt(e.offsetY / CELL_WIDTH+1);
-            // console.log(this.option_x,this.option_y);
             this.drawOptions();
         });
 
@@ -463,19 +444,14 @@ class God {
                         if (this.enemies[ene2].hp <= 1) {
                             this.player.money += this.enemies[ene2].money; 
                             this.enemies[ene2].dead();
-                            // console.log("kill");
                             this.killed_enemies++;
                             this.nowenemys--;
                             this.enemies[ene2] = null;
-                            // this.enemies.splice(e, 1);
                             this.enemies.splice(ene2, 1, null);
                             this.enemyExisted--;
                             kill_enemy_num_of_this_click++
                             this.enemyNumber--
                             this.shaEnemy++
-                            // console.log('现在杀死一个还剩'+this.enemyNumber)
-                            // this.createEnemy(0);
-                            // this.createEnemy(0);
                         }
                     }
                     // for(var q=0;q<kill_enemy_num_of_this_click;q++){
@@ -490,9 +466,6 @@ class God {
                 }
                 else {
                     this.money_not_enough();
-                    // $("#moneylack").show(300).delay(1000).hide(200);
-                    // console.log(this.player.money);
-                    // alert("给自己小怪减血技能金币数量不够");
                 }
             } else {
                 alert("地图上没有小怪，无法减血");
@@ -605,7 +578,6 @@ class God {
             $("#p1leaveenemyshow").html(this.enemyNumber);
 
             // $('#detail_num').html(onlineNum)
-            // console.log(onlineNum)
         }, 60);
 
 
@@ -675,7 +647,6 @@ class God {
         enemy.check_levelup();
         enemy.check_boss();
         this.enemies.push(enemy);
-        // console.log(this.enemies);
         this.enemyNumber++;
         // if (this.enemyNumber <= length) {
         //     let enemy = new Enemy();
@@ -814,7 +785,6 @@ class God {
             }
             // 如果攻击范围里存在血最少的怪
             if(least_hp_enemy != null){
-                console.log("bullet target in attack:"+least_hp_enemy);
                 this.bullets.push(new Bullet(
                     tower.x,
                     tower.y,
@@ -959,32 +929,21 @@ class God {
                             // 触碰到敌人时 敌人血量减少
                             let distanceX = this.bullets[bullet].x - this.enemies[ene].x;
                             let distanceY = this.bullets[bullet].y - this.enemies[ene].y;
-                            // console.log(distanceX);
-                            // console.log(distanceY);
                             if ((distanceX*distanceX+distanceY*distanceY)<=
                                 ((this.bullets[bullet].size+CELL_WIDTH)*(this.bullets[bullet].size+CELL_WIDTH))) {
                                 // 调用敌人扣血，传入子弹类型与子弹伤害：
                                 // 子弹类型：this.bullets[bullet].type
                                 // 子弹伤害：this.bullets[bullet].atk
-                                // console.log('1打中敌人！');
-                                // console.log(distanceX);
-                                // console.log(distanceY);
-                                
-                                // console.log(this.bullets.length);
                                 this.enemies[ene].take_damage(this.bullets[bullet].type,this.bullets[bullet].damage);
                                 this.bullets[bullet].dead();
                                 this.bullets[bullet] = null;
                                 this.bullets.splice(bullet, 1);
-                                // console.log('2子弹已清除');
-                                // console.log(this.bullets.length);
                                 // 生命为0的时候 敌人死去
                                 if (this.enemies[ene].hp <= 0) {
                                     this.player.money += this.enemies[ene].money; //-----------------------------------------------------------------戴
                                     this.enemies[ene].dead();
-                                    // console.log("kill");
                                     this.killed_enemies++;
                                     this.nowenemys--;
-                                    // this.enemies[ene] = null;
                                     this.enemies.splice(ene, 1, null);
                                     this.enemyExisted--;
                                     this.enemyNumber--
@@ -1000,9 +959,7 @@ class God {
                     }
                 }
                 else if(parseInt(parseInt(this.bullets[bullet].type-1)/3)==1){
-                    console.log("bullet.x:"+this.bullets[bullet].target_inde);
                     let target_ene= this.bullets[bullet].target_index;
-                    console.log("bullet target in touch:"+target_ene);
                     if(this.enemies[target_ene]!=null){
                         // 触碰到敌人时 敌人血量减少
                         let distanceX = this.bullets[bullet].x - this.enemies[target_ene].x;
@@ -1037,8 +994,6 @@ class God {
     Tower_up(type,x,y){
         if(type%3!=0){
             for (let tower in this.towers) {
-                // console.log("tower的位置：x:"+(this.towers[tower].x/CELL_WIDTH)+"y:"+(this.towers[tower].y/CELL_WIDTH));
-                // console.log("点击位置：x:"+(x-1)+"y:"+(y-1));
                 if (this.towers[tower].x == (x-1)*CELL_WIDTH && this.towers[tower].y == (y-1)*CELL_WIDTH) {
                     if (TowerType[type][4] <= this.player.money) {                         
                         this.towers[tower].type +=1;
@@ -1061,14 +1016,11 @@ class God {
 
     //拆除塔
     Tower_down(type,x,y) {
-
         for (let tower in this.towers) {
             if (this.towers[tower]!=null&&(this.towers[tower].x == (x-1)*CELL_WIDTH && this.towers[tower].y == (y-1)*CELL_WIDTH)) {
                 this.player.money += TowerType[type-1][5];
-                console.log(this.towers);
                 clearInterval(this.towers[tower].check_attack_interval);
                 this.towers.splice(tower, 1, null);
-                console.log(this.towers);
                 this.tower_message[y-1][x-1] = 1;
                 let cv = document.querySelector('#canvasMap_tower');
                 let ctx = cv.getContext('2d');
@@ -1085,9 +1037,6 @@ class God {
         let cv = document.querySelector('#canvasMap_enemy');
         //获取2d平面
         let ctx = cv.getContext('2d');
-
-        
-
         // 清空敌人图片
         ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         let img = new Image;
@@ -1096,12 +1045,9 @@ class God {
             if(this.enemies[ene]==null){
                 continue
             }
-            // console.log(this.enemies[ene])
             img.src = this.enemies[ene].enemy_img;
             ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
             Ca.drawBlood(ctx, this.enemies[ene]);
-            // console.log(this.enemies[ene].x)
-            // console.log(this.enemies[ene].y)
         }
     
     }
@@ -1131,8 +1077,6 @@ class God {
 
     //绘制选项
     drawOptions(){
-        // console.log("last: x:"+this.last_option_x+" y:"+this.last_option_y);
-        // console.log("this: x:"+this.option_x+" y:"+this.option_y);
         let cv = document.querySelector('#canvasMap_option');
         let ctx = cv.getContext('2d');
         let img_xx = new Image();
@@ -1146,9 +1090,6 @@ class God {
         if(num!=0){
             console.log("on tower home");
             // 判断这次在不在上次点击的选项上
-            // console.log("last_num:"+this.tower_message[this.last_option_y-1][this.last_option_x-1]);
-            // console.log("option_x:"+this.option_x+" option_y:"+this.option_y);
-            // console.log("last_option_x:"+this.last_option_x+" last_option_y:"+this.last_option_y);
             if((this.option_x==this.last_option_x-1&&this.option_y==this.last_option_y-1)
             ||(this.option_x==this.last_option_x+1&&this.option_y==this.last_option_y-1)){
                 console.log("on aaaa last option");
@@ -1268,7 +1209,6 @@ class God {
 
     //聊天
     chat(){
-            // console.log(this.player)
             var player1 = this.player;
             var Words = document.getElementById("words");
             var TalkWords = document.getElementById("talkwords");
@@ -1286,7 +1226,6 @@ class God {
                 //作弊
                 if(TalkWords.value=="show me the money"){
                     player1.money += 10000;
-                    // console.log(player1)
                     TalkWords.value="";
                     return;
                 }
@@ -1300,7 +1239,6 @@ class God {
                     let str = "";
                     if(TalkWords.value=="show me the money"){
                         player1.money += 10000;
-                        // console.log(player1)
                         TalkWords.value="";
                         return;
                     }
