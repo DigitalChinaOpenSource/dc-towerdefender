@@ -75,7 +75,7 @@
 
 }
 .game_rules{
-    padding: 220px 260px;
+    padding: 100px 100px;
     font-size: 30px;
     background: rgba(255, 255, 255, 0.925);
     position: absolute;
@@ -434,7 +434,7 @@ ul.list-login-bottom li a:hover {
 .skill_iel:hover::after{
     font-family:"楷体","楷体";
     position: absolute;
-    content: '对战玩家所有的小怪升级';
+    content: '对战玩家所有的小怪升级,50金币';
     font-size: 18px;
     text-align: center;
     width: 110px;
@@ -461,7 +461,7 @@ ul.list-login-bottom li a:hover {
 .skill_reb:hover::after{
     font-family:"楷体","楷体";
     position: absolute;
-    content: '减少敌方小怪血量';
+    content: '减少己方全场小怪血量,150金';
     font-size: 18px;
     text-align: center;
     width: 110px;
@@ -487,7 +487,7 @@ ul.list-login-bottom li a:hover {
 .skill_ab:hover::after{
     font-family:"楷体","楷体";
     position: absolute;
-    content: '对战玩家新增大boss';
+    content: '对战玩家新增大boss,50金';
     font-size: 18px;
     text-align: center;
     width: 110px;
