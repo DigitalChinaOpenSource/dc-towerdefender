@@ -863,8 +863,8 @@ class God {
             this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
             // alert("win");
              // 跳转到结算页面
-            this.to_total_win();
-            this.websocketClose()
+            // this.to_total_win();
+            // this.websocketClose()
         }
     }
 
