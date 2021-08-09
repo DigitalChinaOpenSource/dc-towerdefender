@@ -289,6 +289,12 @@ class Enemy {
     // 技能：怪物升级
     check_levelup(){
         this.hp = this.originHp*(1+0.1*this.enemy_level);
+        if(this.enemy_level <= 10){
+            this.money = this.money-1*this.enemy_level;
+        }
+        else{
+            this.money = this.money-10;
+        }
         // this.money = this.money*(1+0.1*this.enemy_level);
     }
 
