@@ -292,10 +292,14 @@ class God {
                     }else if(recv.type == 5){
                         //时间到，对比小兵enemy数量，判断输赢
                         ////调用断开连接方法
-                        if(recv.enemy<enemyExisted){
+                        if(recv.otherEneNum<finalEnmyNum){
+                            console.log("other"+recv.otherEneNum)
+                            console.log("mine"+finalEnmyNum)
                             // alert("you losed")
                             winSign =0
                         }else{
+                            console.log("other"+recv.otherEneNum)
+                            console.log("mine"+finalEnmyNum)
                             // alert('you win')
                             winSign = 1
                         }
@@ -550,12 +554,15 @@ class God {
 
         this.winSignAAAA = setInterval(()=>{
             if(winSign == 0){
+                this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
                 this.to_total_lose()
                 this.writeGameTotalInfo(linkName)
                 this.websocketClose()
                 winSign = -1
             }
             if(winSign == 1){
+                console.log("send my msg when i win")
+                this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
                 this.stopGame()
                 console.log('winner is'+linkName)
                 this.writeGameInfo(linkName)
@@ -576,6 +583,7 @@ class God {
 
             $("#p1killenemyshow").html(this.shaEnemy);
             $("#p1leaveenemyshow").html(this.enemyNumber);
+            finalEnmyNum = this.enemyNumber
 
             // $('#detail_num').html(onlineNum)
         }, 60);
@@ -616,7 +624,7 @@ class God {
         clearInterval(this.other);
         clearInterval(this.recvOtherMsg);
         clearInterval(this.createEnemyAAAA);
-        clearInterval(this.winSignAAAA);
+        // clearInterval(this.winSignAAAA);
         clearInterval(this.draw_towers);
     }
 
@@ -860,7 +868,10 @@ class God {
         if (this.enemyExisted < 100 && this.leftTime <= 0) {
             this.stopGame();
             // 发送自己的小兵剩余信息给对方
+            console.log("finalnum"+finalEnmyNum)
+            console.log("send final msg to other before")
             this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
+            console.log("send final msg to other after")
             // alert("win");
              // 跳转到结算页面
             // this.to_total_win();
