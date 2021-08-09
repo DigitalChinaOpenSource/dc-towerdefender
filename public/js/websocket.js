@@ -16,6 +16,7 @@ let otherHistoryWin
 let otherEneNum
 let otherSocre
 let otherName
+let finalEnmyNum
 // function websocketLink(){
 //     ws = new WebSocket(ip)
 //     ws.onopen = function(){
