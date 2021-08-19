@@ -6,7 +6,6 @@ class Enemy {
         this.hp = hp; // 不同种类的enemy有不同的血量
         this.speed = speed || ENEMY_BASE_SPEED; // 不同种类的enemy有不同的速度
         this.size = size || 60; // 敌人的大小，默认60
-        this.enemy_img = enemy_img || "img/TowerDefense.png";
         this.money = money; // 死后掉落金币
         this.enemy_level = enemy_level; // 怪物等级
         this.boss = boss || 0; // 是否是boss：0=小怪，1=boss
@@ -17,6 +16,13 @@ class Enemy {
         // 怪物初始参数
         this.originHp = hp; // 原始hp
         // this.origin_spd = this.speed; // 初始速度 用于速度改变使用
+        this.img_1 = new Image;
+        this.img_1.src = "img/monster/monster-"+this.enemy_img_series+"-1.png";
+        this.img_2 = new Image;
+        this.img_2.src = "img/monster/monster-"+this.enemy_img_series+"-2.png";
+        this.img_3 = new Image;
+        this.img_3.src = "img/monster/monster-"+this.enemy_img_series+"-3.png";
+        this.img = this.img_1;
 
 
         
@@ -147,9 +153,9 @@ class Enemy {
         //当游戏正常运行时，小怪正常运行
         if (this.flag == 0) {
             // 切换怪物图片 实现动态变化
-            if(order < 10){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-1.png";}
-            else if(order < 20){this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-2.png";}
-            else {this.enemy_img = "img/monster/monster-"+this.enemy_img_series+"-3.png";}
+            if(order < 10){this.img = this.img_1;}
+            else if(order < 20){this.img = this.img_2;}
+            else {this.img = this.img_3;}
 
             // 判断的时候乘CELL_WIDTH
             if (this.x != this.moveArr[(this.ran + 1) % this.moveArr.length].x * CELL_WIDTH) {
