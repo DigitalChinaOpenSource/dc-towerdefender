@@ -1,0 +1,309 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    font-family: Arial, sans-serif;
+    color: #282828;
+    text-decoration: none;
+    list-style-type: none
+}
+
+h3 {
+    text-transform: uppercase;
+    font-size: 33px;
+    text-align: center;
+    margin-bottom: 20px
+}
+
+.start {
+    width: 500px;
+    height: 300px;
+    background-color: #b3d7f1;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -250px;
+    z-index: 99
+}
+
+.end {
+    width: 500px;
+    height: 300px;
+    background-color: #b3d7f1;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -250px;
+    z-index: 99;
+    display: none
+}
+
+.btn_start {
+    width: 300px;
+    height: 50px;
+    margin-left: 100px;
+    margin-top: 20px;
+    background-color: #efb6c1
+}
+
+.map {
+    height: 800px;
+    width: 1500px;
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    margin-left: -750px;
+}
+
+.towers {
+    position: absolute;
+    background-color: #ffd1d1;
+    height: 200px;
+    width: 1500px;
+    top: 650px;
+    left: 50%;
+    margin-top: 10%;
+    margin-left: -750px
+}
+
+.tower_one {
+    margin-left: 100px;
+    margin-top: 75px
+}
+
+img {
+    position: absolute;
+    width: 50px;
+    height: 50px
+}
+
+.star {
+    background-color: red;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 3px 2px;
+    cursor: pointer;
+    position: absolute;
+    top: -16%;
+    left: 80%;
+    Display: none;
+}
+
+.menu {
+    background-color: green;
+    width: 500px;
+    height: 100px;
+    position: absolute;
+    top: -8%;
+    left: 20%;
+    margin-top: -150px;
+    margin-left: -250px;
+    /*按钮背景透明*/
+    background: transparent;
+}
+
+.stop {
+    background-color: whitesmoke;
+    width: 500px;
+    height: 300px;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -250px;
+    z-index: 99;
+    Display: none;
+}
+
+.life {
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 3px 2px;
+    position: relative;
+    top: 10%;
+    left: 3%;
+}
+
+.lifeshow {
+    font-size: 20px;
+    margin-left: 350px;
+    padding: 10px 10px;
+    position: relative;
+    top: -55%;
+    left: -50%;
+}
+
+.money {
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 3px 2px;
+    position: relative;
+    top: -118%;
+    left: 50%;
+}
+
+.moneyshow {
+    font-size: 20px;
+    margin-left: 350px;
+    padding: 10px 10px;
+    position: relative;
+    top: -185%;
+    left: 3%;
+}
+
+.enemys {
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 3px 2px;
+    position: relative;
+    top: -250%;
+    left: 28%;
+}
+
+.enemysshow {
+    font-size: 20px;
+    margin-left: 350px;
+    padding: 10px 10px;
+    position: relative;
+    top: -320%;
+    left: -25%;
+}
+
+.explains {
+    background-color: #b3d7f1;
+    height: 500px;
+    width: 800px;
+    position: absolute;
+    top: -5%;
+    left: 73%;
+    margin-left: -750px;
+    z-index: 100;
+    font-size: 20px;
+    Display: none;
+}
+
+#explains_button {
+    background-color: greenyellow;
+    cursor: pointer;
+    padding: 15px 31px;
+    position: absolute;
+    top: -16%;
+    left: 90%;
+    margin: 3px 2px;
+    font-size: 16px;
+}
+
+.close_explains {
+    position: relative;
+    top: -82%;
+    left: 94%;
+    cursor: pointer;
+}
+
+.explain {
+    width: 510px;
+    height: 500px;
+    background-color: #b3d7f1;
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    margin-top: -150px;
+    margin-left: -250px;
+    Display: none;
+    font-size: 15px;
+    clear: both;
+}
+
+.explainTwo {
+    width: 500px;
+    height: 500px;
+    background-color: #b3d7f1;
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    margin-top: -150px;
+    margin-left: -250px;
+    Display: none;
+    font-size: 20px;
+    clear: both;
+}
+
+.continue {
+    width: 80px;
+    height: 70px;
+    background-color: greenyellow;
+    position: relative;
+    top: 38%;
+    left: 25%;
+    cursor: pointer;
+}
+
+.restart {
+    width: 80px;
+    height: 70px;
+    background-color: limegreen;
+    position: relative;
+    top: 38%;
+    left: 40%;
+    cursor: pointer;
+}
+
+.move {
+    width: 80px;
+    height: 70px;
+    position: relative;
+    top: 4%;
+    left: 30%;
+    cursor: pointer;
+}
+
+.good {
+    width: 80px;
+    height: 70px;
+    position: relative;
+    top: 4%;
+    left: -33%;
+}
+
+#nextScale {
+    height: 46px;
+    width: 57px;
+    font-display: red;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    margin-left: -810px;
+    cursor: pointer;
+    font-size: 20px;
+    /*按钮背景透明*/
+    background: transparent;
+    /*边框透明*/
+    border-width: 0px;
+    /*点击后没边框*/
+    outline: none;
+    Display: none;
+}
+
+body {
+    height: 1500px;
+    width: 1500px;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    margin-top: 10%;
+    margin-left: -750px
+}
