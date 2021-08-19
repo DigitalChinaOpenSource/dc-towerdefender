@@ -1,0 +1,501 @@
+.hide_it{
+    display: none;
+}
+.start {
+    width: 1690px;
+    height: 810px;
+    background:url(../img/bgd1.png) ;
+    background-size: 100% 100%;
+    margin:0 auto;
+}
+.end_img {
+    width: 907px;
+    height: 650px;
+    background: url("../img/end.png") no-repeat ;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 80px;
+    margin-left: 391px;
+}
+.end_btn1{
+    width:440px;
+    height: 170px;
+    position: absolute;
+    margin-left: 230px;
+    margin-top: 120px;
+
+}
+.success_img {
+    width: 738px;
+    height: 800px;
+    background: url("../img/success.png") no-repeat ;
+    background-size: 100% 100%;
+    position: absolute;
+    top:10px;
+    margin-left: 800px;
+}
+.firework{
+    width: 750px;
+    height: 760px;
+    background-size: 100% 100%;
+    position: absolute;
+    background: url("../img/firework.gif");
+    margin-left: 10px;
+    top: 10px;
+}
+
+.next_img {
+    width: 480px;
+    height: 650px;
+    background: url("../img/next_img.png") no-repeat ;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 70px;
+    margin-left: 645px;
+}
+.next_btn{
+    width:490px;
+    height: 155px;
+    position: absolute;
+    margin-left: 10px;
+    margin-top: 123px;
+
+}
+.award{
+    width: 500px;
+    height: 300px;
+    background-color: #b3d7f1;
+    position: absolute;
+    margin-top: 180px;
+    margin-left:600px;
+    z-index: 99;
+    display: none
+}
+.lack_money_img{
+    height: 200px;
+    width: 300px;
+    font-display: red;
+    position: absolute;
+    top: 70px ;
+    margin-left: 230px; 
+}
+.btn_start {
+    width:490px;
+    height: 200px;
+    position: absolute;
+    margin-left: 950px;
+    margin-top: 550px;
+}
+div#container{
+    width: 1690px;
+    height: 800px;
+    margin: 0 auto;
+    display: none;
+    /* background-image:url("../img/all_bg1.png");  */
+    background-repeat:no-repeat;
+    background-size: 100% 100%; 
+   
+   
+}
+div#content_menu{
+    width: 1400px;
+    height: 70px;
+    position: absolute;
+    margin-left: 160px;
+
+}
+.ready{
+    width: 220px;
+    height: 400px;
+    margin-top: 70px;
+    margin-left: 1450px;
+
+    
+}
+.ready_img{
+    width: 220px;
+    height: 200px;
+    margin-top: 0;
+    position: absolute;
+ 
+}
+.ready_btn{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    margin-left: 50px;
+    margin-top: 200px;
+
+}
+.hand{
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    margin-top: 270px;
+    margin-left: 70px;
+    background:url("../img/hand.gif") ;
+    background-size: 100% 100%;
+}
+.x_img{
+    width: 20px;
+    height: 20px;
+    margin-left: 125px;
+}
+div#game{
+    width: 1200px;
+    height: 660px;
+    position: absolute;
+    top: 70px;
+    margin-left: 245px;
+}
+.all_map{
+    width: 1200px;
+    height: 660px;
+}
+.map1{
+    position: absolute;
+    width: 1440px;
+    height: 660px;
+    margin-left: -140px;
+}
+.map{
+    position: absolute;
+    width: 1200px;
+    height: 660px;
+}
+
+div#footer{
+    width:1200px;
+    height: 70px;
+    /* border:1px solid rgb(0, 255, 191); */
+    clear: both;
+    position: absolute;
+    top: 730px;
+    margin-left: 245px;
+}
+
+.all_tower_text{
+    width: 200px;
+    height: 150px;
+    background: url("../img/tower_text.png") no-repeat;
+    background-size: 100% 100%;
+    text-align: center;
+    color: #FFF;
+    position:  absolute;
+    top: 580px;;
+}
+.tower_text1{
+    position: absolute;
+    margin-left: 390px;
+}
+.tower_text2{
+    position: absolute;
+    margin-left: 550px;
+}
+.tower_text3{
+    position: absolute;
+    margin-left: 710px;
+}
+.tower_text4{
+    position: absolute;
+    margin-left: 870px;
+}
+.tower_text5{
+    position: absolute;
+    margin-left:1030px;
+}
+.towers{
+    width: 800px;
+    height: 100%;
+    margin: 0px auto;
+    text-align: center;
+    background-color: #999999;
+    border-radius: 40px;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+.menus{
+    width: 90%;
+    height: 100%;
+    margin: 0px auto;
+    text-align: center;
+    
+    
+}
+::-webkit-srollbar-track-piece{background:none;-webkit-border-radius:0;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb:vertical{height:50px;background-color:#bbbbbb;-webkit-border-radius:4px;outline:0px solid #ffffff;ouline-offset:-2px;border:2px solid #ffffff;}
+::-webkit-scrollbar-thumb:hover{height:50px;background-color:#999999;-webkit-border-radius:4px;}
+::-webkit-scrollbar-thumb:horizontal{width:50px;background-color:#bbbbbb;-webkit-border-radius:4px;outline:0px solid #ffffff;ouline-offset:-2px;border:2px solid #ffffff;}
+.start_explain{
+    overflow: auto; 
+    width: 500px; 
+    height: 420px;
+    /* margin-left: 50px; */
+    font: 12px Verdana;
+    color:#000;
+    background-color:#FFF;
+    border: 1px solid rgb(141, 139, 139);
+}
+.explains {
+    width: 550px;
+    height: 650px;
+    background:url("../img/explains.png") no-repeat;
+    position: absolute;
+    margin-left: 1100px;
+    top: 70px;
+    display: none;  
+}
+.close_explains {
+   width: 50px;
+   height: 50px;
+   position: absolute;
+   top:10px;
+   margin-left: -20px;
+}    
+.user_explain{
+    overflow: auto; 
+    width: 430px; 
+    height: 540px;
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 50px;
+    font: 12px Verdana;
+    color:rgb(12, 11, 11);
+}
+.explain_menus{
+    height: 30px;
+    width: 430px;
+    margin-left:50px ;
+    margin-top: 20px;
+}
+.life {
+    width: 60px;
+    height: 60px;
+}
+.money {
+    width: 60px;
+    height: 60px;
+}
+.enemys{
+    width: 60px;
+    height: 60px;
+}
+.star {
+    Display: none;
+}
+.tower_images{
+    width: 60px;
+    height: 60px;
+}
+.stop {
+    width: 600px;
+    height: 700px;
+    position: absolute;
+    margin-left: 545px;
+    top: 80px;
+    z-index: 10;
+    /* display: none;  */
+}
+.quit{
+    width: 300px;
+    height: 600px;
+    position: absolute;
+    top: 10px;
+    margin-left: 150px;
+}
+.continue {
+    width: 305px;
+    height: 110px;
+    position: absolute;
+    top: 62px;
+    margin-left: 190px;
+    cursor: pointer;
+}
+.restart {
+    width: 349px;
+    height: 122px;
+    position: absolute;
+    top: 205px;
+    margin-left: 130px;
+    cursor: pointer;
+ 
+}
+.move {
+    width: 80px;
+    height: 70px;
+    position: relative;
+    top: 4%;
+    left: 30%;
+    cursor: pointer;
+}
+.good {
+    width: 80px;
+    height: 70px;
+    position: relative;
+    top: 4%;
+    left: -33%;
+}
+
+.nextScale {
+    height: 200px;
+    width: 490px;
+    position: absolute;
+    top: 245px ;
+    margin-left: 600px;                       
+}
+#loading{
+    width: 1690px;
+    height: 810px;
+    background:url("../img/first_bg.png");
+    margin:0 auto;
+    z-index: 999;
+}
+.movie{
+ 
+    height:1000px;  
+    width:1500px;                     
+    position: absolute;
+    top: -155px;
+    margin-left: 95px;
+}
+.dia_img{
+    height:500;  
+    width:270; 
+    top: -50px;
+}
+.evils{
+    width: 150px;
+    height: 150px;
+}
+.all_tower{
+    width: 100px;
+    height: 100px;
+}
+table,tr,td{
+    text-align: center;
+}
+.explain_menus_btn{
+    width: 100px;
+    height: 40px;
+   
+}
+.start_btn{
+    width:366px;
+    height: 120px;
+    position: absolute;
+    margin-left: 1250px;
+    margin-top:690px;
+}
+.skip{
+    width:150px;
+    height: 75px;
+    position: absolute;
+    margin-left: 1450px;
+    margin-top: 700px;
+}
+.success_btn{
+    width:500px;
+    height: 200px;
+    margin-left: 900px;
+    margin-top: 300px;
+}
+.p1{
+    font-size: 25px;
+    font-family:"Times New Roman",Times,serif;
+    font-weight:bold;
+    color: rgb(235, 177, 52);
+}
+.p2{
+    font-size: 30px;
+    font-family:"Times New Roman",Times,serif;
+    font-weight:bold;
+    color: rgb(235, 64, 52);
+}
+.p3{
+    font-size: 25px;
+    font-family:"Times New Roman",Times,serif;
+    font-weight:bold;
+    color: rgb(5, 5, 5);
+    display: block;
+    text-align: center;
+}
+.p4{
+    font-size: 15px;
+    font-family:"Times New Roman",Times,serif;
+    font-weight:bold;
+    color: rgb(15, 15, 15);
+    display: block;
+}  
+.span{
+    color:rgb(10, 10, 12);
+    font-size: 15px;
+    font-family:"Times New Roman",Times,serif;
+    font-weight:bold;
+
+}
+.banner{
+    width: 1200px;
+    height: 660px;
+    margin: 0 auto;
+    background: #2b2929;
+    opacity: 0.5;
+    position: absolute;
+    top: 70px;
+    margin-left:245px ;
+}
+.banner0{
+    top: 0;
+    width: 1680px;
+    height: 800px;
+    margin: 0 auto;
+    background: #2b2929;
+    opacity: 0.8;
+    position: absolute;
+
+}
+.explain_menus_btn{
+    width: 100px;
+    height: 40px;
+   
+}
+
+.customs{
+    width: 300px;
+    height: 650px;
+    position: absolute;
+    margin-left: 0px;
+    top: 5px;
+    
+}
+.customs1{
+    background:url("../img/customs1.png") no-repeat;
+    background-size: 100% 100%;
+}
+.customs2{
+    background:url("../img/customs2.png") no-repeat;
+    background-size: 100% 100%;
+}
+.customs3{
+    background:url("../img/customs3.png") no-repeat;
+    background-size: 100% 100%;
+}
+.customs4{
+    background:url("../img/customs4.png") no-repeat;
+    background-size: 100% 100%;
+}
+.p5{
+    font-size: 40px;
+    font-family:"Times New Roman",Times,serif;
+    font-weight:bold;
+    color: rgb(17, 11, 11);
+    text-align: center;
+    display: block;
+}
+.close_customs{
+width: 50px;
+height: 50px;
+position: absolute;
+margin-top: 120px;
+margin-left: 230px;
+}

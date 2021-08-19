@@ -1,0 +1,20 @@
+#!/bin/sh
+
+MSG=`awk '{printf("%s",$0)}' $1`
+error_msg="提交信息首行请按照如下格式书写:
+<type>(<scope>): <subject>
+1. type关键字看正则或PPT
+2. scope 则为对应的功能范围，可选
+3. subject 没有限制
+例如：
+feat(暂停功能): 添加游戏暂停功能"
+
+if [[ $MSG =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\(.*\):.*$ ]]
+then
+	echo "commit success"
+    exit 0
+else
+    echo "commit fail"
+	echo "$error_msg">&2
+	exit 1
+fi
