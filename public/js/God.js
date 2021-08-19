@@ -863,8 +863,8 @@ class God {
             this.websocketSend({type:5,roomCount:roomCount,name:linkName,otherEneNum:this.enemyNumber})
             // alert("win");
              // 跳转到结算页面
-            this.to_total_win();
-            this.websocketClose()
+            // this.to_total_win();
+            // this.websocketClose()
         }
     }
 
@@ -1069,14 +1069,12 @@ class God {
         let ctx = cv.getContext('2d');
         // 清空敌人图片
         ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        let img = new Image;
         // 遍历数据，绘制敌人
         for (let ene in this.enemies) {
             if(this.enemies[ene]==null){
                 continue
             }
-            img.src = this.enemies[ene].enemy_img;
-            ctx.drawImage(img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
+            ctx.drawImage(this.enemies[ene].img, this.enemies[ene].x, this.enemies[ene].y, this.enemies[ene].size, this.enemies[ene].size);
             Ca.drawBlood(ctx, this.enemies[ene]);
         }
     
