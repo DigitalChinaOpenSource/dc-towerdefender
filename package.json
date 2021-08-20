@@ -1,0 +1,27 @@
+{
+  "name": "towerdefense4.0.1",
+  "version": "1.0.0",
+  "description": "- https://towerdefense-towerdefense.dev.wh.digitalchina.com/",
+  "main": "server.js",
+  "dependencies": {
+    "alert": "^5.0.10",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mysql": "^2.18.1",
+    "nodejs-websocket": "^1.7.2",
+    "websocket": "^1.0.34",
+    "ws": "^8.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@newgitlab.digitalchina.com:yinxbc/towerdefense4.0.1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
